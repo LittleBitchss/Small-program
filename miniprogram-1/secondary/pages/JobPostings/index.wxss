@@ -1,0 +1,169 @@
+/* secondary/pages/JobPostings/index.wxss */
+.JobPostings{
+  height: 100vh;
+  font-family: 'Medium';
+}
+.JobPostings .content{
+  height: 100%;
+  padding-bottom: 128rpx;
+  overflow: auto;
+  position: relative;
+}
+.JobPostings .content .titles{
+  height: 180rpx;
+  border-bottom: 2rpx solid #eee;
+  padding: 0 38rpx;
+}
+.JobPostings .content .titles .titles1{
+  height: 90rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 30rpx;
+}
+.JobPostings .content .titles .titles1 .title{
+  font-size: 45rpx;
+}
+.JobPostings .content .titles .titles1 .salary{
+  font-size: 25rpx;
+  color: #4768f3;
+}
+.JobPostings .content .titles .titles2{
+  height: 90rpx;
+  display: flex;
+  align-items: center;
+  padding-bottom: 20rpx;
+}
+.JobPostings .content .titles .titles2 .item{
+  font-size: 18rpx;
+  display: flex;
+  align-items: center;
+  margin-right: 26rpx;
+}
+.JobPostings .content .titles .titles2 .item .icon{
+  width: 24rpx;
+  height: 24rpx;
+  background-color: #4768f3;
+  margin-right: 8rpx;
+}
+.JobPostings .content .personnel{
+  height: 116rpx;
+  border-bottom: #eee solid 2rpx;
+  display: flex;
+  align-items: center;
+  padding: 0 38rpx;
+  font-size: 28rpx;
+  color: #3c3c3c;
+}
+.JobPostings .content .personnel .portrait{
+  width: 74rpx;
+  height: 74rpx;
+  background-color: #4768f3;
+  border-radius: 50%;
+  margin-right: 28rpx;
+}
+
+
+.JobPostings .content .obligations{
+  border-bottom: 2rpx solid #eee;
+  padding: 30rpx 38rpx;
+
+}
+.JobPostings .content .obligations .title{
+  font-size: 22rpx;
+  color: #676767;
+}
+.JobPostings .content .obligations .demand{
+  height: 70rpx;
+  display: flex;
+  align-items: center;
+  font-size: 15rpx;
+}
+.JobPostings .content .obligations .demand .item{
+  padding: 6rpx 16rpx;
+  background-color: #eee;
+  border-radius: 5rpx;
+  line-height: 1;
+  margin-right: 6rpx;
+}
+.JobPostings .content .obligations .obligation{
+  font-size: 22rpx;
+}
+.JobPostings .content .company{
+  padding: 0 34rpx;
+}
+.JobPostings .content .company .company_name{
+  height: 138rpx;
+  display: flex;
+  align-items: center;
+  font-size: 25rpx;
+  color: #3c3c3c;
+}
+.JobPostings .content .company .company_name .left{
+  width: 82rpx;
+  height: 82rpx;
+  background-color: #4768f3;
+  border-radius: 10rpx;
+  margin-right: 30rpx;
+}
+.JobPostings .content .company .company_name .left .img{
+  width: 100%;
+  height: 100%;
+}
+.JobPostings .content .company .company_map{
+  height: 378rpx;
+  border-radius: 20rpx;
+  overflow: hidden;
+  position: relative;
+}
+.JobPostings .content .company .company_map .map{
+  height: 120%;
+  position: relative;
+  top: -10%;
+  width: 100%;
+}
+.JobPostings .content .company .company_map .cover{
+  height: 100%;
+  position: absolute;
+  width: 100%;
+  left: 0;
+  top: 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.JobPostings .bottom{
+  width: 100%;
+  height: 128rpx;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.JobPostings .bottom .btn{
+  font-size: 28rpx;
+  color: #fff;
+  background-color: #4768f3;
+  border-radius: 10rpx;
+  width: 702rpx;
+  height: 60rpx;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

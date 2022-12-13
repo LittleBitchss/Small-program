@@ -1,0 +1,367 @@
+<!--secondary/pages/editResume/index.wxml-->
+<view class="editResume">
+  <view class="info">
+    <view class="infos">
+      <view class="name" wx:if="{{!basic.r_name}}">编辑个人信息
+        <image class="name_right" src="../../icon/edit.png" bindtap="openMask" data-item="1"></image>
+      </view>
+      <view class="name" wx:if="{{basic.r_name}}">{{basic.r_name}}
+        <image class="name_right" src="../../icon/edit.png" bindtap="openMask" data-item="1"></image>
+      </view>
+      <view class="describe" wx:if="{{basic.worktime||basic.age||basic.education}}">{{basic.worktime?basic.worktime+'年经验':''}}{{basic.age?'·'+basic.age+'岁':''}}{{basic.education?'·'+basic.education:''}}</view>
+    </view>
+    <view class="photo">
+      <image class="photos" src="{{basic.r_head_portrait}}"></image>
+    </view>
+  </view>
+  <view class="item">
+    <view class="title">居住地址</view>
+    <view class="content" bindtap="openMask" data-item="6">
+      <view class="content_left {{address=='编辑居住地址'?'':'content_lefts'}}">{{address}}</view>
+      <image class="arrows" src="../../../icon/mine_right_arrow.png"></image>
+    </view>
+  </view>
+  <view class="item info2">
+    <view class="title">
+      <text>个人优势</text>
+      <image class="img" src="../../icon/edit.png" bindtap="openMask" data-item="2"></image>
+    </view>
+    <view class="content">
+      <view class="content_left" wx:if="{{basic.r_advantage}}">
+        {{basic.r_advantage}}
+      </view>
+      <view class="content_left" wx:if="{{!basic.r_advantage}}">编辑个人优势</view>
+    </view>
+  </view>
+  <view class="item">
+    <view class="title">
+      <text>求职期望</text>
+      <view class="add" bindtap="openMask" data-item="3" data-addOrEdit="1" wx:if="{{job_expectation.length<5}}">
+        <view class="cross"></view>
+        <view class="vertical"></view>
+      </view>
+    </view>
+    <view class="content" wx:if="{{job_expectation.length==0}}" bindtap="openMask" data-item="3" data-addOrEdit="1">
+      <view class="content_left">编辑求职期望</view>
+      <image class="arrows" src="../../../icon/mine_right_arrow.png"></image>
+    </view>
+    <view class="content" wx:if="{{job_expectation.length!=0}}" bindtap="openMask" data-item="3" data-addOrEdit="2" data-index="{{index}}" wx:for="{{job_expectation}}" wx:key="index">
+      <view class="content_left">
+        <text class="content_left_top" space="emsp">{{item.p_name}} <text class="content_left_tops">{{item.je_job_salary_min}}-{{item.je_job_salary_max}}{{item.je_job_salary_max=='面议'?'':'元'}}</text></text>
+        <text>{{item.city}}</text>
+      </view>
+      <image class="arrows" src="../../../icon/mine_right_arrow.png"></image>
+    </view>
+  </view>
+  <view class="item">
+    <view class="title">求职状态</view>
+    <picker bindchange="bindChange" data-item="6" value="{{stateJobIndex}}" range="{{stateJobArray}}">
+      <view class="picker">
+        <view class="content">
+          <view class="content_left {{jobState=='编辑求职状态'?'':'content_lefts'}}">{{jobState}}</view>
+          <image class="arrows" src="../../../icon/mine_right_arrow.png"></image>
+        </view>
+      </view>
+    </picker>
+  </view>
+  <view class="item">
+    <view class="title">
+      <text>教育经历</text>
+      <view class="add" bindtap="openMask" data-item="4" data-addOrEdit="1">
+        <view class="cross"></view>
+        <view class="vertical"></view>
+      </view>
+    </view>
+    <view class="content" wx:if="{{educational.length==0}}" bindtap="openMask" data-item="4" data-addOrEdit="1">
+      <view class="content_left">编辑教育经历</view>
+      <image class="arrows" src="../../../icon/mine_right_arrow.png"></image>
+    </view>
+    <view class="content" wx:if="{{educational.length!=0}}" bindtap="openMask" data-item="4" data-addOrEdit="2" data-index="{{index}}" wx:for="{{educational}}" wx:key="index">
+      <view class="content_left">
+        <text class="content_left_top" space="emsp">{{item.ee_school}}</text>
+        <text>{{item.education}}-{{item.ee_major}}</text>
+      </view>
+      <view class="content_right">
+        <text>{{item.ee_start_year}}-{{item.ee_end_year}}</text>
+        <image class="arrows" src="../../../icon/mine_right_arrow.png"></image>
+      </view>
+    </view>
+  </view>
+  <view class="item">
+    <view class="title">
+      <text>工作经历</text>
+      <view class="add" bindtap="openMask" data-item="5" data-addOrEdit="1">
+        <view class="cross"></view>
+        <view class="vertical"></view>
+      </view>
+    </view>
+    <view class="content" wx:if="{{work_experience.length==0}}" bindtap="openMask" data-item="5" data-addOrEdit="1">
+      <view class="content_left">编辑工作经历</view>
+      <view class="content_right">
+        <text></text>
+        <image class="arrows" src="../../../icon/mine_right_arrow.png"></image>
+      </view>
+    </view>
+    <view class="content" wx:if="{{work_experience.length!=0}}" bindtap="openMask" data-item="5" data-addOrEdit="2" data-index="{{index}}" wx:for="{{work_experience}}" wx:key="index">
+      <view class="content_left">
+        <text class="content_left_top">{{item.we_corporate_name}}</text>
+        <text>{{item.work}}</text>
+        <text>工作内容：{{item.we_job_content}}</text>
+      </view>
+      <view class="content_right">
+        <text>{{item.we_start_date}}-{{item.we_end_date}}</text>
+        <image class="arrows" src="../../../icon/mine_right_arrow.png"></image>
+      </view>
+    </view>
+  </view>
+</view>
+<page-container class="page-container" show="{{show}}" position="right">
+  <view class="z_info" wx:if="{{maskType==1}}">
+    <view class="z_item">
+      <view class="z_item_left">
+        <view class="z_item_left_txt">头像</view>
+        <view>推荐使用真实头像</view>
+      </view>
+      <view class="photo" bindtap="avatar">
+        <image class="photos" src="{{avatar}}"></image>
+      </view>
+    </view>
+    <view class="z_item">
+      <view class="z_title">
+        姓名
+        <input type="text" class="z_input" placeholder="编辑姓名" placeholder-class="placeholder" value="{{name}}" bindinput="z_input" data-item="1" maxlength="20" />
+      </view>
+    </view>
+    <view class="z_item">
+      <view class="z_items">
+        <view class="z_title">性别</view>
+        <picker bindchange="bindChange" data-item="1" value="{{sexIndex}}" range="{{sexArray}}">
+          <view class="picker">
+            <view class="choose">
+              <text class="choose_txt {{sex!='编辑性别'?'fontColor':''}}">{{sex}}</text>
+              <image class="choose_arrows" src="../../../icon/mine_right_arrow.png"></image>
+            </view>
+          </view>
+        </picker>
+      </view>
+    </view>
+    <view class="z_item">
+      <view class="z_items">
+        <view class="z_title">出生年月</view>
+        <picker mode="date" value="{{date}}" start="1900-09-01" end="2030-12-31" bindchange="bindChange" data-item="2" fields="month">
+          <view class="picker">
+            <view class="choose">
+              <text class="choose_txt {{born!='编辑出生年月'?'fontColor':''}}">{{born}}</text>
+              <image class="choose_arrows" src="../../../icon/mine_right_arrow.png"></image>
+            </view>
+          </view>
+        </picker>
+      </view>
+    </view>
+    <view class="z_item">
+      <view class="z_items">
+        <view class="z_title">参加工作时间</view>
+        <picker mode="date" value="{{date}}" start="1980-01-01" end="2030-12-31" bindchange="bindChange" data-item="3" fields="month">
+          <view class="picker">
+            <view class="choose">
+              <text class="choose_txt {{workTime!='编辑参加工作时间'?'fontColor':''}}">{{workTime}}</text>
+              <image class="choose_arrows" src="../../../icon/mine_right_arrow.png"></image>
+            </view>
+          </view>
+        </picker>
+      </view>
+    </view>
+    <view class="z_item">
+      <view class="z_title">
+        手机号
+        <input type="number" class="z_input" placeholder="{{phonePlaceholder}}" placeholder-class="{{phonePlaceholderClass}}" value="{{phone}}" bindinput="z_input" bindblur="z_blur" data-item="2" maxlength="11" />
+      </view>
+    </view>
+    <view class="z_info_bottom">
+      <view class="btn" bindtap="save" data-item="1">保存</view>
+    </view>
+  </view>
+  <view class="z_advantage" wx:if="{{maskType==2}}">
+    <view class="z_a_title">
+      <text>我的优势</text>
+      <text class="words"><text class="{{areaWords?'wordss':''}}">{{areaWords}}</text>/200</text>
+    </view>
+    <view class="z_a_describe">丰富的个人优势介绍，更能赢得老板的青睐</view>
+    <textarea class="z_a_area" placeholder="等待输入内容" placeholder-class="z_a_placeholder" maxlength="200" focus="{{areaf}}" bindinput="z_input" data-item="3" value="{{areaVal}}"></textarea>
+    <view class="z_info_bottom">
+      <view class="btn" bindtap="save" data-item="2">保存</view>
+    </view>
+  </view>
+  <view class="z_expect" wx:if="{{maskType==3}}">
+    <view class="title">编辑求职期望</view>
+    <view class="item">
+      <view class="items">
+        <view class="item_titel">求职类型</view>
+        <view class="items_right">
+          <view class="full {{fullOrPart==1?'active':''}}" bindtap="fullOrPart" data-item="1">全职</view>
+          <view class="part {{fullOrPart==1?'':'active'}}" bindtap="fullOrPart" data-item="2">兼职</view>
+        </view>
+      </view>
+    </view>
+    <view class="item">
+      <view class="item_titel">工作地址</view>
+      <navigator class="items" url="../../../tertiary/pages/citySelection/index?city={{city}}&citycode={{citycode}}">
+        <view class="item_left {{city=='选择地址'?'':'fontColor'}}">{{city}}</view>
+        <image class="items_img" src="../../../icon/mine_right_arrow.png"></image>
+      </navigator>
+    </view>
+    <view class="item">
+      <view class="item_titel">期望职位</view>
+      <picker bindchange="bindChange" data-item="4" value="{{expectJobIndex}}" range="{{expectJobArray}}">
+        <view class="picker">
+          <view class="items">
+            <view class="item_left {{expectJob=='选择职位'?'':'fontColor'}}">{{expectJob}}</view>
+            <image class="items_img" src="../../../icon/mine_right_arrow.png"></image>
+          </view>
+        </view>
+      </picker>
+    </view>
+    <view class="item">
+      <view class="item_titel">薪资要求</view>
+      <picker mode="multiSelector" bindchange="bindChange" bindcolumnchange="bindColumnChange" data-item="5" value="{{salaryIndex}}" range="{{salaryArray}}">
+        <view class="picker">
+          <view class="items">
+            <view class="item_left" wx:if="{{!salaryMax}}">选择薪资范围</view>
+            <view class="item_left fontColor" wx:if="{{salaryMax}}">{{salaryMin+'-'+salaryMax}}</view>
+            <image class="items_img" src="../../../icon/mine_right_arrow.png"></image>
+          </view>
+        </view>
+      </picker>
+    </view>
+    <view class="z_expect_bottom">
+      <view class="cancel" wx:if="{{addOrEdit!=1&&job_expectation.length!=0}}" bindtap="cancel" data-item="1">删除</view>
+      <view class="save" bindtap="save" data-item="3">保存</view>
+    </view>
+  </view>
+  <view class="z_educational" wx:if="{{maskType==4}}">
+    <view class="title">编辑教育经历</view>
+    <view class="item">
+      <view class="item_titel">学校</view>
+      <view class="items">
+        <input type="text" class="item_left fontColor" placeholder="请输入" placeholder-class="item_left" value="{{school}}" bindinput="z_input" data-item="4" />
+      </view>
+    </view>
+    <view class="item">
+      <view class="item_titel">学历</view>
+      <picker mode="multiSelector" bindchange="bindChange" bindcolumnchange="bindColumnChange" data-item="7" value="{{educationalIndex}}" range="{{educationalArray}}">
+        <view class="picker">
+          <view class="items">
+            <view class="item_left" wx:if="{{!education}}">请选择</view>
+            <view class="item_left fontColor" wx:if="{{education}}">{{education}}{{fullPart?'-'+fullPart:''}}</view>
+            <image class="items_img" src="../../../icon/mine_right_arrow.png"></image>
+          </view>
+        </view>
+      </picker>
+    </view>
+    <view class="item">
+      <view class="item_titel">专业</view>
+      <view class="items">
+        <input type="text" class="item_left fontColor" placeholder="请输入" placeholder-class="item_left" value="{{major}}" bindinput="z_input" data-item="5" />
+      </view>
+    </view>
+    <view class="item">
+      <view class="item_titel">上学时间段</view>
+      <picker mode="multiSelector" bindchange="bindChange" bindcolumnchange="bindColumnChange" data-item="8" value="{{timeRangeIndex}}" range="{{timeRangeArray}}">
+        <view class="picker">
+          <view class="items">
+            <view class="item_left" wx:if="{{!timeRangeL}}">选择薪资范围</view>
+            <view class="item_left fontColor" wx:if="{{timeRangeL}}">{{timeRangeL+'-'+timeRangeR}}</view>
+            <image class="items_img" src="../../../icon/mine_right_arrow.png"></image>
+          </view>
+        </view>
+      </picker>
+    </view>
+    <view class="hint">以下为选填内容</view>
+    <view class="item">
+      <view class="item_titel">在校经历</view>
+      <view class="itemsss">
+        <text class="schoolET">{{schoolExperience}}</text>
+        <textarea class="schoolE" placeholder="请输入" placeholder-class="placeholder" bindinput="z_input" data-item="6" value="{{schoolExperience}}"></textarea>
+      </view>
+    </view>
+    <view class="z_educational_bottom">
+      <view class="cancel" wx:if="{{addOrEdit2!=1&&educational.length!=0}}" bindtap="cancel" data-item="2">删除</view>
+      <view class="save" bindtap="save" data-item="4">保存</view>
+    </view>
+  </view>
+  <view class="z_educational" wx:if="{{maskType==5}}">
+    <view class="title">编辑工作经历</view>
+    <view class="item">
+      <view class="item_titel">公司全称</view>
+      <view class="items">
+        <input type="text" class="item_left fontColor" placeholder="请输入" placeholder-class="item_left" value="{{company}}" bindinput="z_input" data-item="7" />
+      </view>
+    </view>
+    <view class="item">
+      <view class="item_titel">在职时间</view>
+      <view class="items itemx">
+        <picker mode="date" value="{{date}}" fields="month" start="1990-01-01" end="2030-12-31" bindchange="bindChange" data-item="9">
+          <view class="picker">
+            <view class="item_left {{entryTime=='入职时间'?'':'fontColor'}}">{{entryTime}}</view>
+          </view>
+        </picker>
+        ——
+        <picker mode="date" value="{{date}}" fields="month" start="1990-01-01" end="2030-12-31" bindchange="bindChange" data-item="10">
+          <view class="picker">
+            <view class="item_left fontColor">{{departureTime}}</view>
+          </view>
+        </picker>
+      </view>
+    </view>
+    <view class="item">
+      <view class="item_titel">职位名称</view>
+      <picker bindchange="bindChange" data-item="11" value="{{jobTitleIndex}}" range="{{jobTitleArray}}">
+        <view class="picker">
+          <view class="items">
+            <view class="item_left {{jobTitle=='请选择'?'':'fontColor'}}">{{jobTitle}}</view>
+            <image class="items_img" src="../../../icon/mine_right_arrow.png"></image>
+          </view>
+        </view>
+      </picker>
+    </view>
+    <view class="item">
+      <view class="item_titel">工作内容</view>
+      <view class="items">
+        <input type="text" class="item_left fontColor" placeholder="请输入" placeholder-class="item_left" value="{{jobDuties}}" bindinput="z_input" data-item="8" />
+      </view>
+    </view>
+    <view class="z_educational_bottom">
+      <view class="cancel" wx:if="{{addOrEdit3!=1&&educational.length!=0}}" bindtap="cancel" data-item="3">删除</view>
+      <view class="save" bindtap="save" data-item="5">保存</view>
+    </view>
+  </view>
+  <view class="WorkAddress" wx:if="{{maskType==6}}">
+    <view class="map" bindtap="clickMap">
+      <map id="maps" class="maps" show-location longitude="{{longitude}}" latitude="{{latitude}}" scale="16" bindregionchange="regionchange">
+        <image class="cover-image {{show_ani}}" src="{{domains}}mark.png"></image>
+      </map>
+    </view>
+    <view class="search">
+      <image class="search_img" src="{{domain}}search.png"></image>
+      <input class="search_inp" type="text" placeholder="搜索地址" placeholder-class="placeholder" bindfocus="focus" bindinput="z_input" data-item="9"/>
+    </view>
+    <view class="bottoms">
+      <view class="workAddress">
+        <view class="workAddress_left">工作地址：</view>
+        <view class="workAddress_right">{{workAddress}}</view>
+      </view>
+      <view class="fullAddress">
+        <input class="fullAddress_inp" type="text" placeholder="请输入详细地址" value="{{fullAddress}}" bindinput="z_input" data-item="10"/>
+      </view>
+      <view class="bottoms_bottom">
+        <view class="btn {{active2}}" bindtap="save" data-item="6">确定</view>
+      </view>
+    </view>
+    <view class="showview" hidden="{{showview}}">
+      <view class="showview_item" wx:for="{{addressArr}}" wx:key="index" bindtap="cilckItem" data-index="{{index}}">
+        <view class="showview_item_top">{{item.title}}</view>
+        <view class="showview_item_bom">{{item.address}}</view>
+      </view>
+    </view>
+  </view>
+</page-container>

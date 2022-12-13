@@ -1,0 +1,64 @@
+<!--secondary/pages/publishPage/index.wxml-->
+<view class="publishPage">
+  <view class="title">
+    <view class="title_left">发布社招</view>
+  </view>
+  <view class="course">
+    <view class="course_item">
+      <view class="outerRace">
+        <view class="insideTrack"></view>
+      </view>
+      <view class="course_left_txt">填写职业信息</view>
+    </view>
+    <view class="course_midden"></view>
+    <view class="course_item">
+      <view class="insideTracks"></view>
+      <view class="course_left_txt">选择职业要求</view>
+    </view>
+  </view>
+  <view class="item">
+    <view class="item_title">招聘标题</view>
+    <input class="item_inp" type="text" placeholder="请填写招聘标题，如“中餐厨师长1名”" placeholder-class="placeholder" bindinput="inputs" data-item="1" />
+  </view>
+  <view class="item">
+    <view class="item_title">职位名称</view>
+    <picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}">
+    <view class="picker">
+      <view class="content">
+      <view class="content_left {{active2}}" wx:if="{{value2}}">
+        {{value2}}
+      </view>
+      <view class="content_left" wx:if="{{!value2}}">选择对应的职位名称</view>
+      <image class="img" src="../../../icon/mine_right_arrow.png"></image>
+    </view>
+    </view>
+  </picker>
+  </view>
+  <view class="item">
+    <view class="item_title">职位描述</view>
+    <view class="content" bindtap="openMask">
+      <view class="content_left {{active3}}" wx:if="{{value3s}}">
+        {{value3s}}
+      </view>
+      <view class="content_left" wx:if="{{!value3s}}">介绍工作内容、职位要求、加分项</view>
+      <image class="img" src="../../../icon/mine_right_arrow.png"></image>
+    </view>
+  </view>
+  <view class="note">注:职位名称和职位描述和工作地址发布后不可修改</view>
+  <view class="bottom">
+    <view class="btn {{active1}}" bindtap="next">下一步</view>
+  </view>
+</view>
+<page-container class="page-container" show="{{show}}" position="right">
+  <view class="jobDescribe">
+    <view class="z_a_title">
+      <text>职位描述</text>
+      <text class="words"><text class="{{areaWords?'wordss':''}}">{{areaWords}}</text>/500</text>
+    </view>
+    <view class="z_a_describe">介绍工作内容、职位要求、加分项</view>
+    <textarea class="z_a_area" placeholder="等待输入内容" placeholder-class="z_a_placeholder" maxlength="500" focus="{{areaf}}" bindinput="inputs" data-item="2" value="{{value3}}"></textarea>
+    <view class="z_info_bottom">
+      <view class="btn {{active3}}" bindtap="save">保存</view>
+    </view>
+  </view>
+</page-container>

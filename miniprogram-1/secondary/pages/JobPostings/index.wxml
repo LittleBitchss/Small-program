@@ -1,0 +1,60 @@
+<!--secondary/pages/JobPostings/index.wxml-->
+<view class="JobPostings">
+  <view class="content">
+    <view class="titles">
+      <view class="titles1">
+        <view class="title">行政总厨1名</view>
+        <view class="salary">1.3万-1.6万</view>
+      </view>
+      <view class="titles2">
+        <view class="item">
+          <image class="icon"></image>
+          <text>杭州市</text>
+        </view>
+        <view class="item">
+          <image class="icon"></image>
+          <text>5-10年</text>
+        </view>
+        <view class="item">
+          <image class="icon"></image>
+          <text>大专</text>
+        </view>
+      </view>
+    </view>
+    <view class="personnel">
+      <image class="portrait"></image>
+      <text>周先生</text>·
+      <text>人事经理</text>
+    </view>
+    <view class="obligations">
+      <view class="title">岗位职责</view>
+      <view class="demand">
+        <view class="item">厨师长</view>
+        <view class="item">炒菜</view>
+      </view>
+      <view class="obligation">
+        <text>1、在餐饮部经总监的领导下，全面负责食品的制作，控制厨房出品
+          2、制定厨房管理制度、服务标准、操作规程，制定各岗位职责，了解各岗位人员的技术水平和专长，合理安排工作岗位，确保厨房工作的正常运作。
+          3、制定各餐厅菜单和厨房菜谱，确定出品价格，控制成本费用，保持良好的毛利率。</text>
+      </view>
+    </view>
+    <view class="company">
+      <view class="company_name">
+        <view class="left">
+          <image class="img"></image>
+        </view>
+        <view class="right">
+          <view class="name">餐安科技（浙江）有限公司</view>
+          <view class="industry">5-20人·餐饮</view>
+        </view>
+      </view>
+      <view class="company_map">
+        <map class="map" name=""></map>
+        <cover-view class="cover"></cover-view>
+      </view>
+    </view>
+  </view>
+  <view class="bottom">
+    <button class="btn">点击提交简历</button>
+  </view>
+</view>

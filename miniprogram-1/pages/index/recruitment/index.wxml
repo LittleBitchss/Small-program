@@ -1,0 +1,191 @@
+<!--pages/index/recruitment/index.wxml-->
+<view class="recruitment">
+  <view class="recruitment_top">
+    <view class="recruitmentSquare" wx:if="{{index == 1}}">
+      <view class="recruitmentSquare_top">
+        <scroll-view scroll-x="true" class="scroll" scroll-left="{{scroll}}">
+          <view class="recruitmentSquare_top_left">
+            <view class="item active" wx:if="{{desiredPosition.length==0}}">精选推荐</view>
+            <view wx:for="{{desiredPosition}}" wx:key="index" class="{{item.active}} item" bindtap="topTilter" data-index="{{index}}">{{item.p_name}}</view>
+          </view>
+        </scroll-view>
+      </view>
+      <view class="recruitmentSquare_filter">
+        <view class="recruitmentSquare_filter_left">
+          <view class="recruitmentSquare_filter_left_item {{leftTilterActive1}}" bindtap="leftTilter" data-item="1">综合</view>
+          <view class="recruitmentSquare_filter_left_item {{leftTilterActive2}}" bindtap="leftTilter" data-item="2">附近</view>
+          <view class="recruitmentSquare_filter_left_item {{leftTilterActive3}}" bindtap="leftTilter" data-item="3">最新</view>
+        </view>
+        <view class="recruitmentSquare_filter_right">
+          <navigator class="recruitmentSquare_filter_right_item" url="/tertiary/pages/citySelection/index?ret=1&citycode={{citys[1]}}">{{citys[0]}}</navigator>
+          <view class="recruitmentSquare_filter_right_item" bindtap="openMask" data-item="1">筛选{{filtersNum?'·'+filtersNum:''}}</view>
+        </view>
+      </view>
+      <scroll-view scroll-y="true" class="list">
+        <view class="list_item">
+          <view class="list_item1">
+            <image class="list_item1_img"></image>
+          </view>
+          <view class="list_item2">
+            <view class="list_item2_name">与呼呼</view>
+            <view class="list_item2_suffer">2年经验·22岁·大学</view>
+            <view class="list_item2_jobs">应聘岗位：炒锅师傅</view>
+            <view class="list_item2_state">求职状态：在职考虑</view>
+          </view>
+          <navigator class="list_item3" url="/secondary/pages/talentInfo/index">
+            点击查看
+          </navigator>
+        </view>
+      </scroll-view>
+    </view>
+    <view class="mine" wx:if="{{index == 2}}">
+      <view class="mine_top">
+        <view class="cutUser" bindtap="goJobRecruitment">
+          <image class="cutUserImg" src="../../../icon/userSwitch.png"></image>
+        </view>
+        <view class="userCard">
+          <view class="userCard_photos">
+            <image class="userCard_photo" src="{{photo}}"></image>
+          </view>
+          <text class="userCard_name" wx:if="1">{{name}}</text>
+          <navigator class="userCard_editResume" url="/secondary/pages/createTraCQ/index">编辑你的电子名片</navigator>
+        </view>
+      </view>
+      <view class="mine_state">
+        <view class="mine_state_item {{actives1}}" bindtap="mineToggle" data-item="1">
+          <text>招聘中</text>
+          <view class="mine_state_item_a" wx:if="{{actives1}}"></view>
+        </view>
+        <view class="mine_state_item {{actives2}}" bindtap="mineToggle" data-item="2">
+          <text>未发布</text>
+          <view class="mine_state_item_a" wx:if="{{actives2}}"></view>
+        </view>
+        <view class="mine_state_item {{actives3}}" bindtap="mineToggle" data-item="3">
+          <text>已完成</text>
+          <view class="mine_state_item_a" wx:if="{{actives3}}"></view>
+        </view>
+      </view>
+      <view class="list">
+        <scroll-view class="inRecruitment" scroll-y="true">
+          <view class="recruitment_list" wx:for="{{onTheJobList}}" wx:key="index">
+            <view class="recruitment_list1">
+              <text>{{item.rpr_title}}</text>
+              <text>{{item.rpr_minimum_waga}}{{item.rpr_minimum_waga?'-':'待发布'}}{{item.rpr_maximum_waga}}</text>
+            </view>
+            <view class="recruitment_list2">
+              <view class="recruitment_list2_item" wx:for="{{item.key_word}}" wx:for-index="idx" wx:for-item="itemName" wx:key="idx">{{itemName}}</view>
+            </view>
+            <view class="recruitment_list3">
+              <navigator class="recruitment_list3_item" url="/secondary/pages/resumeInfo/index?item=1&id={{item.rpr_id}}">
+                <view class="recruitment_list3_item_left">
+                  <text>已
+                    收
+                    简
+                    历</text>
+                </view>
+                <view class="recruitment_list3_item_right">
+                  {{item.resume.received}}<text class="x">人</text>
+                </view>
+              </navigator>
+              <navigator class="recruitment_list3_item" url="/secondary/pages/resumeInfo/index?item=2&id={{item.rpr_id}}">
+                <view class="recruitment_list3_item_left">
+                  <text>未
+                    阅
+                    简
+                    历</text>
+                </view>
+                <view class="recruitment_list3_item_right">
+                  {{item.resume.unread}}<text class="x">人</text>
+                </view>
+              </navigator>
+              <navigator class="recruitment_list3_item" url="/secondary/pages/resumeInfo/index?item=3&id={{item.rpr_id}}">
+                <view class="recruitment_list3_item_left">
+                  <text>已
+                    阅
+                    简
+                    历</text>
+                </view>
+                <view class="recruitment_list3_item_right">
+                  {{item.resume.read}}<text class="x">人</text>
+                </view>
+              </navigator>
+              <navigator class="recruitment_list3_item" url="/secondary/pages/resumeInfo/index?item=4&id={{item.rpr_id}}">
+                <view class="recruitment_list3_item_left red">
+                  <text>标
+                    记
+                    简
+                    历</text>
+                </view>
+                <view class="recruitment_list3_item_right reds">
+                  {{item.resume.sign}}<text class="x">人</text>
+                </view>
+              </navigator>
+            </view>
+            <view class="recruitment_list4">发布时间：{{item.rpr_publish_date}}</view>
+            <view class="recruitment_list5">
+              <view class="recruitment_list5_item y" wx:if="{{actives1}}" bindtap="shelves" data-index="{{index}}">
+                <image class="recruitment_list5_item_img" src="../../../icon/z_soldOut.png"></image>
+                <text>下架</text>
+              </view>
+              <navigator class="recruitment_list5_item" url="/tertiary/pages/publishPageTwe/index?item=4&id={{item.rpr_id}}" wx:if="{{!actives3}}">
+                <image class="recruitment_list5_item_img" src="../../../icon/z_edit.png"></image>
+                <text>编辑</text>
+              </navigator>
+              <view class="recruitment_list5_item y" wx:if="{{!actives1}}" bindtap="remove" data-index="{{index}}">
+                <image class="recruitment_list5_item_img" src="../../../icon/z_soldOut.png"></image>
+                <text>删除</text>
+              </view>
+            </view>
+          </view>
+          <text class="recruitment_i" style="visibility:hidden;">1</text>
+        </scroll-view>
+        <navigator class="publish" url="/secondary/pages/publishPage/index" wx:if="{{actives1}}">
+          <view class="add">
+            <view class="add-"></view>
+            <view class="add_"></view>
+          </view>
+          <view>发布职位</view>
+        </navigator>
+      </view>
+    </view>
+  </view>
+  <view class="recruitment_bottom">
+    <view class="item" bindtap="tabToggle" data-index="1">
+      <image class="img" src="{{recruitmentSquare.img}}"></image>
+      <text class="text {{recruitmentSquare.fontColor}}">招聘广场</text>
+    </view>
+    <view class="item" bindtap="tabToggle" data-index="2">
+      <image class="img" src="{{mine.img}}"></image>
+      <text class="text {{mine.fontColor}}">我 的</text>
+    </view>
+  </view>
+</view>
+<page-container class="page-container" show="{{show}}" position="right" bind:leave="eventhandle">
+  <view class="filter">
+    <view class="educationBackground">
+      <view class="titles">学历要求</view>
+      <view class="content">
+        <view class="item {{active1}}" bindtap="tilters" data-item="1" data-type="1">不限</view>
+        <view wx:for="{{educationBackground}}" wx:key="index" class="item {{item.active}}" bindtap="tilters" data-item="1" data-type="2" data-index="{{index}}">{{item.e_name}}</view>
+      </view>
+    </view>
+    <view class="salaryPackage">
+      <view class="titles">薪资待遇<text class="titles_txt">（单选）</text></view>
+      <view class="content">
+        <view class="item {{active2}}" bindtap="tilters" data-item="2" data-type="1">不限</view>
+        <view wx:for="{{salaryPackage}}" wx:key="index" class="item {{item.active}}" bindtap="tilters" data-item="2" data-index="{{index}}" data-type="2">{{item.s_name}}</view>
+      </view>
+    </view>
+    <view class="experienceRequirement">
+      <view class="titles">经验要求</view>
+      <view class="content">
+        <view class="item {{active3}}" bindtap="tilters" data-item="3" data-type="1">不限</view>
+        <view wx:for="{{experienceRequirement}}" wx:key="index" class="item {{item.active}}" bindtap="tilters" data-item="3" data-type="2" data-index="{{index}}">{{item.e_name}}</view>
+      </view>
+    </view>
+    <view class="bottom">
+      <view class="empty" bindtap="empty">清空</view>
+      <view class="confirm" bindtap="confirm">确认</view>
+    </view>
+  </view>
+</page-container>

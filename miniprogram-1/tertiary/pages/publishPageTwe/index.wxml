@@ -1,0 +1,135 @@
+<!--secondary/pages/publishPageTwe/index.wxml-->
+<view class="publishPageTwe">
+  <view class="title">
+    <view class="title_left">继续填写</view>
+  </view>
+  <view class="course">
+    <view class="course_item">
+      <view class="insideTracks"></view>
+      <view class="course_left_txt">填写职业信息</view>
+    </view>
+    <view class="course_midden"></view>
+    <view class="course_item">
+      <view class="outerRace">
+        <view class="insideTrack"></view>
+      </view>
+      <view class="course_left_txt">选择职业要求</view>
+    </view>
+  </view>
+  <view class="item">
+    <view class="item_title">经验要求</view>
+    <picker bindchange="bindChange" data-item="1" value="{{sufferIndex}}" range="{{sufferArr}}">
+      <view class="picker">
+        <view class="item_cont">
+          <view class="{{sufferValue.e_id?'active':''}}">{{sufferValue.e_name}}</view>
+          <image class="item_cont_img" src="../../../icon/mine_right_arrow.png"></image>
+        </view>
+      </view>
+    </picker>
+  </view>
+  <view class="item">
+    <view class="item_title">最低学历</view>
+    <picker bindchange="bindChange" data-item="2" value="{{learnIndex}}" range="{{learnArr}}">
+      <view class="picker">
+        <view class="item_cont">
+          <view class="{{learnValue.e_id?'active':''}}">{{learnValue.e_name}}</view>
+          <image class="item_cont_img" src="../../../icon/mine_right_arrow.png"></image>
+        </view>
+      </view>
+    </picker>
+  </view>
+  <view class="item">
+    <view class="item_title">薪资范围</view>
+    <picker mode="multiSelector" bindchange="bindChange" bindcolumnchange="bindColumnChange" data-item="3" value="{{salaryIndex}}" range="{{salaryArray}}">
+      <view class="item_cont">
+        <view wx:if="{{!salaryMax}}">请选择合理的薪资范围</view>
+        <view class="active" wx:if="{{salaryMax}}">{{salaryMin+'-'+salaryMax}}<text space="emsp">    {{fewPay}}</text></view>
+        <image class="item_cont_img" src="../../../icon/mine_right_arrow.png"></image>
+      </view>
+    </picker>
+  </view>
+  <view class="item">
+    <view class="item_title">职位关键词</view>
+    <view class="item_cont" bindtap="openMask" data-item="1">
+      <view class="item_cont_txt {{txt=='选择关键词提供给求职者'?'':'active'}}">{{txt}}</view>
+      <image class="item_cont_img" src="../../../icon/mine_right_arrow.png"></image>
+    </view>
+  </view>
+  <view class="item">
+    <view class="item_title">工作地址</view>
+    <view class="item_cont" bindtap="openMask" data-item="2">
+      <view class="item_cont_txt {{workFullAddress=='请填写精确的工作地址'?'':'active'}}">{{workFullAddress}}</view>
+      <image class="item_cont_img" src="../../../icon/mine_right_arrow.png"></image>
+    </view>
+  </view>
+  <view class="bottom">
+    <view class="btn {{active2}}" bindtap="confirms">发布</view>
+  </view>
+</view>
+<page-container class="page-container" show="{{show}}" position="right">
+  <view class="keyWord" wx:if="{{maskType==1}}">
+    <view class="title">岗位招聘偏好</view>
+    <view class="note">你的偏好选择将用于为你推荐更适合的求职者</view>
+    <view class="item">
+      <view class="item_title">此岗位在后厨的职责是？</view>
+      <view class="item_cont">
+        <view class="item_cont_item {{item.active}}" wx:for="{{duty}}" wx:key="index" bindtap="clickItem" data-item="1" data-index="{{index}}">{{item.rd_name}}</view>
+      </view>
+    </view>
+    <view class="item">
+      <view class="item_title">此岗位的工作经验要求是？</view>
+      <view class="item_cont">
+        <view class="item_cont_item {{item.active}}" wx:for="{{suffer}}" wx:key="index" bindtap="clickItem" data-item="2" data-index="{{index}}">{{item.re_name}}</view>
+      </view>
+    </view>
+    <view class="item">
+      <view class="item_title">此岗位可以提供哪些福利？</view>
+      <view class="item_cont">
+        <view class="item_cont_item {{item.active}}" wx:for="{{welfare}}" wx:key="index" bindtap="clickItem" data-item="3" data-index="{{index}}">{{item.rf_name}}</view>
+      </view>
+    </view>
+    <view class="item">
+      <view class="item_title">添加自定义招聘偏好</view>
+      <view class="item_cont">
+        <view class="item_cont_item {{item.active}}" wx:for="{{custom}}" wx:key="index" bindtap="clickItem" data-item="4" data-index="{{index}}">
+          <image class="item_cont_item_img" src="../../../icon/chef_remove.png" catchtap="delCustom" data-index="{{index}}"></image>
+          {{item.rc_name}}
+        </view>
+        <view class="item_cont_item add" bindtap="addCustom">+添加关键词</view>
+      </view>
+    </view>
+    <view class="bottom">
+      <view class="empty" bindtap="empty">清空</view>
+      <view class="confirm" bindtap="confirm" data-item="1">确认</view>
+    </view>
+  </view>
+  <view class="WorkAddress" wx:if="{{maskType==2}}">
+    <view class="map" bindtap="clickMap">
+      <map id="maps" class="maps" show-location longitude="{{longitude}}" latitude="{{latitude}}" scale="16" bindregionchange="regionchange">
+        <image class="cover-image {{show_ani}}" src="{{domains}}mark.png"></image>
+      </map>
+    </view>
+    <view class="search">
+      <image class="search_img" src="{{domain}}search.png"></image>
+      <input class="search_inp" type="text" placeholder="搜索地址" placeholder-class="placeholder" bindfocus="focus" bindinput="inputs" data-item="1"/>
+    </view>
+    <view class="bottoms">
+      <view class="workAddress">
+        <view class="workAddress_left">工作地址：</view>
+        <view class="workAddress_right">{{workAddress}}</view>
+      </view>
+      <view class="fullAddress">
+        <input class="fullAddress_inp" type="text" placeholder="请输入详细地址" value="{{fullAddress}}" bindinput="inputs" data-item="2"/>
+      </view>
+      <view class="bottoms_bottom">
+        <view class="btn {{active2}}" bindtap="confirm" data-item="2">确定</view>
+      </view>
+    </view>
+    <view class="showview" hidden="{{showview}}">
+      <view class="showview_item" wx:for="{{addressArr}}" wx:key="index" bindtap="cilckItem" data-index="{{index}}">
+        <view class="showview_item_top">{{item.title}}</view>
+        <view class="showview_item_bom">{{item.address}}</view>
+      </view>
+    </view>
+  </view>
+</page-container>
