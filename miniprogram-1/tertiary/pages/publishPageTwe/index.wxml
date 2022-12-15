@@ -1,7 +1,7 @@
 <!--secondary/pages/publishPageTwe/index.wxml-->
 <view class="publishPageTwe">
   <view class="title">
-    <view class="title_left">继续填写</view>
+    <view class="title_left">{{edit?'编辑招聘':'继续填写'}}</view>
   </view>
   <view class="course">
     <view class="course_item">
@@ -43,7 +43,7 @@
     <picker mode="multiSelector" bindchange="bindChange" bindcolumnchange="bindColumnChange" data-item="3" value="{{salaryIndex}}" range="{{salaryArray}}">
       <view class="item_cont">
         <view wx:if="{{!salaryMax}}">请选择合理的薪资范围</view>
-        <view class="active" wx:if="{{salaryMax}}">{{salaryMin+'-'+salaryMax}}<text space="emsp">    {{fewPay}}</text></view>
+        <view class="active" wx:if="{{salaryMax}}">{{salaryMin+'-'+salaryMax}}<text space="emsp">    {{fewPay?fewPay+'薪':''}}</text></view>
         <image class="item_cont_img" src="../../../icon/mine_right_arrow.png"></image>
       </view>
     </picker>
@@ -71,15 +71,15 @@
     <view class="title">岗位招聘偏好</view>
     <view class="note">你的偏好选择将用于为你推荐更适合的求职者</view>
     <view class="item">
-      <view class="item_title">此岗位在后厨的职责是？</view>
+      <view class="item_title">请选择餐饮种类</view>
       <view class="item_cont">
-        <view class="item_cont_item {{item.active}}" wx:for="{{duty}}" wx:key="index" bindtap="clickItem" data-item="1" data-index="{{index}}">{{item.rd_name}}</view>
+        <view class="item_cont_item {{item.active}}" wx:for="{{kind}}" wx:key="index" bindtap="clickItem" data-item="2" data-index="{{index}}">{{item.ke_name}}</view>
       </view>
     </view>
     <view class="item">
-      <view class="item_title">此岗位的工作经验要求是？</view>
+      <view class="item_title">此岗位在后厨的职责是？</view>
       <view class="item_cont">
-        <view class="item_cont_item {{item.active}}" wx:for="{{suffer}}" wx:key="index" bindtap="clickItem" data-item="2" data-index="{{index}}">{{item.re_name}}</view>
+        <view class="item_cont_item {{item.active}}" wx:for="{{duty}}" wx:key="index" bindtap="clickItem" data-item="1" data-index="{{index}}">{{item.rd_name}}</view>
       </view>
     </view>
     <view class="item">

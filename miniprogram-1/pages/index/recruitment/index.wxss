@@ -399,7 +399,7 @@
   height: 78rpx;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
   font-family: 'Medium';
   font-size: 18rpx;
   padding: 0 20rpx;

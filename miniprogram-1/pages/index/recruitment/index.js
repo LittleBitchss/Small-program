@@ -573,8 +573,34 @@ Page({
       }
     })
   },
-  getData(){
-
+  remove(e){
+    var that= this
+    var index = e.currentTarget.dataset.index
+    wx.showModal({
+      title: '提示',
+      content: '是否确定删除',
+      success (res) {
+        if (res.confirm) {
+          app.post('/Recruit/delRecruit',{
+            token:wx.getStorageSync('userInfo').token,
+            id:that.data.onTheJobList[index].rpr_id
+          }).then(res=>{
+            if(res.data.status==1){
+              wx.showToast({
+                title: '删除成功',
+                icon: 'success',
+                duration: 1000
+              })
+              if (that.data.actives2) {
+                that.getJobList(0)
+              } else if (that.data.actives3) {
+                that.getJobList(2)
+              }
+            }
+          })
+        }
+      }
+    })
   },
   /**
    * 生命周期函数--监听页面加载
@@ -586,7 +612,7 @@ Page({
     this.setData({
       citys: [wx.getStorageSync('userInfo').citys.slice(0, wx.getStorageSync('userInfo').citys.length - 1), wx.getStorageSync('userInfo').citycode]
     })
-    if (!wx.getStorageInfoSync('userInfo').publish) {
+    if (wx.getStorageInfoSync('userInfo').publish==0) {
       wx.showModal({
         title: '暂未发布社招',
         content: '前去发布？',

@@ -54,7 +54,6 @@ Page({
     longitudes: '',
     latitudes: '',
     address: '编辑居住地址',
-    active1: '',
     active2: '',
     // 个人优势
     areaf: false,
@@ -276,6 +275,7 @@ Page({
           fullAddress: this.data.fullAddresss,
           longitude: this.data.longitudes,
           latitude: this.data.latitudes,
+          active2:'active'
         })
       } else {
         this.setData({
@@ -546,16 +546,31 @@ Page({
           fullAddresss: this.data.fullAddress,
           longitudes: this.data.longitude,
           latitudes: this.data.latitude,
-          address: this.data.workAddress + this.data.fullAddress,
-          show: false
+          address: this.data.workAddress + this.data.fullAddress
         })
-        if (this.data.sufferValue.e_name != '请选择经验' && this.data.learnValue.e_name != '请选择学历' && this.data.salaryMin != '' && this.data.txt != '选择关键词提供给求职者' && this.data.address != '请填写精确的工作地址') {
-          this.setData({
-            active2: 'actives'
-          })
-        } else {
-          this.setData({
-            active2: ''
+        if (this.data.longitudes != '' && this.data.latitudes != '' && this.data.fullAddresss != '' && this.data.address != '编辑居住地址') {
+          app.post('/Job/setAddress', {
+            token: wx.getStorageSync('userInfo').token,
+            r_longitude: this.data.longitudes,
+            r_latitude: this.data.latitudes,
+            r_address: this.data.workAddresss,
+            r_doorplate: this.data.fullAddresss,
+            r_provinces: this.data.provincess,
+            r_city: this.data.citys,
+            r_area: this.data.areas
+          }).then((res) => {
+            if (res.data.status == 1) {
+              this.setData({
+                show: false
+              })
+              this.getData()
+            } else {
+              wx.showToast({
+                title: '保存失败',
+                icon: 'error',
+                duration: 1000
+              })
+            }
           })
         }
       }
@@ -844,7 +859,16 @@ Page({
             })
           }
           var stateJobs = this.data.stateJob.find(i => i.js_id == res.data.data.basic.r_job_status)
+          console.log(res.data.data);
           this.setData({
+            address: res.data.data.basic.r_address + res.data.data.basic.r_doorplate,
+            provincess: res.data.data.basic.r_provinces,
+            citys: res.data.data.basic.r_city,
+            areas: res.data.data.basic.r_area,
+            workAddresss: res.data.data.basic.r_address,
+            fullAddresss: res.data.data.basic.r_doorplate,
+            longitudes: res.data.data.basic.r_longitude,
+            latitudes: res.data.data.basic.r_latitude,
             basic: res.data.data.basic,
             job_expectation: res.data.data.job_expectation,
             jobState: stateJobs.js_name,

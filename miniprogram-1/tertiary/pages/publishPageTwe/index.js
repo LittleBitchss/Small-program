@@ -13,7 +13,8 @@ Page({
     domain: app.domain + '/img/chef/',
     domains: app.domain + '/img/chefs/',
     id: 0,
-    title:'',
+    edit: 0,
+    title: '',
     jobName: '',
     jobDescribe: '',
     sufferArr: [],
@@ -32,24 +33,50 @@ Page({
     },
     salaryArray: [
       ['面议', '1000', '2000', '3000', '4000', '5000', '6000', '7000', '8000', '9000', '10000', '11000', '12000', '13000', '14000', '15000', '16000', '17000', '18000', '19000', '20000', '21000', '22000', '23000', '24000', '25000', '26000', '27000', '28000', '29000', '30000', '31000', '32000', '33000', '34000'],
-      ['面议'],['12薪','13薪','14薪','15薪','16薪','17薪','18薪','19薪','20薪','21薪','22薪','23薪','24薪']
+      ['面议'],
+      ['12薪', '13薪', '14薪', '15薪', '16薪', '17薪', '18薪', '19薪', '20薪', '21薪', '22薪', '23薪', '24薪']
     ],
     salaryArrays: [
       ['面议', '1000', '2000', '3000', '4000', '5000', '6000', '7000', '8000', '9000', '10000', '11000', '12000', '13000', '14000', '15000', '16000', '17000', '18000', '19000', '20000', '21000', '22000', '23000', '24000', '25000', '26000', '27000', '28000', '29000', '30000', '31000', '32000', '33000', '34000'],
-      ['面议', '2000', '3000', '4000', '5000', '6000', '7000', '8000', '9000', '10000', '11000', '12000', '13000', '14000', '15000', '16000', '17000', '18000', '19000', '20000', '21000', '22000', '23000', '24000', '25000', '26000', '27000', '28000', '29000', '30000', '31000', '32000', '33000', '34000', '35000'],['12薪','13薪','14薪','15薪','16薪','17薪','18薪','19薪','20薪','21薪','22薪','23薪','24薪']
+      ['面议', '2000', '3000', '4000', '5000', '6000', '7000', '8000', '9000', '10000', '11000', '12000', '13000', '14000', '15000', '16000', '17000', '18000', '19000', '20000', '21000', '22000', '23000', '24000', '25000', '26000', '27000', '28000', '29000', '30000', '31000', '32000', '33000', '34000', '35000'],
+      ['12薪', '13薪', '14薪', '15薪', '16薪', '17薪', '18薪', '19薪', '20薪', '21薪', '22薪', '23薪', '24薪']
     ],
-    salaryIndex: [0, 0],
+    salaryIndex: [0, 0, 0],
     salaryMin: '',
     salaryMax: '',
-    fewPay:'',
+    fewPay: '',
     show: false,
     // 关键词
+    kind: [{
+      ke_id: 1,
+      active: '',
+      ke_name: '中餐'
+    }, {
+      ke_id: 2,
+      active: '',
+      ke_name: '西餐'
+    }, {
+      ke_id: 3,
+      active: '',
+      ke_name: '糕点/甜品'
+    }],
+    kinds: [{
+      ke_id: 1,
+      active: '',
+      ke_name: '中餐'
+    }, {
+      ke_id: 2,
+      active: '',
+      ke_name: '西餐'
+    }, {
+      ke_id: 3,
+      active: '',
+      ke_name: '糕点/甜品'
+    }],
+    kindsValue: [],
     duty: [],
     dutys: [],
     dutyValue: [],
-    suffer: [],
-    suffers: [],
-    suffersValue: [],
     welfare: [],
     welfares: [],
     welfareValue: [],
@@ -76,7 +103,6 @@ Page({
     longitudes: '',
     latitudes: '',
     workFullAddress: '请填写精确的工作地址',
-    active1: '',
     active2: ''
   },
   bindChange(e) {
@@ -112,7 +138,7 @@ Page({
       this.setData({
         salaryMin: this.data.salaryArray[0][e.detail.value[0]],
         salaryMax: this.data.salaryArray[1][e.detail.value[1]],
-        fewPay: this.data.salaryArray[2][e.detail.value[2]]
+        fewPay: this.data.salaryArray[2][e.detail.value[2]].slice(0, 2)
       })
       if (this.data.sufferValue.e_name != '请选择经验' && this.data.learnValue.e_name != '请选择学历' && this.data.salaryMin != '' && this.data.txt != '选择关键词提供给求职者' && this.data.workFullAddress != '请填写精确的工作地址') {
         this.setData({
@@ -157,8 +183,8 @@ Page({
     })
     if (item == 1) {
       this.setData({
+        kind: this.data.kinds,
         duty: this.data.dutys,
-        suffer: this.data.suffers,
         welfare: this.data.welfares,
         custom: this.data.customs
       })
@@ -194,7 +220,7 @@ Page({
     var item = e.currentTarget.dataset.item
     var index = e.currentTarget.dataset.index
     var duty = JSON.parse(JSON.stringify(this.data.duty))
-    var suffer = JSON.parse(JSON.stringify(this.data.suffer))
+    var kind = JSON.parse(JSON.stringify(this.data.kind))
     var welfare = JSON.parse(JSON.stringify(this.data.welfare))
     var custom = JSON.parse(JSON.stringify(this.data.custom))
     if (item == 1) {
@@ -204,10 +230,10 @@ Page({
         duty[index].active = 'active'
       }
     } else if (item == 2) {
-      if (suffer[index].active) {
-        suffer[index].active = ''
+      if (kind[index].active) {
+        kind[index].active = ''
       } else {
-        suffer[index].active = 'active'
+        kind[index].active = 'active'
       }
     } else if (item == 3) {
       if (welfare[index].active) {
@@ -223,8 +249,8 @@ Page({
       }
     }
     this.setData({
+      kind: kind,
       duty: duty,
-      suffer: suffer,
       welfare: welfare,
       custom: custom
     })
@@ -289,13 +315,13 @@ Page({
   },
   empty() {
     var duty = JSON.parse(JSON.stringify(this.data.duty))
-    var suffer = JSON.parse(JSON.stringify(this.data.suffer))
+    var kind = JSON.parse(JSON.stringify(this.data.kind))
     var welfare = JSON.parse(JSON.stringify(this.data.welfare))
     var custom = JSON.parse(JSON.stringify(this.data.custom))
     duty.forEach(i => {
       i.active = ''
     })
-    suffer.forEach(i => {
+    kind.forEach(i => {
       i.active = ''
     })
     welfare.forEach(i => {
@@ -305,8 +331,8 @@ Page({
       i.active = ''
     })
     this.setData({
+      kind: kind,
       duty: duty,
-      suffer: suffer,
       welfare: welfare,
       custom: custom
     })
@@ -315,11 +341,11 @@ Page({
     var item = e.currentTarget.dataset.item
     if (item == 1) {
       var dutyTxt = ''
-      var sufferTxt = ''
+      var kindTxt = ''
       var welfareTxt = ''
       var customTxt = ''
       var dutyNum = ''
-      var sufferNum = ''
+      var kindNum = ''
       var welfareNum = ''
       var customNum = ''
       this.data.duty.forEach(i => {
@@ -328,10 +354,10 @@ Page({
           dutyNum += i.rd_id + '/'
         }
       })
-      this.data.suffer.forEach(i => {
+      this.data.kind.forEach(i => {
         if (i.active) {
-          sufferTxt += i.re_name + '/'
-          sufferNum += i.re_id + '/'
+          kindTxt += i.ke_name + '/'
+          kindNum += i.ke_id + '/'
         }
       })
       this.data.welfare.forEach(i => {
@@ -352,9 +378,9 @@ Page({
         dutyTxt = dutyTxt.slice(0, dutyTxt.length - 1)
         dutyNum = dutyNum.slice(0, dutyNum.length - 1)
       }
-      if (sufferTxt) {
-        sufferTxt = sufferTxt.slice(0, sufferTxt.length - 1)
-        sufferNum = sufferNum.slice(0, sufferNum.length - 1)
+      if (kindTxt) {
+        kindTxt = kindTxt.slice(0, kindTxt.length - 1)
+        kindNum = kindNum.slice(0, kindNum.length - 1)
       }
       if (welfareTxt) {
         welfareTxt = welfareTxt.slice(0, welfareTxt.length - 1)
@@ -364,15 +390,15 @@ Page({
         customTxt = customTxt.slice(0, customTxt.length - 1)
         customNum = customNum.slice(0, customNum.length - 1)
       }
-      var txt = dutyTxt + ((dutyTxt && sufferTxt) || (dutyTxt && welfareTxt) || (dutyTxt && customTxt) ? ',' : '') + sufferTxt + ((sufferTxt && welfareTxt) || (sufferTxt && customTxt) ? ',' : '') + welfareTxt + ((welfareTxt && customTxt) ? ',' : '') + customTxt
-      var num = dutyNum + ',' + sufferNum + ',' + welfareNum + ',' + customNum
+      var txt = kindTxt + ((kindTxt && dutyTxt) || (kindTxt && welfareTxt) || (kindTxt && customTxt) ? ',' : '') + dutyTxt + ((dutyTxt && welfareTxt) || (dutyTxt && customTxt) ? ',' : '') + welfareTxt + ((welfareTxt && customTxt) ? ',' : '') + customTxt
+      var num = kindNum + ',' + dutyNum + ',' + welfareNum + ',' + customNum
       if (txt) {
         this.setData({
           txt: txt,
           num: num,
           show: false,
           dutys: this.data.duty,
-          suffers: this.data.suffer,
+          kinds: this.data.kind,
           welfares: this.data.welfare,
           customs: this.data.custom
         })
@@ -382,7 +408,7 @@ Page({
           num: '',
           show: false,
           dutys: this.data.duty,
-          suffers: this.data.suffer,
+          kinds: this.data.kind,
           welfares: this.data.welfare,
           customs: this.data.custom
         })
@@ -563,6 +589,7 @@ Page({
         minimum_education: this.data.learnValue.e_id,
         minimum_waga: this.data.salaryMin,
         maximum_waga: this.data.salaryMax,
+        few_salaries: this.data.fewPay,
         work_address: this.data.workFullAddress,
         provinces: this.data.provincess,
         city: this.data.citys,
@@ -578,7 +605,7 @@ Page({
             icon: 'success',
             duration: 1000
           })
-          if(!storage.publish){
+          if (!storage.publish) {
             storage.publish = 1
             wx.setStorageSync('userInfo', storage)
           }
@@ -587,7 +614,7 @@ Page({
               delta: 2
             })
             let pages = getCurrentPages()
-            var recruitment =  pages[pages.length - 3]
+            var recruitment = pages[pages.length - 3]
             recruitment.getMineInfo()
           }, 1000)
         }
@@ -604,7 +631,12 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-    if (options.jobName) {
+    if (options.edit) {
+      this.setData({
+        id: options.id,
+        edit: options.edit
+      })
+    } else {
       this.setData({
         title: options.title,
         jobName: options.jobName,
@@ -650,17 +682,6 @@ Page({
         })
       }
     })
-    app.post('/comm/getWorkExperience').then((res) => {
-      if (res.data.status == 1) {
-        res.data.data.forEach(i => {
-          i.active = ''
-        });
-        this.setData({
-          suffer: res.data.data,
-          suffers: res.data.data
-        })
-      }
-    })
     app.post('/comm/getWelfare').then((res) => {
       if (res.data.status == 1) {
         res.data.data.forEach(i => {
@@ -673,6 +694,46 @@ Page({
       }
     })
     this.getCustom()
+    if (options.edit) {
+      app.post('/Recruit/getPublishDetail', {
+        token: wx.getStorageSync('userInfo').token,
+        rpr_id: this.data.id
+      }).then((res) => {
+        if (res.data.status == 1 && res.data.data.info.rpr_experience) {
+          var kinds = JSON.parse(JSON.stringify(this.data.kinds))
+          var dutys = JSON.parse(JSON.stringify(this.data.dutys))
+          var welfares = JSON.parse(JSON.stringify(this.data.welfares))
+          var customs = JSON.parse(JSON.stringify(this.data.customs))
+          kinds.forEach(i=>{
+            res.data.data.catering.forEach(j=>{
+              if(i.ke_id==j.rcc_id){
+                i.active='active'
+              }
+            })
+          })
+          console.log(res.data.data);
+          this.setData({
+            title: res.data.data.info.rpr_title,
+            jobName: res.data.data.info.rpr_position_name,
+            jobDescribe: res.data.data.info.rpr_job_description,
+            sufferIndex: res.data.data.info.rpr_experience - 1,
+            sufferValue: this.data.sufferArrs[res.data.data.info.rpr_experience - 1],
+            learnIndex: res.data.data.info.rpr_minimum_education - 1,
+            learnValue: this.data.learnArrs[res.data.data.info.rpr_minimum_education - 1],
+            salaryArray: res.data.data.info.rpr_maximum_waga == '面议' ? this.data.salaryArray : this.data.salaryArrays,
+            salaryIndex: [
+              res.data.data.info.rpr_maximum_waga == '面议' ? this.data.salaryArray[0].indexOf(res.data.data.info.rpr_minimum_waga) : this.data.salaryArrays[0].indexOf(res.data.data.info.rpr_minimum_waga),
+              res.data.data.info.rpr_maximum_waga == '面议' ? this.data.salaryArray[1].indexOf(res.data.data.info.rpr_maximum_waga) : this.data.salaryArrays[1].indexOf(res.data.data.info.rpr_maximum_waga),
+              this.data.salaryArray[2].indexOf(res.data.data.info.rpr_few_salaries + '薪')
+            ],
+            salaryMin: res.data.data.info.rpr_minimum_waga,
+            salaryMax: res.data.data.info.rpr_maximum_waga,
+            fewPay: res.data.data.info.rpr_few_salaries,
+
+          })
+        }
+      })
+    }
   },
 
   /**

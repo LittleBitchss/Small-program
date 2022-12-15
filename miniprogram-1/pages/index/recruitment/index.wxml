@@ -70,7 +70,7 @@
           <view class="recruitment_list" wx:for="{{onTheJobList}}" wx:key="index">
             <view class="recruitment_list1">
               <text>{{item.rpr_title}}</text>
-              <text>{{item.rpr_minimum_waga}}{{item.rpr_minimum_waga?'-':'待发布'}}{{item.rpr_maximum_waga}}</text>
+              <text space="emsp">{{item.rpr_minimum_waga}}{{item.rpr_minimum_waga?'-':'待发布'}}{{item.rpr_maximum_waga}} {{item.rpr_few_salaries&&item.rpr_few_salaries>12?item.rpr_few_salaries+'薪':''}}13薪</text>
             </view>
             <view class="recruitment_list2">
               <view class="recruitment_list2_item" wx:for="{{item.key_word}}" wx:for-index="idx" wx:for-item="itemName" wx:key="idx">{{itemName}}</view>
@@ -121,13 +121,16 @@
                 </view>
               </navigator>
             </view>
-            <view class="recruitment_list4">发布时间：{{item.rpr_publish_date}}</view>
+            <view class="recruitment_list4">
+            <text>职位：{{desiredPosition[item.rpr_position_name-1].p_name}}</text>
+            <text>发布时间：{{item.rpr_publish_date}}</text>
+            </view>
             <view class="recruitment_list5">
               <view class="recruitment_list5_item y" wx:if="{{actives1}}" bindtap="shelves" data-index="{{index}}">
                 <image class="recruitment_list5_item_img" src="../../../icon/z_soldOut.png"></image>
                 <text>下架</text>
               </view>
-              <navigator class="recruitment_list5_item" url="/tertiary/pages/publishPageTwe/index?item=4&id={{item.rpr_id}}" wx:if="{{!actives3}}">
+              <navigator class="recruitment_list5_item" url="/tertiary/pages/publishPageTwe/index?edit=1&id={{item.rpr_id}}" wx:if="{{!actives3}}">
                 <image class="recruitment_list5_item_img" src="../../../icon/z_edit.png"></image>
                 <text>编辑</text>
               </navigator>
