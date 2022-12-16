@@ -16,6 +16,10 @@ Page({
     },
     index: 1,
     desiredPosition: [],
+    desiredPositions: [],
+    year: '',
+    month: '',
+    list:[],
     p_id: 0,
     scroll: 0,
     leftTilterActive1: 'active',
@@ -49,11 +53,23 @@ Page({
     photo: '',
     name: '',
     onTheJobList: [],
-
+    kind: [{
+      ke_id: 1,
+      active: '',
+      ke_name: '中餐'
+    }, {
+      ke_id: 2,
+      active: '',
+      ke_name: '西餐'
+    }, {
+      ke_id: 3,
+      active: '',
+      ke_name: '糕点/甜品'
+    }],
     duty: [],
-    suffer: [],
     welfare: [],
     custom: [],
+    url: ''
   },
   tabToggle(e) {
     var index = e.currentTarget.dataset.index
@@ -453,72 +469,63 @@ Page({
       }
     })
   },
-  getCustom(list){
-    if(list.length==0){
-      this.setData ({
+  getCustom(list) {
+    if (list.length == 0) {
+      this.setData({
         onTheJobList: []
       })
       return
     }
     list.forEach(i => {
-      app.post('/comm/getCustom', {
-        rpr_id: i.rpr_id
-      }).then((res) => {
-        if (res.data.status == 1) {
-          var arr = []
-          var a = i.key_word.split(',')
-          if (a[0]) {
-            try{
-              a[0].split('').forEach(j => {
-                if (j != '/') {
-                  var b = this.data.duty.find(k => j == k.rd_id).rd_name
-                  arr.push(b)
-                  throw new Error('停止')
-                }
-              })
-            }catch(e){}
-          }
-          if (a[1]) {
-            try{
-            a[1].split('').forEach(j => {
-              if (j != '/') {
-                var b = this.data.suffer.find(k => j == k.re_id).re_name
-                arr.push(b)
-                throw new Error('停止')
-              }
-            })
-          }catch(e){}
-          }
-          if (a[2]) {
-            try{
-            a[2].split('').forEach(j => {
-              if (j != '/') {
-                var b = this.data.welfare.find(k => j == k.rf_id).rf_name
-                arr.push(b)
-                throw new Error('停止')
-              }
-            })
-          }catch(e){}
-          }
-          if (a[3]) {
-            try{
-            if (a[3].indexOf('/') == -1) {
-              a[3] = [a[3]]
-            } else {
-              a[3] = a[3].split('/')
-            }
-            a[3].forEach(j => {
-              var b = res.data.data.find(k => j == k.rc_id).rc_name
+      var rpr_custom = JSON.parse(i.rpr_custom)
+      var arr = []
+      var a = i.key_word.split(',')
+      if (i.rpr_experience) {
+        arr.push(this.data.experienceRequirement[i.rpr_experience - 1].e_name)
+      }
+      if (i.rpr_minimum_education) {
+        arr.push(this.data.educationBackground[i.rpr_minimum_education - 1].e_name)
+      }
+      if (a[0]) {
+        try {
+          a[0].split('').forEach(j => {
+            if (j != '/') {
+              var b = this.data.kind.find(k => j == k.ke_id).ke_name
               arr.push(b)
               throw new Error('停止')
-            })
-          }catch(e){}
-          }
-          i.key_word = arr
-          this.setData({
-            onTheJobList: list
+            }
           })
-        }
+        } catch (e) {}
+      }
+      if (a[1]) {
+        try {
+          a[1].split('').forEach(j => {
+            if (j != '/') {
+              var b = this.data.duty.find(k => j == k.rd_id).rd_name
+              arr.push(b)
+              throw new Error('停止')
+            }
+          })
+        } catch (e) {}
+      }
+      if (a[2]) {
+        try {
+          a[2].split('').forEach(j => {
+            if (j != '/') {
+              var b = this.data.welfare.find(k => j == k.rf_id).rf_name
+              arr.push(b)
+              throw new Error('停止')
+            }
+          })
+        } catch (e) {}
+      }
+      if (rpr_custom.length != 0) {
+        arr.push(rpr_custom[0].rc_name)
+      }
+      i.key_word = arr
+      this.setData({
+        onTheJobList: list,
+        url: i.rpr_status == 2 ? '' : '/secondary/pages/resumeInfo/index'
       })
     })
   },
@@ -536,31 +543,30 @@ Page({
       }
     })
   },
-  getJobList(item){
-    app.post('/Recruit/getPublish',{
-      token:wx.getStorageSync('userInfo').token,
-      rc_id:wx.getStorageSync('userInfo').rc_id,
-      status:item
-    }).then((res)=>{
-      if(res.data.status==1){
-        console.log(res.data.data);
+  getJobList(item) {
+    app.post('/Recruit/getPublish', {
+      token: wx.getStorageSync('userInfo').token,
+      rc_id: wx.getStorageSync('userInfo').rc_id,
+      status: item
+    }).then((res) => {
+      if (res.data.status == 1) {
         this.getCustom(res.data.data)
       }
     })
   },
-  shelves(e){
+  shelves(e) {
     var index = e.currentTarget.dataset.index
     var that = this
     wx.showModal({
       title: '提示',
       content: '是否已完成招聘',
-      success (res) {
+      success(res) {
         if (res.confirm) {
-          app.post('/Recruit/lowerShelf',{
-            token:wx.getStorageSync('userInfo').token,
-            id:that.data.onTheJobList[index].rpr_id
-          }).then(res=>{
-            if(res.data.status==1){
+          app.post('/Recruit/lowerShelf', {
+            token: wx.getStorageSync('userInfo').token,
+            id: that.data.onTheJobList[index].rpr_id
+          }).then(res => {
+            if (res.data.status == 1) {
               wx.showToast({
                 title: '下架成功',
                 icon: 'success',
@@ -573,19 +579,19 @@ Page({
       }
     })
   },
-  remove(e){
-    var that= this
+  remove(e) {
+    var that = this
     var index = e.currentTarget.dataset.index
     wx.showModal({
       title: '提示',
       content: '是否确定删除',
-      success (res) {
+      success(res) {
         if (res.confirm) {
-          app.post('/Recruit/delRecruit',{
-            token:wx.getStorageSync('userInfo').token,
-            id:that.data.onTheJobList[index].rpr_id
-          }).then(res=>{
-            if(res.data.status==1){
+          app.post('/Recruit/delRecruit', {
+            token: wx.getStorageSync('userInfo').token,
+            id: that.data.onTheJobList[index].rpr_id
+          }).then(res => {
+            if (res.data.status == 1) {
               wx.showToast({
                 title: '删除成功',
                 icon: 'success',
@@ -602,6 +608,39 @@ Page({
       }
     })
   },
+  getData(duty, filter, location) {
+    var obj = {
+      token: wx.getStorageSync('userInfo').token,
+      rc_id: wx.getStorageSync('userInfo').rc_id
+    }
+    app.post('/Recruit/recommendPosition', obj).then((res) => {
+      if (res.data.status == 1) {
+        var arr = [{
+          p_id: 0,
+          p_name: '推荐职位',
+          active: 'active'
+        }]
+        var rex = res.data.data
+        console.log(rex);
+        var duty = rex.duty.duty.indexOf(',') == -1 ? rex.duty.duty.split() : rex.duty.duty.split(',')
+        if (duty.length != 0) {
+          duty.forEach(i => {
+            var item = this.data.desiredPositions.find(j => j.p_id == i)
+            item.active = ''
+            arr.push(item)
+          })
+        }
+        rex.list.forEach(i => {
+          i.r_age = this.data.month > i.r_born.slice(5, 7) ? this.data.year - i.r_born.slice(0, 4) + 1 : this.data.year - i.r_born.slice(0, 4)
+          i.r_experience = this.data.month > i.r_working_time.slice(5, 7) ? this.data.year - i.r_working_time.slice(0, 4) + 1 : this.data.year - i.r_working_time.slice(0, 4)
+        })
+        this.setData({
+          desiredPosition: arr,
+          list:rex.list
+        })
+      }
+    })
+  },
   /**
    * 生命周期函数--监听页面加载
    */
@@ -609,10 +648,15 @@ Page({
     wx.setNavigationBarTitle({
       title: '招聘-我的',
     })
+    var date = new Date()
+    var year = date.getFullYear()
+    var month = date.getMonth() + 1
     this.setData({
-      citys: [wx.getStorageSync('userInfo').citys.slice(0, wx.getStorageSync('userInfo').citys.length - 1), wx.getStorageSync('userInfo').citycode]
+      citys: [wx.getStorageSync('userInfo').citys.slice(0, wx.getStorageSync('userInfo').citys.length - 1), wx.getStorageSync('userInfo').citycode],
+      year: year,
+      month: month
     })
-    if (wx.getStorageInfoSync('userInfo').publish==0) {
+    if (wx.getStorageInfoSync('userInfo').publish == 0) {
       wx.showModal({
         title: '暂未发布社招',
         content: '前去发布？',
@@ -627,11 +671,8 @@ Page({
     }
     app.post('/comm/getPosition').then((res) => {
       if (res.data.status == 1) {
-        res.data.data.forEach(i => {
-          i.active = ''
-        })
         this.setData({
-          desiredPosition: res.data.data
+          desiredPositions: res.data.data
         })
       } else {
         wx.showToast({
@@ -649,17 +690,6 @@ Page({
         this.setData({
           educationBackground: res.data.data,
           educationBackgrounds: res.data.data
-        })
-      }
-    })
-    app.post('/comm/getSalary').then((res) => {
-      if (res.data.status == 1) {
-        res.data.data.forEach(i => {
-          i.active = ''
-        })
-        this.setData({
-          salaryPackage: res.data.data,
-          salaryPackages: res.data.data
         })
       }
     })
@@ -695,6 +725,7 @@ Page({
         })
       }
     })
+    this.getData()
   },
 
   /**

@@ -6,40 +6,49 @@ Page({
    * 页面的初始数据
    */
   data: {
-    info:{},
-    education:[],
-    position:[],
-    r_id:''
+    year: '',
+    month: '',
+    info: {},
+    education: [],
+    position: [],
+    r_id: ''
   },
-  
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-    this.setData({
-      r_id:options.rrr_id
-    })
-    app.post('/comm/getEducation').then(res =>{
-      if(res.data.status == 1){
-        this.setData({
-          education:res.data.data
-        })
-      }
-    })
-    app.post('/comm/getPosition').then(res =>{
-      if(res.data.status == 1){
-        console.log(res.data.data);
-        this.setData({
-          position:res.data.data
-        })
-      }
-    })
-    
-    
     var date = new Date()
     var year = date.getFullYear()
     var month = date.getMonth() + 1
-    
+    this.setData({
+      r_id: options.r_id,
+      year: year,
+      month: month
+    })
+    app.post('/comm/getEducation').then(res => {
+      if (res.data.status == 1) {
+        this.setData({
+          education: res.data.data
+        })
+      }
+    })
+    app.post('/comm/getPosition').then(res => {
+      if (res.data.status == 1) {
+        this.setData({
+          position: res.data.data
+        })
+      }
+    })
+    app.post('/Recruit/showResume',{
+      token:wx.getStorageSync('userInfo').token,
+      r_id:this.data.r_id
+    }).then(res => {
+      if (res.data.status == 1) {
+        this.setData({
+          info: res.data.data
+        })
+      }
+    })
   },
 
   /**

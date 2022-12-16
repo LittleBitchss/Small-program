@@ -1,28 +1,10 @@
-<!--secondary/pages/resumeInfo/index.wxml-->
-<scroll-view scroll-y="true" class="list">
-  <view class="list_item" wx:for="{{lists}}" wx:key="index">
-    <view class="list_item1">
-      <view class="state" wx:if="{{!item.read_status}}"></view>
-      <image class="list_item1_img" src="{{item.r_head_portrait}}"></image>
-    </view>
-    <view class="list_item2">
-      <view class="list_item2_name">{{item.r_name}}</view>
-      <view class="list_item2_suffer">{{item.working_years}}年经验·{{item.r_age}}岁·{{education[item.education-1].e_name}}</view>
-      <view class="list_item2_jobs">应聘岗位：{{item.rpr_position_name}}</view>
-      <view class="list_item2_state">求职状态：{{item.r_job_status==1?'离职-随时到岗':item.r_job_status==2?'在职-月内到岗':item.r_job_status==3?'在职-考虑机会':'在职-暂不考虑'}}</view>
-    </view>
-    <view class="list_item3" bindtap="openMask" data-index="{{index}}">
-      点击查看
-    </view>
-  </view>
-</scroll-view>
-<page-container class="page-container" show="{{show}}" position="right">
-  <view class="editResume">
+<!--secondary/pages/talentInfo/index.wxml-->
+<view class="talentInfo">
     <view class="info">
       <view class="infos">
         <view class="name">{{info.r_name}}
         </view>
-        <view class="describe">{{basic.worktime?basic.worktime+'年经验':''}}{{basic.age?'·'+basic.age+'岁':''}}{{basic.education?'·'+basic.education:''}}{{info.r_working_time}}年经验·{{info.r_age}}岁·{{education[info.education[0].ee_education].e_name}}</view>
+        <view class="describe">{{basic.worktime?basic.worktime+'年经验':''}}{{basic.age?'·'+basic.age+'岁':''}}{{basic.education?'·'+basic.education:''}}{{info.r_working_time}}年经验·{{info.r_age}}岁·{{education[info.education[0].ee_education-1].e_name}}</view>
       </view>
       <view class="photo">
         <image class="photos" src="{{info.r_head_portrait}}"></image>
@@ -90,4 +72,3 @@
       <button class="btn btns" bindtap="callPhone">电话联系</button>
     </view>
   </view>
-</page-container>

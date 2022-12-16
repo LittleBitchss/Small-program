@@ -85,6 +85,7 @@ Page({
     customValue: [],
     txt: '选择关键词提供给求职者',
     num: '',
+
     show_ani: '',
     addressArr: [],
     showview: '1',
@@ -257,6 +258,7 @@ Page({
   },
   addCustom() {
     var that = this
+    var custom = JSON.parse(JSON.stringify(this.data.custom))
     wx.showModal({
       title: '添加关键字',
       editable: true,
@@ -265,14 +267,13 @@ Page({
       success(res) {
         if (res.confirm) {
           if (res.content.trim()) {
-            app.post('/Recruit/setRecruitCustom', {
-              token: wx.getStorageSync('userInfo').token,
-              rc_rpr_id: that.data.id,
-              rc_name: res.content
-            }).then((res) => {
-              if (res.data.status == 1) {
-                that.getCustom()
-              }
+            custom.push({
+              rc_id: custom.length,
+              rc_name: res.content,
+              active: "active"
+            })
+            that.setData({
+              custom: custom
             })
           } else {
             wx.showToast({
@@ -287,30 +288,10 @@ Page({
   },
   delCustom(e) {
     var index = e.currentTarget.dataset.index
-    app.post('/Recruit/delRecruitCustom', {
-      token: wx.getStorageSync('userInfo').token,
-      rc_id: this.data.custom[index].rc_id
-    }).then((res) => {
-      if (res.data.status == 1) {
-        this.getCustom()
-      }
-    })
-  },
-  getCustom() {
-    app.post('/comm/getCustom', {
-      rpr_id: this.data.id
-    }).then((res) => {
-      if (res.data.status == 1) {
-        if (res.data.data.length != 0) {
-          res.data.data.forEach(i => {
-            i.active = 'active'
-          });
-        }
-        this.setData({
-          custom: res.data.data,
-          customs: res.data.data
-        })
-      }
+    var custom = JSON.parse(JSON.stringify(this.data.custom))
+    custom.splice(index, 1)
+    this.setData({
+      custom: custom
     })
   },
   empty() {
@@ -347,7 +328,6 @@ Page({
       var dutyNum = ''
       var kindNum = ''
       var welfareNum = ''
-      var customNum = ''
       this.data.duty.forEach(i => {
         if (i.active) {
           dutyTxt += i.rd_name + '/'
@@ -370,17 +350,16 @@ Page({
         this.data.custom.forEach(i => {
           if (i.active) {
             customTxt += i.rc_name + '/'
-            customNum += i.rc_id + '/'
           }
         })
-      }
-      if (dutyTxt) {
-        dutyTxt = dutyTxt.slice(0, dutyTxt.length - 1)
-        dutyNum = dutyNum.slice(0, dutyNum.length - 1)
       }
       if (kindTxt) {
         kindTxt = kindTxt.slice(0, kindTxt.length - 1)
         kindNum = kindNum.slice(0, kindNum.length - 1)
+      }
+      if (dutyTxt) {
+        dutyTxt = dutyTxt.slice(0, dutyTxt.length - 1)
+        dutyNum = dutyNum.slice(0, dutyNum.length - 1)
       }
       if (welfareTxt) {
         welfareTxt = welfareTxt.slice(0, welfareTxt.length - 1)
@@ -388,10 +367,9 @@ Page({
       }
       if (customTxt) {
         customTxt = customTxt.slice(0, customTxt.length - 1)
-        customNum = customNum.slice(0, customNum.length - 1)
       }
       var txt = kindTxt + ((kindTxt && dutyTxt) || (kindTxt && welfareTxt) || (kindTxt && customTxt) ? ',' : '') + dutyTxt + ((dutyTxt && welfareTxt) || (dutyTxt && customTxt) ? ',' : '') + welfareTxt + ((welfareTxt && customTxt) ? ',' : '') + customTxt
-      var num = kindNum + ',' + dutyNum + ',' + welfareNum + ',' + customNum
+      var num = kindNum + ',' + dutyNum + ',' + welfareNum
       if (txt) {
         this.setData({
           txt: txt,
@@ -415,7 +393,7 @@ Page({
       }
       if (this.data.sufferValue.e_name != '请选择经验' && this.data.learnValue.e_name != '请选择学历' && this.data.salaryMin != '' && this.data.txt != '选择关键词提供给求职者' && this.data.workFullAddress != '请填写精确的工作地址') {
         this.setData({
-          active2: 'activea'
+          active2: 'actives'
         })
       } else {
         this.setData({
@@ -482,7 +460,7 @@ Page({
       },
       success: (res) => {
         this.setData({
-          provinces: res.result.ad_info.nation_code,
+          provinces: res.result.ad_info.city_code.slice(0, 2),
           city: res.result.ad_info.city_code.slice(3, 7),
           area: res.result.ad_info.adcode,
           workAddress: res.result.formatted_addresses.recommend,
@@ -590,11 +568,13 @@ Page({
         minimum_waga: this.data.salaryMin,
         maximum_waga: this.data.salaryMax,
         few_salaries: this.data.fewPay,
-        work_address: this.data.workFullAddress,
+        work_address: this.data.workAddresss,
+        doorplate: this.data.fullAddresss,
         provinces: this.data.provincess,
         city: this.data.citys,
         area: this.data.areas,
         key_word: this.data.num,
+        custom: JSON.stringify(this.data.customs),
         longitude: this.data.longitudes,
         latitude: this.data.latitudes
       }
@@ -610,12 +590,25 @@ Page({
             wx.setStorageSync('userInfo', storage)
           }
           setTimeout(() => {
-            wx.navigateBack({
-              delta: 2
-            })
-            let pages = getCurrentPages()
-            var recruitment = pages[pages.length - 3]
-            recruitment.getMineInfo()
+            if (this.data.edit) {
+              wx.navigateBack({
+                delta: 1
+              })
+              let pages = getCurrentPages()
+              var recruitment = pages[pages.length - 2]
+              if (recruitment.data.actives1) {
+                recruitment.getJobList(1)
+              } else if (recruitment.data.actives2) {
+                recruitment.getJobList(0)
+              }
+            } else {
+              wx.navigateBack({
+                delta: 2
+              })
+              let pages = getCurrentPages()
+              var recruitment = pages[pages.length - 3]
+              recruitment.getMineInfo()
+            }
           }, 1000)
         }
       })
@@ -645,7 +638,7 @@ Page({
       })
     }
     wx.setNavigationBarTitle({
-      title: '发布社招',
+      title: this.data.edit ? '编辑社招' : '发布社招',
     })
     app.post('/comm/getExperience').then((res) => {
       if (res.data.status == 1) {
@@ -658,82 +651,159 @@ Page({
           sufferArr: arr
         })
       }
-    })
-    app.post('/comm/getEducation').then((res) => {
-      if (res.data.status == 1) {
-        var arr = []
-        res.data.data.forEach(i => {
-          arr.push(i.e_name)
-        });
-        this.setData({
-          learnArrs: res.data.data,
-          learnArr: arr
-        })
-      }
-    })
-    app.post('/comm/getRecruitDuty').then((res) => {
-      if (res.data.status == 1) {
-        res.data.data.forEach(i => {
-          i.active = ''
-        });
-        this.setData({
-          duty: res.data.data,
-          dutys: res.data.data
-        })
-      }
-    })
-    app.post('/comm/getWelfare').then((res) => {
-      if (res.data.status == 1) {
-        res.data.data.forEach(i => {
-          i.active = ''
-        });
-        this.setData({
-          welfare: res.data.data,
-          welfares: res.data.data
-        })
-      }
-    })
-    this.getCustom()
-    if (options.edit) {
-      app.post('/Recruit/getPublishDetail', {
-        token: wx.getStorageSync('userInfo').token,
-        rpr_id: this.data.id
-      }).then((res) => {
-        if (res.data.status == 1 && res.data.data.info.rpr_experience) {
-          var kinds = JSON.parse(JSON.stringify(this.data.kinds))
-          var dutys = JSON.parse(JSON.stringify(this.data.dutys))
-          var welfares = JSON.parse(JSON.stringify(this.data.welfares))
-          var customs = JSON.parse(JSON.stringify(this.data.customs))
-          kinds.forEach(i=>{
-            res.data.data.catering.forEach(j=>{
-              if(i.ke_id==j.rcc_id){
-                i.active='active'
-              }
-            })
-          })
-          console.log(res.data.data);
+    }).then(() => {
+      app.post('/comm/getEducation').then((res) => {
+        if (res.data.status == 1) {
+          var arr = []
+          res.data.data.forEach(i => {
+            arr.push(i.e_name)
+          });
           this.setData({
-            title: res.data.data.info.rpr_title,
-            jobName: res.data.data.info.rpr_position_name,
-            jobDescribe: res.data.data.info.rpr_job_description,
-            sufferIndex: res.data.data.info.rpr_experience - 1,
-            sufferValue: this.data.sufferArrs[res.data.data.info.rpr_experience - 1],
-            learnIndex: res.data.data.info.rpr_minimum_education - 1,
-            learnValue: this.data.learnArrs[res.data.data.info.rpr_minimum_education - 1],
-            salaryArray: res.data.data.info.rpr_maximum_waga == '面议' ? this.data.salaryArray : this.data.salaryArrays,
-            salaryIndex: [
-              res.data.data.info.rpr_maximum_waga == '面议' ? this.data.salaryArray[0].indexOf(res.data.data.info.rpr_minimum_waga) : this.data.salaryArrays[0].indexOf(res.data.data.info.rpr_minimum_waga),
-              res.data.data.info.rpr_maximum_waga == '面议' ? this.data.salaryArray[1].indexOf(res.data.data.info.rpr_maximum_waga) : this.data.salaryArrays[1].indexOf(res.data.data.info.rpr_maximum_waga),
-              this.data.salaryArray[2].indexOf(res.data.data.info.rpr_few_salaries + '薪')
-            ],
-            salaryMin: res.data.data.info.rpr_minimum_waga,
-            salaryMax: res.data.data.info.rpr_maximum_waga,
-            fewPay: res.data.data.info.rpr_few_salaries,
-
+            learnArrs: res.data.data,
+            learnArr: arr
           })
         }
+      }).then(() => {
+        app.post('/comm/getRecruitDuty').then((res) => {
+          if (res.data.status == 1) {
+            res.data.data.forEach(i => {
+              i.active = ''
+            });
+            this.setData({
+              duty: res.data.data,
+              dutys: res.data.data
+            })
+          }
+        }).then(() => {
+          app.post('/comm/getWelfare').then((res) => {
+            if (res.data.status == 1) {
+              res.data.data.forEach(i => {
+                i.active = ''
+              });
+              this.setData({
+                welfare: res.data.data,
+                welfares: res.data.data
+              })
+            }
+          }).then(() => {
+            if (options.edit) {
+              app.post('/Recruit/getPublishDetail', {
+                token: wx.getStorageSync('userInfo').token,
+                rpr_id: this.data.id
+              }).then((res) => {
+                if (res.data.status == 1) {
+                  if (res.data.data.info.rpr_experience) {
+                    var kinds = JSON.parse(JSON.stringify(this.data.kinds))
+                    var dutys = JSON.parse(JSON.stringify(this.data.dutys))
+                    var welfares = JSON.parse(JSON.stringify(this.data.welfares))
+                    var kindTxt = ''
+                    var dutyTxt = ''
+                    var welfareTxt = ''
+                    var customTxt = ''
+                    var kindNum = ''
+                    var dutyNum = ''
+                    var welfareNum = ''
+                    var rpr_custom = JSON.parse(res.data.data.info.rpr_custom)
+                    kinds.forEach(i => {
+                      res.data.data.catering.forEach(j => {
+                        if (i.ke_id == j) {
+                          i.active = 'active'
+                          kindTxt += i.ke_name + '/'
+                          kindNum += i.ke_id + '/'
+                        }
+                      })
+                    })
+                    dutys.forEach(i => {
+                      res.data.data.duty.forEach(j => {
+                        if (i.rd_id == j) {
+                          i.active = 'active'
+                          dutyTxt += i.rd_name + '/'
+                          dutyNum += i.rd_id + '/'
+                        }
+                      })
+                    })
+                    welfares.forEach(i => {
+                      res.data.data.welfare.forEach(j => {
+                        if (i.rf_id == j) {
+                          i.active = 'active'
+                          welfareTxt += i.rf_name + '/'
+                          welfareNum += i.rf_id + '/'
+                        }
+                      })
+                    })
+                    if (rpr_custom) {
+                      if (rpr_custom.length != 0) {
+                        rpr_custom.forEach(i => {
+                          if (i.active) {
+                            customTxt += i.rc_name + '/'
+                          }
+                        })
+                      }
+                    }
+                    if (kindTxt) {
+                      kindTxt = kindTxt.slice(0, kindTxt.length - 1)
+                      kindNum = kindNum.slice(0, kindNum.length - 1)
+                    }
+                    if (dutyTxt) {
+                      dutyTxt = dutyTxt.slice(0, dutyTxt.length - 1)
+                      dutyNum = dutyNum.slice(0, dutyNum.length - 1)
+                    }
+                    if (welfareTxt) {
+                      welfareTxt = welfareTxt.slice(0, welfareTxt.length - 1)
+                      welfareNum = welfareNum.slice(0, welfareNum.length - 1)
+                    }
+                    if (customTxt) {
+                      customTxt = customTxt.slice(0, customTxt.length - 1)
+                    }
+                    var txt = kindTxt + ((kindTxt && dutyTxt) || (kindTxt && welfareTxt) || (kindTxt && customTxt) ? ',' : '') + dutyTxt + ((dutyTxt && welfareTxt) || (dutyTxt && customTxt) ? ',' : '') + welfareTxt + ((welfareTxt && customTxt) ? ',' : '') + customTxt
+                    var num = kindNum + ',' + dutyNum + ',' + welfareNum
+                    this.setData({
+                      title: res.data.data.info.rpr_title,
+                      jobName: res.data.data.info.rpr_position_name,
+                      jobDescribe: res.data.data.info.rpr_job_description,
+                      sufferIndex: res.data.data.info.rpr_experience - 1,
+                      sufferValue: this.data.sufferArrs[res.data.data.info.rpr_experience - 1],
+                      learnIndex: res.data.data.info.rpr_minimum_education - 1,
+                      learnValue: this.data.learnArrs[res.data.data.info.rpr_minimum_education - 1],
+                      salaryArray: res.data.data.info.rpr_maximum_waga == '面议' ? this.data.salaryArray : this.data.salaryArrays,
+                      salaryIndex: [
+                        res.data.data.info.rpr_maximum_waga == '面议' ? this.data.salaryArray[0].indexOf(res.data.data.info.rpr_minimum_waga) : this.data.salaryArrays[0].indexOf(res.data.data.info.rpr_minimum_waga),
+                        res.data.data.info.rpr_maximum_waga == '面议' ? this.data.salaryArray[1].indexOf(res.data.data.info.rpr_maximum_waga) : this.data.salaryArrays[1].indexOf(res.data.data.info.rpr_maximum_waga),
+                        this.data.salaryArray[2].indexOf(res.data.data.info.rpr_few_salaries + '薪')
+                      ],
+                      salaryMin: res.data.data.info.rpr_minimum_waga,
+                      salaryMax: res.data.data.info.rpr_maximum_waga,
+                      fewPay: res.data.data.info.rpr_few_salaries,
+                      kinds: kinds,
+                      dutys: dutys,
+                      welfares: welfares,
+                      customs: rpr_custom,
+                      txt: txt,
+                      num: num,
+                      provincess: res.data.data.info.rpr_provinces,
+                      citys: res.data.data.info.rpr_city,
+                      areas: res.data.data.info.rpr_area,
+                      workAddresss: res.data.data.info.rpr_work_address,
+                      fullAddresss: res.data.data.info.rpr_doorplate,
+                      longitudes: res.data.data.info.rpr_longitude,
+                      latitudes: res.data.data.info.rpr_latitude,
+                      workFullAddress: res.data.data.info.rpr_work_address + res.data.data.info.rpr_doorplate,
+                      active2: 'actives'
+                    })
+                  }else{
+                    this.setData({
+                      title: res.data.data.info.rpr_title,
+                      jobName: res.data.data.info.rpr_position_name,
+                      jobDescribe: res.data.data.info.rpr_job_description
+                    })
+                  }
+                }
+              })
+            }
+          })
+        })
       })
-    }
+    })
   },
 
   /**
@@ -761,7 +831,7 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload() {
-
+    wx.removeStorageSync('custom')
   },
 
   /**
