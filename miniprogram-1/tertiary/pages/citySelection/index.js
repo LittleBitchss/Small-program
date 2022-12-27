@@ -138,7 +138,6 @@ Page({
     var pages = getCurrentPages(); //  获取页面栈
     var prevPage = pages[pages.length - 2]; // 上一个页面
     if(this.data.ret){
-      console.log(this.data.citys);
       prevPage.setData({
         citys:[this.data.city.slice(0,this.data.city.length-1),this.data.citycode]
       })
@@ -178,7 +177,6 @@ Page({
     }else{
       if(this.data.flag){
         var cityss = city.slice(0,city.length-1)
-        console.log(cityss);
         prevPage.setData({
           citys: city,
           cityss:cityss,

@@ -122,7 +122,7 @@
               </navigator>
             </view>
             <view class="recruitment_list4">
-            <text>职位：{{desiredPosition[item.rpr_position_name-1].p_name}}</text>
+            <text>职位：{{desiredPositionx[item.rpr_position_name-1].p_name}}</text>
             <text>发布时间：{{item.rpr_publish_date}}</text>
             </view>
             <view class="recruitment_list5">

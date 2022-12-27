@@ -16,6 +16,7 @@ Page({
     },
     index: 1,
     desiredPosition: [],
+    desiredPositionx: [],
     desiredPositions: [],
     year: '',
     month: '',
@@ -535,6 +536,7 @@ Page({
     }).then((res) => {
       if (res.data.status == 1) {
         var rex = res.data.data
+        console.log(rex);
         this.getCustom(rex.list)
         this.setData({
           photo: rex.card.head_portrait,
@@ -672,7 +674,23 @@ Page({
     app.post('/comm/getPosition').then((res) => {
       if (res.data.status == 1) {
         this.setData({
-          desiredPositions: res.data.data
+          desiredPositions: res.data.data,
+          desiredPosition: res.data.data,
+          desiredPositionx: res.data.data
+        })
+      } else {
+        wx.showToast({
+          title: '网络出错~',
+          icon: 'error',
+          duration: 2000
+        })
+      }
+    })
+    app.post('/comm/getSalary').then((res) => {
+      if (res.data.status == 1) {
+        this.setData({
+          salaryPackage: res.data.data,
+          salaryPackages: res.data.data
         })
       } else {
         wx.showToast({

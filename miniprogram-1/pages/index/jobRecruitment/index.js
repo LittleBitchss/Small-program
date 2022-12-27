@@ -21,6 +21,9 @@ Page({
       img: "../../../icon/mineJob.png",
       fontColor: ""
     },
+    name:'',
+    photo:'',
+    mineRecruitment:[],
     index: 1,
     desiredPosition: [],
     p_id: 0,
@@ -85,6 +88,7 @@ Page({
       wx.setNavigationBarTitle({
         title: '求职-我的'
       })
+      this.getMineInfo()
     }
   },
   topTilter(e) {
@@ -426,6 +430,19 @@ Page({
     this.setTitle()
   },
   // 我的
+  getMineInfo(){
+    app.post('/Job/myInfo',{
+      token:wx.getStorageSync('userInfo').token
+    }).then((res)=>{
+      if(res.data.status == 1){
+        this.setData({
+          name:res.data.data.info.r_name,
+          photo:res.data.data.info.r_head_portrait,
+          mineRecruitment:res.data.data.list
+        })
+      }
+    })
+  },
   mineToggle(e) {
     var item = e.currentTarget.dataset.item
     if (item == 1) {

@@ -4,7 +4,7 @@
       <view class="infos">
         <view class="name">{{info.r_name}}
         </view>
-        <view class="describe">{{basic.worktime?basic.worktime+'年经验':''}}{{basic.age?'·'+basic.age+'岁':''}}{{basic.education?'·'+basic.education:''}}{{info.r_working_time}}年经验·{{info.r_age}}岁·{{education[info.education[0].ee_education-1].e_name}}</view>
+        <view class="describe">{{info.r_work}}年经验·{{info.r_age}}岁·{{education[info.education[0].ee_education-1].e_name}}</view>
       </view>
       <view class="photo">
         <image class="photos" src="{{info.r_head_portrait}}"></image>

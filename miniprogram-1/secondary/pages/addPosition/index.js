@@ -191,7 +191,7 @@ Page({
         try {
           res.data.data.forEach(i => {
             cityList.forEach(j => {
-              var a = j.cityInfo.find(k => k.code == i.je_job_location)
+              var a = j.cityInfo.find(k => k.code == i.je_job_location+'00')
               if (a) {
                 i.city = a.city.slice(0, a.city.length - 1)
                 i.citys = a.city

@@ -61,9 +61,9 @@
           </view>
           <view class="userCard">
             <view class="userCard_photos">
-              <image class="userCard_photo"></image>
+              <image class="userCard_photo" src="{{photo}}"></image>
             </view>
-            <text class="userCard_name" wx:if="1">谢新品</text>
+            <text class="userCard_name" wx:if="{{name}}">{{name}}</text>
             <navigator class="userCard_editResume" url="/secondary/pages/editResume/index">编辑你的个人简历</navigator>
           </view>
         </view>
@@ -73,17 +73,17 @@
           <view class="mine_state_item {{actives3}}" bindtap="mineToggle" data-item="3">已完成</view>
         </view>
         <scroll-view scroll-y="true" class="list">
-          <view class="list_item">
+          <view class="list_item" wx:for="{{mineRecruitment}}" wx:key="index">
             <view class="list_item1">
               <view class="list_item1_left">
-                行政主厨1名
+                {{item.rpr_title}}
               </view>
               <view class="list_item1_right">
-                1.3万-1.6万
+                {{item.rpr_minimum_waga}}-{{item.rpr_maximum_waga}}
               </view>
             </view>
             <view class="list_item2">
-              杭州西溪喜来登度假大酒店
+              {{item.rc_company}}
             </view>
             <view class="list_item3">
               <view class="list_item3_item">从业10年</view>
@@ -93,7 +93,7 @@
             <view class="list_item4">
               <view class="list_item4_left">
                 <image class="photo"></image>
-                <text class="callPosition">郑女士 · 人事经理</text>
+                <text class="callPosition">{{item.rc_name}} · 人事经理</text>
               </view>
               <view class="list_item4_right">
                 <view class="state"></view>

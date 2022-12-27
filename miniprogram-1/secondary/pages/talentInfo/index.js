@@ -17,6 +17,9 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
+    wx.setNavigationBarTitle({
+      title: '简历信息',
+    })
     var date = new Date()
     var year = date.getFullYear()
     var month = date.getMonth() + 1
@@ -39,11 +42,13 @@ Page({
         })
       }
     })
-    app.post('/Recruit/showResume',{
-      token:wx.getStorageSync('userInfo').token,
-      r_id:this.data.r_id
+    app.post('/Recruit/showResume', {
+      token: wx.getStorageSync('userInfo').token,
+      r_id: this.data.r_id
     }).then(res => {
       if (res.data.status == 1) {
+        res.data.data.r_age = this.data.month > res.data.data.r_born.slice(5, 7) ? this.data.year - res.data.data.r_born.slice(0, 4) + 1 : this.data.year - res.data.data.r_born.slice(0, 4)
+        res.data.data.r_work = this.data.month > res.data.data.r_working_time.slice(5, 7) ? this.data.year - res.data.data.r_working_time.slice(0, 4) + 1 : this.data.year - res.data.data.r_working_time.slice(0, 4)
         this.setData({
           info: res.data.data
         })
