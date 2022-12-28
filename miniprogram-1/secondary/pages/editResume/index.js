@@ -20,10 +20,14 @@ Page({
     show: false,
     maskType: 0,
     // 个人信息
+    year:'',
+    month:'',
     avatar: '',
     name: '',
     sex: '编辑性别',
     born: '编辑出生年月',
+    isStudent:'编辑身份类型',
+    isStudentCode:0,
     workTime: '编辑参加工作时间',
     phone: '',
     phonePlaceholder: '编辑手机号',
@@ -35,6 +39,9 @@ Page({
       '男', '女'
     ],
     sexIndex: 0,
+    studentArray:['在校生','应届生','职员'],
+    studentIndex:0,
+    disabled: true,
     // 地址
     show_ani: '',
     addressArr: [],
@@ -133,6 +140,10 @@ Page({
         name: basic.r_name ? basic.r_name : '',
         sex: basic.r_sex ? basic.r_sex : '编辑性别',
         born: basic.r_born ? basic.r_born : '编辑出生年月',
+        studentIndex:basic.r_work_role,
+        disabled: basic.r_work_role<3?true:false,
+        isStudent:basic.r_work_role==1?'在校生':basic.r_work_role==2?'应届生':'职工',
+        isStudentCode:basic.r_work_role,
         workTime: basic.r_working_time ? basic.r_working_time : '编辑参加工作时间',
         phone: basic.r_mobile ? basic.r_mobile : '',
         sexIndex: basic.r_sex == '男' ? 0 : 1,
@@ -383,10 +394,11 @@ Page({
         r_name: this.data.name,
         r_sex: this.data.sex,
         r_born: this.data.born,
-        r_working_time: this.data.workTime,
+        r_work_role:this.data.isStudentCode,
+        r_working_time: this.data.workTime=='编辑参加工作时间'?'':this.data.workTime,
         r_mobile: this.data.phone,
       }
-      if (obj.r_head_portrait != '' && obj.r_name != '' && obj.r_sex != '编辑性别' && obj.r_born != '编辑出生年月' && obj.r_working_time != '编辑参加工作时间' && obj.r_mobile != '') {
+      if (obj.r_head_portrait != '' && obj.r_name != '' && obj.r_sex != '编辑性别' && obj.r_born != '编辑出生年月' && ((obj.r_work_role == 3 && this.data.workTime != '编辑参加工作时间')||(obj.r_work_role&&obj.r_work_role<3)) && obj.r_mobile != '') {
         app.post('/Job/setMyself', obj).then((res) => {
           if (res.data.status == 1) {
             this.setData({
@@ -706,6 +718,21 @@ Page({
         jobTitle: this.data.position[e.detail.value].p_name,
         jobTitleId: this.data.position[e.detail.value].p_id
       })
+    } else if (item == 12) {
+      this.setData({
+        isStudent: this.data.studentArray[e.detail.value],
+        isStudentCode: Number(e.detail.value)+1,
+      })
+      if(this.data.isStudentCode&&this.data.isStudentCode!=3){
+        this.setData({
+          disabled: true,
+          workTime:'编辑参加工作时间'
+        })
+      }else{
+        this.setData({
+          disabled: false
+        })
+      }
     }
   },
   bindColumnChange(e) {
@@ -1031,13 +1058,16 @@ Page({
     })
     var date = new Date()
     var year = date.getFullYear()
+    var month = date.getMonth()+1
     var arr = []
     for (var i = year; i >= 1990; i--) {
       arr.push(i)
     }
     var arrs = this.getYear(year)
     this.setData({
-      timeRangeArray: [arr, arrs]
+      timeRangeArray: [arr, arrs],
+      year:year,
+      month:month
     })
     this.getData()
   },

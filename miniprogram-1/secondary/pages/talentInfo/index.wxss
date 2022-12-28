@@ -113,10 +113,9 @@
 }
 
 .talentInfo .bottom .btn {
-  width: 220rpx;
+  width: 700rpx;
   height: 54rpx;
-  background: linear-gradient(to right, #fe6d65, #fe4f79);
-  background: #fe5376;
+  background-color: #4768f3;
   border-radius: 10rpx;
   display: flex;
   justify-content: center;
@@ -125,9 +124,4 @@
   font-family: 'Regular';
   font-size: 22rpx;
   color: #fff;
-}
-
-.talentInfo .bottom .btns {
-  margin-left: 30rpx;
-  background-color: #4768f3;
 }

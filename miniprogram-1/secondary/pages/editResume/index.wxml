@@ -8,7 +8,7 @@
       <view class="name" wx:if="{{basic.r_name}}">{{basic.r_name}}
         <image class="name_right" src="../../icon/edit.png" bindtap="openMask" data-item="1"></image>
       </view>
-      <view class="describe" wx:if="{{basic.worktime||basic.age||basic.education}}">{{basic.worktime?basic.worktime+'年经验':''}}{{basic.age?'·'+basic.age+'岁':''}}{{basic.education?'·'+basic.education:''}}</view>
+      <view class="describe" wx:if="{{basic.worktime||basic.age||basic.education}}">{{basic.worktime?basic.worktime+'年经验':basic.r_work_role==1?'在校生':basic.r_work_role==2?'应届生':''}}{{basic.age?'·'+basic.age+'岁':''}}{{basic.education?'·'+basic.education:''}}</view>
     </view>
     <view class="photo">
       <image class="photos" src="{{basic.r_head_portrait}}"></image>
@@ -161,14 +161,24 @@
     <view class="z_item">
       <view class="z_items">
         <view class="z_title">参加工作时间</view>
-        <picker mode="date" value="{{date}}" start="1980-01-01" end="2030-12-31" bindchange="bindChange" data-item="3" fields="month">
-          <view class="picker">
-            <view class="choose">
-              <text class="choose_txt {{workTime!='编辑参加工作时间'?'fontColor':''}}">{{workTime}}</text>
-              <image class="choose_arrows" src="../../../icon/mine_right_arrow.png"></image>
+        <view class="z_bom">
+          <picker class="pickers1" bindchange="bindChange" data-item="12" value="{{studentIndex}}" range="{{studentArray}}">
+            <view class="picker">
+              <view class="choose">
+                <text class="choose_txt {{isStudent!='编辑身份类型'?'fontColor':''}}">{{isStudent}}</text>
+                <image class="choose_arrows" src="../../../icon/mine_right_arrow.png"></image>
+              </view>
             </view>
-          </view>
-        </picker>
+          </picker>
+          <picker class="pickers2" mode="date" value="{{date}}" start="1980-01-01" end="{{year+'-'+month}}" bindchange="bindChange" data-item="3" fields="month" disabled="{{disabled}}">
+            <view class="picker">
+              <view class="choose">
+                <text class="choose_txt {{workTime!='编辑参加工作时间'?'fontColor':''}}">{{workTime}}</text>
+                <image class="choose_arrows" src="../../../icon/mine_right_arrow.png"></image>
+              </view>
+            </view>
+          </picker>
+        </view>
       </view>
     </view>
     <view class="z_item">
@@ -343,7 +353,7 @@
     </view>
     <view class="search">
       <image class="search_img" src="{{domain}}search.png"></image>
-      <input class="search_inp" type="text" placeholder="搜索地址" placeholder-class="placeholder" bindfocus="focus" bindinput="z_input" data-item="9"/>
+      <input class="search_inp" type="text" placeholder="搜索地址" placeholder-class="placeholder" bindfocus="focus" bindinput="z_input" data-item="9" />
     </view>
     <view class="bottoms">
       <view class="workAddress">
@@ -351,7 +361,7 @@
         <view class="workAddress_right">{{workAddress}}</view>
       </view>
       <view class="fullAddress">
-        <input class="fullAddress_inp" type="text" placeholder="请输入详细地址" value="{{fullAddress}}" bindinput="z_input" data-item="10"/>
+        <input class="fullAddress_inp" type="text" placeholder="请输入详细地址" value="{{fullAddress}}" bindinput="z_input" data-item="10" />
       </view>
       <view class="bottoms_bottom">
         <view class="btn {{active2}}" bindtap="save" data-item="6">确定</view>

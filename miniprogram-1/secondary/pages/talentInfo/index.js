@@ -13,6 +13,12 @@ Page({
     position: [],
     r_id: ''
   },
+  callPhone() {
+    wx.makePhoneCall({
+      phoneNumber: this.data.info.r_mobile,
+      fail: () => {}
+    })
+  },
   /**
    * 生命周期函数--监听页面加载
    */

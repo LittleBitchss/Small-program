@@ -49,11 +49,10 @@ Page({
       cityCode: 500000,
       city: '重庆市'
     }],
-    flag:0,
-    ret:0
+    flag: 0,
+    ret: 0
   },
   onLoad: function (e) {
-    console.log(e);
     // 生命周期函数--监听页面加载
     var searchLetter = city.searchLetter;
     var cityList = city.cityList();
@@ -68,20 +67,20 @@ Page({
       temp.bHeight = (i + 1) * itemH;
       tempObj.push(temp)
     }
+    console.log(cityList);
     this.setData({
       winHeight: winHeight,
       itemH: itemH,
       searchLetter: tempObj,
       cityList: cityList,
-      flag:e.flag,
-      ret:e.ret
+      flag: e.flag ? e.flag : '',
+      ret: e.ret ? e.ret : ''
     })
-    console.log(cityList);
-    cityList.forEach(i=>{
-      i.cityInfo.find(j=>{
-        if(e.citycode==j.code){
+    cityList.forEach(i => {
+      i.cityInfo.find(j => {
+        if (e.citycode == j.code) {
           this.setData({
-            city:j.city
+            city: j.city
           })
         }
       })
@@ -137,20 +136,26 @@ Page({
     })
     var pages = getCurrentPages(); //  获取页面栈
     var prevPage = pages[pages.length - 2]; // 上一个页面
-    if(this.data.ret){
+    if (this.data.ret) {
+      console.log(citycode);
       prevPage.setData({
-        citys:[this.data.city.slice(0,this.data.city.length-1),this.data.citycode]
+        citys: {
+          name: this.data.city.slice(0, this.data.city.length - 1),
+          code: citycode
+        },
+        location: citycode+'',
       })
-    }else{
-      if(this.data.flag){
-        var cityss = city.slice(0,city.length-1)
+      prevPage.toGetgetData()
+    } else {
+      if (this.data.flag) {
+        var cityss = city.slice(0, city.length - 1)
         prevPage.setData({
           citys: city,
-          cityss:cityss,
+          cityss: cityss,
           citycode: citycode,
         })
         prevPage.setTitles(cityss)
-      }else{
+      } else {
         prevPage.setData({
           city: city,
           citycode: citycode,
@@ -170,20 +175,26 @@ Page({
     })
     var pages = getCurrentPages(); //  获取页面栈
     var prevPage = pages[pages.length - 2]; // 上一个页面
-    if(this.data.ret){
+    if (this.data.ret) {
+      console.log(citycode);
       prevPage.setData({
-        citys:[this.data.city.slice(0,this.data.city.length-1),this.data.citycode]
+        citys: {
+          name: this.data.city.slice(0, this.data.city.length - 1),
+          code: citycode
+        },
+        location: citycode+'',
       })
-    }else{
-      if(this.data.flag){
-        var cityss = city.slice(0,city.length-1)
+      prevPage.toGetgetData()
+    } else {
+      if (this.data.flag) {
+        var cityss = city.slice(0, city.length - 1)
         prevPage.setData({
           citys: city,
-          cityss:cityss,
+          cityss: cityss,
           citycode: citycode,
         })
         prevPage.setTitles(cityss)
-      }else{
+      } else {
         prevPage.setData({
           city: city,
           citycode: citycode,

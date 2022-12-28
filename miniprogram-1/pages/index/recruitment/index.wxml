@@ -12,12 +12,11 @@
       </view>
       <view class="recruitmentSquare_filter">
         <view class="recruitmentSquare_filter_left">
-          <view class="recruitmentSquare_filter_left_item {{leftTilterActive1}}" bindtap="leftTilter" data-item="1">综合</view>
+          <view class="recruitmentSquare_filter_left_item {{leftTilterActive1}}" bindtap="leftTilter" data-item="1">最新</view>
           <view class="recruitmentSquare_filter_left_item {{leftTilterActive2}}" bindtap="leftTilter" data-item="2">附近</view>
-          <view class="recruitmentSquare_filter_left_item {{leftTilterActive3}}" bindtap="leftTilter" data-item="3">最新</view>
         </view>
         <view class="recruitmentSquare_filter_right">
-          <navigator class="recruitmentSquare_filter_right_item" url="/tertiary/pages/citySelection/index?ret=1&citycode={{citys[1]}}">{{citys[0]}}</navigator>
+          <navigator class="recruitmentSquare_filter_right_item" url="/tertiary/pages/citySelection/index?ret=1&citycode={{citys.code}}">{{citys.name}}</navigator>
           <view class="recruitmentSquare_filter_right_item" bindtap="openMask" data-item="1">筛选{{filtersNum?'·'+filtersNum:''}}</view>
         </view>
       </view>

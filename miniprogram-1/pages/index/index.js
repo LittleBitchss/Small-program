@@ -156,6 +156,7 @@ Page({
   },
   getNowLocation() {
     var that = this
+    var storage = wx.getStorageSync('userInfo')
     wx.getLocation({
       type: 'gcj02',
       success: res => {
@@ -166,6 +167,9 @@ Page({
           currentLongitude: res.longitude
         })
         that.getAddress(res.longitude, res.latitude);
+        storage.longitude = res.longitude 
+        storage.latitude = res.latitude
+        wx.setStorageSync('userInfo', storage)
       }
     })
   },
@@ -340,17 +344,13 @@ Page({
       confirmText: "确认",
       cancelText: "取消",
       success: function (res) {
-        console.log(res);
         //点击“确认”时打开设置页面
         if (res.confirm) {
-          console.log('用户点击确认')
           wx.openSetting({
             success: (res) => {
               that.getLocation()
             }
           })
-        } else {
-          console.log('用户点击取消')
         }
       }
     });
@@ -369,7 +369,6 @@ Page({
     })
   },
   goUserOrder(){
-    console.log(1);
     wx.navigateTo({
       url: '/pages/mine/userOrder/index?index=1'
     })

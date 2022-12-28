@@ -1,4 +1,8 @@
 // pages/index/recruitment/index.js
+var QQMapWX = require('../../../utils/js/qqmap-wx-jssdk.min');
+const qqMapSdk = new QQMapWX({
+  key: 'ABNBZ-GKPLS-FOAOJ-6HOP3-GAWZO-NNFDH'
+});
 const app = getApp()
 Page({
 
@@ -20,12 +24,11 @@ Page({
     desiredPositions: [],
     year: '',
     month: '',
-    list:[],
+    list: [],
     p_id: 0,
     scroll: 0,
     leftTilterActive1: 'active',
     leftTilterActive2: '',
-    leftTilterActive3: '',
     leftTilterNum: 1,
     citys: [],
     show: false,
@@ -70,7 +73,10 @@ Page({
     duty: [],
     welfare: [],
     custom: [],
-    url: ''
+    url: '',
+    dutys: 0,
+    filter: 0,
+    location: 0
   },
   tabToggle(e) {
     var index = e.currentTarget.dataset.index
@@ -116,21 +122,11 @@ Page({
     desiredPosition[index].active = 'active'
     this.setData({
       p_id: desiredPosition[index].p_id,
+      dutys: desiredPosition[index].p_id,
       desiredPosition: desiredPosition,
       scroll: index * 65 > 136 ? index * 65 - 136 : 0
     })
-    // var a = this.data.educationNum
-    // var b = this.data.salaryNum
-    // var c = this.data.experienceNum
-    // var d = this.data.p_id
-    // var e = this.data.leftTilterNum
-    // var f = this.data.streetCodes
-    // console.log(a);
-    // console.log(b);
-    // console.log(c);
-    // console.log(d);
-    // console.log(e);
-    // console.log(f);
+    this.getData(this.data.dutys, this.data.location)
   },
   leftTilter(e) {
     var item = e.currentTarget.dataset.item
@@ -140,57 +136,18 @@ Page({
         leftTilterActive2: '',
         leftTilterActive3: '',
         leftTilterNum: 1,
+        filter: 0
       })
-      // var a = this.data.educationNum
-      // var b = this.data.salaryNum
-      // var c = this.data.experienceNum
-      // var d = this.data.p_id
-      // var e = this.data.leftTilterNum
-      // var f = this.data.streetCodes
-      // console.log(a);
-      // console.log(b);
-      // console.log(c);
-      // console.log(d);
-      // console.log(e);
-      // console.log(f);
+      this.getData(this.data.dutys, this.data.location)
     } else if (item == 2) {
       this.setData({
         leftTilterActive1: '',
         leftTilterActive2: 'active',
         leftTilterActive3: '',
         leftTilterNum: 2,
+        filter: 1
       })
-      // var a = this.data.educationNum
-      // var b = this.data.salaryNum
-      // var c = this.data.experienceNum
-      // var d = this.data.p_id
-      // var e = this.data.streetCodes
-      // var f = this.data.streetCodes
-      // console.log(a);
-      // console.log(b);
-      // console.log(c);
-      // console.log(d);
-      // console.log(e);
-      // console.log(f);
-    } else if (item == 3) {
-      this.setData({
-        leftTilterActive1: '',
-        leftTilterActive2: '',
-        leftTilterActive3: 'active',
-        leftTilterNum: 3,
-      })
-      // var a = this.data.educationNum
-      // var b = this.data.salaryNum
-      // var c = this.data.experienceNum
-      // var d = this.data.p_id
-      // var e = this.data.leftTilterNum
-      // var f = this.data.streetCodes
-      // console.log(a);
-      // console.log(b);
-      // console.log(c);
-      // console.log(d);
-      // console.log(e);
-      // console.log(f);
+      this.getData(this.data.dutys, this.data.location)
     }
   },
   openMask(e) {
@@ -536,7 +493,6 @@ Page({
     }).then((res) => {
       if (res.data.status == 1) {
         var rex = res.data.data
-        console.log(rex);
         this.getCustom(rex.list)
         this.setData({
           photo: rex.card.head_portrait,
@@ -610,38 +566,56 @@ Page({
       }
     })
   },
-  getData(duty, filter, location) {
-    var obj = {
+  getData( dutys, location, first) {
+    var obj = { 
       token: wx.getStorageSync('userInfo').token,
-      rc_id: wx.getStorageSync('userInfo').rc_id
+      rc_id: wx.getStorageSync('userInfo').rc_id,
+      filter: this.data.filter
     }
+    if (dutys) {
+      obj.duty = dutys
+    }
+    if (location) {
+      obj.location = location.slice(0, 4)
+      qqMapSdk.
+      obj.longitude = wx.getStorageSync('userInfo').longitude
+      obj.latitude = wx.getStorageSync('userInfo').latitude
+    }
+    console.log(obj);
     app.post('/Recruit/recommendPosition', obj).then((res) => {
       if (res.data.status == 1) {
-        var arr = [{
-          p_id: 0,
-          p_name: '推荐职位',
-          active: 'active'
-        }]
         var rex = res.data.data
-        console.log(rex);
-        var duty = rex.duty.duty.indexOf(',') == -1 ? rex.duty.duty.split() : rex.duty.duty.split(',')
-        if (duty.length != 0) {
-          duty.forEach(i => {
-            var item = this.data.desiredPositions.find(j => j.p_id == i)
-            item.active = ''
-            arr.push(item)
-          })
-        }
+        console.log(res);
         rex.list.forEach(i => {
           i.r_age = this.data.month > i.r_born.slice(5, 7) ? this.data.year - i.r_born.slice(0, 4) + 1 : this.data.year - i.r_born.slice(0, 4)
           i.r_experience = this.data.month > i.r_working_time.slice(5, 7) ? this.data.year - i.r_working_time.slice(0, 4) + 1 : this.data.year - i.r_working_time.slice(0, 4)
         })
+        if (first) {
+          var arr = [{
+            p_id: 0,
+            p_name: '推荐职位',
+            active: 'active'
+          }]
+          var duty = rex.duty.duty.indexOf(',') == -1 ? rex.duty.duty.split() : rex.duty.duty.split(',')
+          if (duty.length != 0) {
+            duty.forEach(i => {
+              var item = this.data.desiredPositions.find(j => j.p_id == i)
+              item.active = ''
+              arr.push(item)
+            })
+          }
+          this.setData({
+            desiredPosition: arr,
+          })
+        }
         this.setData({
-          desiredPosition: arr,
-          list:rex.list
+          list: rex.list
         })
       }
     })
+  },
+  toGetgetData() {
+    this.getData(this.data.dutys, this.data.location)
   },
   /**
    * 生命周期函数--监听页面加载
@@ -654,7 +628,11 @@ Page({
     var year = date.getFullYear()
     var month = date.getMonth() + 1
     this.setData({
-      citys: [wx.getStorageSync('userInfo').citys.slice(0, wx.getStorageSync('userInfo').citys.length - 1), wx.getStorageSync('userInfo').citycode],
+      citys: {
+        name: wx.getStorageSync('userInfo').citys.slice(0, wx.getStorageSync('userInfo').citys.length - 1),
+        code: wx.getStorageSync('userInfo').citycode
+      },
+      location: wx.getStorageSync('userInfo').citycode,
       year: year,
       month: month
     })
@@ -743,7 +721,7 @@ Page({
         })
       }
     })
-    this.getData()
+    this.getData( 0, 0, 1)
   },
 
   /**
@@ -756,9 +734,7 @@ Page({
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow() {
-
-  },
+  onShow() {},
 
   /**
    * 生命周期函数--监听页面隐藏

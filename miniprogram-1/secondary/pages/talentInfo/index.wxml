@@ -68,7 +68,6 @@
     </view>
     <view style="visibility: hidden; margin-top: 128rpx;"></view>
     <view class="bottom">
-      <button class="btn" bindtap="markResume">{{sign?'取消标记':'标记简历'}}</button>
-      <button class="btn btns" bindtap="callPhone">电话联系</button>
+      <button class="btn" bindtap="callPhone">电话联系</button>
     </view>
   </view>
