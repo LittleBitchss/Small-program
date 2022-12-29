@@ -887,6 +887,9 @@ Page({
           }
           var stateJobs = this.data.stateJob.find(i => i.js_id == res.data.data.basic.r_job_status)
           console.log(res.data.data);
+          console.log(this.data.month);
+          console.log(this.data.year);
+          res.data.data.basic.r_work = this.data.month > res.data.data.basic.r_working_time.slice(5, 7) ? this.data.year - res.data.data.basic.r_working_time.slice(0, 4) + 1 : this.data.year - res.data.data.basic.r_working_time.slice(0, 4)
           this.setData({
             address: res.data.data.basic.r_address + res.data.data.basic.r_doorplate,
             provincess: res.data.data.basic.r_provinces,

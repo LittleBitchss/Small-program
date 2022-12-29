@@ -35,21 +35,26 @@ Page({
     educationBackground: [],
     salaryPackage: [],
     experienceRequirement: [],
+    jobStatus: [],
     educationNum: [],
     salaryNum: [],
     experienceNum: [],
+    jobStatusNum:[],
     filtersNum: 0,
     confirm: 0,
     educationBackgrounds: [],
     salaryPackages: [],
     experienceRequirements: [],
+    jobStatuss: [],
     educationNums: [],
     salaryNums: [],
     experienceNums: [],
+    jobStatusNums:[],
     id: 0,
     active1: 'active',
     active2: 'active',
     active3: 'active',
+    active4: 'active',
     // 我的
     actives1: 'active',
     actives2: '',
@@ -76,7 +81,8 @@ Page({
     url: '',
     dutys: 0,
     filter: 0,
-    location: 0
+    location: 0,
+    city:'',
   },
   tabToggle(e) {
     var index = e.currentTarget.dataset.index
@@ -126,6 +132,7 @@ Page({
       desiredPosition: desiredPosition,
       scroll: index * 65 > 136 ? index * 65 - 136 : 0
     })
+    console.log(this.data.location);
     this.getData(this.data.dutys, this.data.location)
   },
   leftTilter(e) {
@@ -155,7 +162,15 @@ Page({
     this.setData({
       show: true,
       maskType: item,
-      confirm: 0
+      confirm: 0,
+      educationNum: this.data.educationNums,
+      salaryNum: this.data.salaryNums,
+      experienceNum: this.data.experienceNums,
+      jobStatusNum:this.data.jobStatusNums,
+      educationBackground: this.data.educationBackgrounds,
+      salaryPackage: this.data.salaryPackages,
+      experienceRequirement: this.data.experienceRequirements,
+      jobStatus:this.data.jobStatuss
     })
     if (item == 1) {
       this.setTitle()
@@ -166,9 +181,10 @@ Page({
     var a = this.data.educationNum
     var b = this.data.salaryNum
     var c = this.data.experienceNum
-    var d = a.concat(b).concat(c)
+    var d = this.data.jobStatusNum
+    var e = a.concat(b).concat(c).concat(d)
     this.setData({
-      filtersNum: d.length
+      filtersNum: e.length
     })
     if (this.data.filtersNum) {
       t = t + '· ' + this.data.filtersNum
@@ -238,6 +254,7 @@ Page({
     var salaryPackage = JSON.parse(JSON.stringify(this.data.salaryPackage))
     var experienceRequirement = JSON.parse(JSON.stringify(this.data.experienceRequirement))
     var experienceNum = JSON.parse(JSON.stringify(this.data.experienceNum))
+    var jobStatus = JSON.parse(JSON.stringify(this.data.jobStatus))
     if (item == 1) {
       if (type == 1) {
         educationBackground.forEach(i => {
@@ -335,18 +352,51 @@ Page({
         experienceNum: experienceNum
       })
       this.setTitle()
+    } else if (item == 4) {
+      if (type == 1) {
+        this.setData({
+          active4: 'active',
+          jobStatusNum: []
+        })
+        jobStatus.forEach(i => {
+          i.active = ''
+        })
+      } else {
+        this.setData({
+          active4: '',
+          jobStatusNum: [jobStatus[index].js_id]
+        })
+        jobStatus.forEach(i => {
+          i.active = ''
+        })
+        jobStatus[index].active = 'active'
+      }
+      this.setData({
+        jobStatus: jobStatus
+      })
+      this.setTitle()
     }
   },
   confirm() {
     this.setData({
       show: false,
-      confirm: 1
+      confirm: 1,
+      educationNums: this.data.educationNum,
+      salaryNums: this.data.salaryNum,
+      experienceNums: this.data.experienceNum,
+      jobStatusNums:this.data.jobStatusNum,
+      educationBackgrounds: this.data.educationBackground,
+      salaryPackages: this.data.salaryPackage,
+      experienceRequirements: this.data.experienceRequirement,
+      jobStatuss:this.data.jobStatus
     })
+    
   },
   empty() {
     var educationBackground = JSON.parse(JSON.stringify(this.data.educationBackground))
     var salaryPackage = JSON.parse(JSON.stringify(this.data.salaryPackage))
     var experienceRequirement = JSON.parse(JSON.stringify(this.data.experienceRequirement))
+    var jobStatus = JSON.parse(JSON.stringify(this.data.jobStatus))
     educationBackground.forEach(i => {
       i.active = ''
     })
@@ -356,16 +406,22 @@ Page({
     experienceRequirement.forEach(i => {
       i.active = ''
     })
+    jobStatus.forEach(i => {
+      i.active = ''
+    })
     this.setData({
       active1: 'active',
       active2: 'active',
       active3: 'active',
+      active4: 'active',
       educationNum: [],
       salaryNum: [],
       experienceNum: [],
+      jobStatusNum:[],
       educationBackground: educationBackground,
       salaryPackage: salaryPackage,
-      experienceRequirement: experienceRequirement
+      experienceRequirement: experienceRequirement,
+      jobStatus:jobStatus
     })
     this.setTitle()
   },
@@ -577,15 +633,24 @@ Page({
     }
     if (location) {
       obj.location = location.slice(0, 4)
-      qqMapSdk.
-      obj.longitude = wx.getStorageSync('userInfo').longitude
-      obj.latitude = wx.getStorageSync('userInfo').latitude
+      if(this.data.city){
+        qqMapSdk.geocoder({
+          address: this.data.city,
+          success:function(res){
+            obj.longitude = res.result.location.lng
+            obj.latitude = res.result.location.lat
+          }
+        })
+      }else{
+        obj.longitude = wx.getStorageSync('userInfo').longitude
+        obj.latitude = wx.getStorageSync('userInfo').latitude
+      }
     }
     console.log(obj);
     app.post('/Recruit/recommendPosition', obj).then((res) => {
       if (res.data.status == 1) {
         var rex = res.data.data
-        console.log(res);
+        console.log(rex);
         rex.list.forEach(i => {
           i.r_age = this.data.month > i.r_born.slice(5, 7) ? this.data.year - i.r_born.slice(0, 4) + 1 : this.data.year - i.r_born.slice(0, 4)
           i.r_experience = this.data.month > i.r_working_time.slice(5, 7) ? this.data.year - i.r_working_time.slice(0, 4) + 1 : this.data.year - i.r_working_time.slice(0, 4)
@@ -593,10 +658,10 @@ Page({
         if (first) {
           var arr = [{
             p_id: 0,
-            p_name: '推荐职位',
+            p_name: '推荐厨师',
             active: 'active'
           }]
-          var duty = rex.duty.duty.indexOf(',') == -1 ? rex.duty.duty.split() : rex.duty.duty.split(',')
+          var duty = rex.duty.indexOf(',') == -1 ? rex.duty.split() : rex.duty.split(',')
           if (duty.length != 0) {
             duty.forEach(i => {
               var item = this.data.desiredPositions.find(j => j.p_id == i)
@@ -614,7 +679,11 @@ Page({
       }
     })
   },
-  toGetgetData() {
+  toGetgetData(location,city) {
+    this.setData({
+      location:location,
+      city:city
+    })
     this.getData(this.data.dutys, this.data.location)
   },
   /**
@@ -627,6 +696,7 @@ Page({
     var date = new Date()
     var year = date.getFullYear()
     var month = date.getMonth() + 1
+    console.log(1);
     this.setData({
       citys: {
         name: wx.getStorageSync('userInfo').citys.slice(0, wx.getStorageSync('userInfo').citys.length - 1),
@@ -697,6 +767,17 @@ Page({
         this.setData({
           experienceRequirement: res.data.data,
           experienceRequirements: res.data.data
+        })
+      }
+    })
+    app.post('/comm/getJobStatus').then((res) => {
+      if (res.data.status == 1) {
+        res.data.data.forEach(i => {
+          i.active = ''
+        })
+        this.setData({
+          jobStatus: res.data.data,
+          jobStatuss: res.data.data
         })
       }
     })

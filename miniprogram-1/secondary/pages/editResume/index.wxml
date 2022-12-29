@@ -8,7 +8,7 @@
       <view class="name" wx:if="{{basic.r_name}}">{{basic.r_name}}
         <image class="name_right" src="../../icon/edit.png" bindtap="openMask" data-item="1"></image>
       </view>
-      <view class="describe" wx:if="{{basic.worktime||basic.age||basic.education}}">{{basic.worktime?basic.worktime+'年经验':basic.r_work_role==1?'在校生':basic.r_work_role==2?'应届生':''}}{{basic.age?'·'+basic.age+'岁':''}}{{basic.education?'·'+basic.education:''}}</view>
+      <view class="describe" wx:if="{{basic.r_work||basic.age||basic.education}}">{{basic.r_work?basic.r_work+'年经验':basic.r_work_role==1?'在校生':'应届生'}}{{basic.age?'·'+basic.age+'岁':''}}{{basic.education?'·'+basic.education:''}}</view>
     </view>
     <view class="photo">
       <image class="photos" src="{{basic.r_head_portrait}}"></image>

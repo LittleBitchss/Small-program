@@ -55,6 +55,7 @@ Page({
       if (res.data.status == 1) {
         res.data.data.r_age = this.data.month > res.data.data.r_born.slice(5, 7) ? this.data.year - res.data.data.r_born.slice(0, 4) + 1 : this.data.year - res.data.data.r_born.slice(0, 4)
         res.data.data.r_work = this.data.month > res.data.data.r_working_time.slice(5, 7) ? this.data.year - res.data.data.r_working_time.slice(0, 4) + 1 : this.data.year - res.data.data.r_working_time.slice(0, 4)
+        console.log(res.data.data);
         this.setData({
           info: res.data.data
         })

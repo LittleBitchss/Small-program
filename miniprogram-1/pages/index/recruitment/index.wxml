@@ -27,7 +27,7 @@
           </view>
           <view class="list_item2">
             <view class="list_item2_name">{{item.r_name}}</view>
-            <view class="list_item2_suffer">{{item.r_experience}}年经验·{{item.r_age}}岁·{{educationBackground[item.education-1].e_name}}</view>
+            <view class="list_item2_suffer">{{item.r_working_time?item.r_experience+'年经验':item.r_work_role==1?'在校生':'应届生'}}·{{item.r_age}}岁·{{educationBackground[item.education-1].e_name}}</view>
             <view class="list_item2_jobs">应聘岗位：{{desiredPositions[item.rpr_position_name-1].p_name}}</view>
             <view class="list_item2_state">求职状态：{{item.r_job_status==1?'离职-随时到岗':item.r_job_status==2?'在职-月内到岗':item.r_job_status==3?'在职-考虑机会':'在职-暂不考虑'}}</view>
           </view>
@@ -183,6 +183,13 @@
       <view class="content">
         <view class="item {{active3}}" bindtap="tilters" data-item="3" data-type="1">不限</view>
         <view wx:for="{{experienceRequirement}}" wx:key="index" class="item {{item.active}}" bindtap="tilters" data-item="3" data-type="2" data-index="{{index}}">{{item.e_name}}</view>
+      </view>
+    </view>
+    <view class="salaryPackage">
+      <view class="titles">求职状态<text class="titles_txt">（单选）</text></view>
+      <view class="content">
+        <view class="item {{active4}}" bindtap="tilters" data-item="4" data-type="1">不限</view>
+        <view wx:for="{{jobStatus}}" wx:key="index" class="item {{item.active}}" bindtap="tilters" data-item="4" data-index="{{index}}" data-type="2">{{item.js_name}}</view>
       </view>
     </view>
     <view class="bottom">

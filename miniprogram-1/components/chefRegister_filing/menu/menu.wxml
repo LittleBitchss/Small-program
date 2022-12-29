@@ -38,7 +38,7 @@
               <view class="dishes_item_right {{item.fontColor}}">
                 {{item.disheCategory}}
               </view>
-              <view class="add" bindtap="openFilter">
+              <view class="add" bindtap="openFilter" data-item="1">
                 <view class="add_x add_"></view>
                 <view class="add_y add_"></view>
               </view>
@@ -81,13 +81,15 @@
     <button class="btn btn_right" size="mini" bindtap="submit">确认无误提交</button>
   </view>
 </view>
-<!-- <page-container class="page-container" show="{{show}}" position="center" overlay="true" custom-style="width: 350px;height: 112px;top:50%;left:50%;transform: translate(-50%,-50%);border-radius: 10px;">
+<view style="position: fixed;top: 0;left: 0;right: 0;bottom: 0;background-color: rgba(0, 0, 0, 0.7);" wx:if="{{show}}">
+  <view class="page-container" style="position: absolute; width: 350px;height: 112px;top:50%;left:50%;transform: translate(-50%,-50%);border-radius: 10px;background-color: #fff;">
   <view class="option {{telescopic2}}">
     <view class="options {{item.bgColor}}" wx:for="{{menus[current].disheCategorys}}" catchtap="choose" wx:key="index" data-index="{{index}}">
       {{item.name}}
     </view>
   </view>
   <view class="btns">
-    <button class="btnss" size="mini" catchtap="finish">完成</button>
+    <button class="btnss" size="mini" catchtap="finish">关闭</button>
   </view>
-</page-container> -->
+</view>
+</view>

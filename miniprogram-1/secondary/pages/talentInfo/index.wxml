@@ -4,7 +4,7 @@
       <view class="infos">
         <view class="name">{{info.r_name}}
         </view>
-        <view class="describe">{{info.r_work}}年经验·{{info.r_age}}岁·{{education[info.education[0].ee_education-1].e_name}}</view>
+        <view class="describe">{{info.r_working_time?info.r_work+'年经验':info.r_work_role==1?'在校生':'应届生'}}·{{info.r_age}}岁·{{education[info.education[0].ee_education-1].e_name}}</view>
       </view>
       <view class="photo">
         <image class="photos" src="{{info.r_head_portrait}}"></image>
@@ -16,7 +16,7 @@
       </view>
       <view class="content">
         <view class="content_left">
-          {{info.r_advantage}}
+          {{info.r_advantage?info.r_advantage:'无'}}
         </view>
       </view>
     </view>

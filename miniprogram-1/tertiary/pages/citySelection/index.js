@@ -142,10 +142,9 @@ Page({
         citys: {
           name: this.data.city.slice(0, this.data.city.length - 1),
           code: citycode
-        },
-        location: citycode+'',
+        }
       })
-      prevPage.toGetgetData()
+      prevPage.toGetgetData(citycode+'',this.data.city)
     } else {
       if (this.data.flag) {
         var cityss = city.slice(0, city.length - 1)
@@ -181,10 +180,9 @@ Page({
         citys: {
           name: this.data.city.slice(0, this.data.city.length - 1),
           code: citycode
-        },
-        location: citycode+'',
+        }
       })
-      prevPage.toGetgetData()
+      prevPage.toGetgetData(citycode+'',this.data.city)
     } else {
       if (this.data.flag) {
         var cityss = city.slice(0, city.length - 1)
