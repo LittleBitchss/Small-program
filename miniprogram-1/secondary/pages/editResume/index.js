@@ -181,10 +181,16 @@ Page({
         var minIndex = this.data.salaryArrays[0].indexOf(job.je_job_salary_min)
         var salaryArrays = JSON.parse(JSON.stringify(this.data.salaryArrays))
         salaryArrays[1].splice(0, minIndex)
+        var je_job_location = ''
+        city.cityList().forEach(i=>{
+          if(i.cityInfo.find(j=>j.code==job.je_job_location+'00')){
+            je_job_location=i.cityInfo.find(j=>j.code==job.je_job_location+'00').city
+          }  
+        })
         this.setData({
           je_id: job.je_id,
           fullOrPart: job.je_job_type,
-          city: job.city,
+          city: je_job_location,
           citycode: job.je_job_location,
           expectJob: job.p_name,
           expectJobId: job.je_job_expectation,
@@ -886,9 +892,6 @@ Page({
             })
           }
           var stateJobs = this.data.stateJob.find(i => i.js_id == res.data.data.basic.r_job_status)
-          console.log(res.data.data);
-          console.log(this.data.month);
-          console.log(this.data.year);
           res.data.data.basic.r_work = this.data.month > res.data.data.basic.r_working_time.slice(5, 7) ? this.data.year - res.data.data.basic.r_working_time.slice(0, 4) + 1 : this.data.year - res.data.data.basic.r_working_time.slice(0, 4)
           this.setData({
             address: res.data.data.basic.r_address + res.data.data.basic.r_doorplate,

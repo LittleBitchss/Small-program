@@ -46,7 +46,7 @@ Page({
       cityCode: 510100,
       city: '成都市'
     }, {
-      cityCode: 500000,
+      cityCode: 500100,
       city: '重庆市'
     }],
     flag: 0,
@@ -67,7 +67,6 @@ Page({
       temp.bHeight = (i + 1) * itemH;
       tempObj.push(temp)
     }
-    console.log(cityList);
     this.setData({
       winHeight: winHeight,
       itemH: itemH,
@@ -137,7 +136,6 @@ Page({
     var pages = getCurrentPages(); //  获取页面栈
     var prevPage = pages[pages.length - 2]; // 上一个页面
     if (this.data.ret) {
-      console.log(citycode);
       prevPage.setData({
         citys: {
           name: this.data.city.slice(0, this.data.city.length - 1),
@@ -146,6 +144,7 @@ Page({
       })
       prevPage.toGetgetData(citycode+'',this.data.city)
     } else {
+      console.log(this.data.flag);
       if (this.data.flag) {
         var cityss = city.slice(0, city.length - 1)
         prevPage.setData({
@@ -153,7 +152,7 @@ Page({
           cityss: cityss,
           citycode: citycode,
         })
-        prevPage.setTitles(cityss)
+        prevPage.setTitles(cityss,citycode)
       } else {
         prevPage.setData({
           city: city,
@@ -175,7 +174,6 @@ Page({
     var pages = getCurrentPages(); //  获取页面栈
     var prevPage = pages[pages.length - 2]; // 上一个页面
     if (this.data.ret) {
-      console.log(citycode);
       prevPage.setData({
         citys: {
           name: this.data.city.slice(0, this.data.city.length - 1),
@@ -191,7 +189,7 @@ Page({
           cityss: cityss,
           citycode: citycode,
         })
-        prevPage.setTitles(cityss)
+        prevPage.setTitles(cityss,citycode)
       } else {
         prevPage.setData({
           city: city,

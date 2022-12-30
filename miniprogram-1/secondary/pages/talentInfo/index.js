@@ -11,7 +11,8 @@ Page({
     info: {},
     education: [],
     position: [],
-    r_id: ''
+    r_id: '',
+    duty:[]
   },
   callPhone() {
     wx.makePhoneCall({
@@ -31,6 +32,7 @@ Page({
     var month = date.getMonth() + 1
     this.setData({
       r_id: options.r_id,
+      duty: options.duty.indexOf(',')==-1?options.duty.split(''):options.duty.split(','),
       year: year,
       month: month
     })
@@ -55,7 +57,15 @@ Page({
       if (res.data.status == 1) {
         res.data.data.r_age = this.data.month > res.data.data.r_born.slice(5, 7) ? this.data.year - res.data.data.r_born.slice(0, 4) + 1 : this.data.year - res.data.data.r_born.slice(0, 4)
         res.data.data.r_work = this.data.month > res.data.data.r_working_time.slice(5, 7) ? this.data.year - res.data.data.r_working_time.slice(0, 4) + 1 : this.data.year - res.data.data.r_working_time.slice(0, 4)
-        console.log(res.data.data);
+        var arr = []
+        res.data.data.job_expectation.forEach(i=>{
+          this.data.duty.forEach(j=>{
+            if(i.je_job_expectation==j){
+              arr.push(i)
+            }
+          })
+        })
+        res.data.data.job_expectation= arr
         this.setData({
           info: res.data.data
         })

@@ -21,9 +21,9 @@ Page({
       img: "../../../icon/mineJob.png",
       fontColor: ""
     },
-    name:'',
-    photo:'',
-    mineRecruitment:[],
+    name: '',
+    photo: '',
+    mineRecruitment: [],
     index: 1,
     desiredPosition: [],
     p_id: 0,
@@ -122,7 +122,6 @@ Page({
       this.setData({
         leftTilterActive1: 'active',
         leftTilterActive2: '',
-        leftTilterActive3: '',
         leftTilterNum: 1,
       })
       var a = this.data.educationNum
@@ -141,27 +140,7 @@ Page({
       this.setData({
         leftTilterActive1: '',
         leftTilterActive2: 'active',
-        leftTilterActive3: '',
         leftTilterNum: 2,
-      })
-      var a = this.data.educationNum
-      var b = this.data.salaryNum
-      var c = this.data.experienceNum
-      var d = this.data.p_id
-      var e = this.data.areacodes
-      var f = this.data.areacodes
-      console.log(a);
-      console.log(b);
-      console.log(c);
-      console.log(d);
-      console.log(e);
-      console.log(f);
-    } else if (item == 3) {
-      this.setData({
-        leftTilterActive1: '',
-        leftTilterActive2: '',
-        leftTilterActive3: 'active',
-        leftTilterNum: 3,
       })
       var a = this.data.educationNum
       var b = this.data.salaryNum
@@ -189,7 +168,7 @@ Page({
         area: this.data.areas,
         areacode: this.data.areacodes,
       })
-      var a = this.data.areacode.length ? ' · ' + this.data.areacode.length : ''
+      var a = this.data.areacode.length && this.data.areacode[0].length != 4 ? ' · ' + this.data.areacode.length : ''
       wx.setNavigationBarTitle({
         title: this.data.cityss + a,
       })
@@ -197,14 +176,14 @@ Page({
       this.setTitle()
     }
   },
-  setTitles(cityss) {
+  setTitles(cityss,citycode) {
     setTimeout(() => {
       wx.setNavigationBarTitle({
         title: cityss,
       })
       this.setData({
-        areacode: [],
-        areacodes: []
+        areacode: [citycode.slice(0,4)],
+        areacodes: [citycode.slice(0,4)]
       })
       this.getAreas(this.data.citycode.toString())
     })
@@ -396,12 +375,12 @@ Page({
     var d = this.data.p_id
     var e = this.data.leftTilterNum
     var f = this.data.areacodes
-      console.log(a);
-      console.log(b);
-      console.log(c);
-      console.log(d);
-      console.log(e);
-      console.log(f);
+    console.log(a);
+    console.log(b);
+    console.log(c);
+    console.log(d);
+    console.log(e);
+    console.log(f);
   },
   empty() {
     var educationBackground = JSON.parse(JSON.stringify(this.data.educationBackground))
@@ -430,15 +409,15 @@ Page({
     this.setTitle()
   },
   // 我的
-  getMineInfo(){
-    app.post('/Job/myInfo',{
-      token:wx.getStorageSync('userInfo').token
-    }).then((res)=>{
-      if(res.data.status == 1){
+  getMineInfo() {
+    app.post('/Job/myInfo', {
+      token: wx.getStorageSync('userInfo').token
+    }).then((res) => {
+      if (res.data.status == 1) {
         this.setData({
-          name:res.data.data.info.r_name,
-          photo:res.data.data.info.r_head_portrait,
-          mineRecruitment:res.data.data.list
+          name: res.data.data.info.r_name,
+          photo: res.data.data.info.r_head_portrait,
+          mineRecruitment: res.data.data.list
         })
       }
     })
@@ -476,7 +455,11 @@ Page({
           token: wx.getStorageSync('userInfo').token
         }).then((res) => {
           if (res.data.status == 1) {
-            var arr = []
+            var arr = [{
+              p_id: 0,
+              p_name: '推荐职位',
+              active: 'active'
+            }]
             res.data.data.forEach(i => {
               var a = desiredPosition.find(j => j.p_id == i.je_job_expectation)
               arr.push(a)
@@ -535,13 +518,24 @@ Page({
     var index = e.currentTarget.dataset.index
     if (index) {
       area[0].num = 0
-      if(area[index].num){
+      if (area[index].num) {
         area[index].num = 0
-      }else{
+      } else {
         area[index].num = 1
       }
-      var indes = areacode.indexOf(area[index].code)
-      if(indes==-1){
+      // if (areacode[0].length == 4) {
+      //   areacode = []
+      // } else if (areacode[0].length != 4 && areacode[0].length == 0) {
+      //   areacode = [area[0].code.slice(0, 4)]
+      //   area[0].num = 1
+      // }
+      
+      var indes = areacode.indexOf(area[index].code.toString())
+      console.log(indes);
+      if (indes == -1) {
+        if (areacode[0].length == 4) {
+          areacode = []
+        }
         if (areacode.length >= 9) {
           wx.showToast({
             title: '最多选择9个~',
@@ -550,13 +544,19 @@ Page({
           })
           return
         }
-        areacode.push(area[index].code)
-      }else{
-        areacode.splice(indes,1)
+        areacode.push(area[index].code + '')
+      } else {
+        areacode.splice(indes, 1)
+        if(areacode.length==0){
+          areacode.push(area[0].code.slice(0, 4))
+          area[0].num = 1
+          this.remove()
+        }
       }
+      console.log(areacode);
       this.setData({
         area: area,
-        areacode:areacode
+        areacode: areacode
       })
       var a = this.data.areacode.length ? ' · ' + this.data.areacode.length : ''
       wx.setNavigationBarTitle({
@@ -574,8 +574,10 @@ Page({
     area[0].num = 1
     this.setData({
       area: area,
-      areacode:[]
+      areacode: [area[0].code.slice(0, 4)]
     })
+    console.log(this.data.areacode);
+    this.setTitle()
   },
   ensure() {
     this.setData({
@@ -596,18 +598,18 @@ Page({
     console.log(e);
     console.log(f);
   },
-  goRecruitment(){
+  goRecruitment() {
     var storage = wx.getStorageSync('userInfo')
     wx.showModal({
       title: '是否切换到招聘模式',
-      success (res) {
+      success(res) {
         if (res.confirm) {
-          app.post('/Recruit/setRole',{
+          app.post('/Recruit/setRole', {
             token: storage.token
-          }).then((res)=>{
-            if(res.data.status==1){
+          }).then((res) => {
+            if (res.data.status == 1) {
               wx.redirectTo({
-                url: !wx.getStorageSync('userInfo').card?"/secondary/pages/createTraCQ/index":"/pages/index/recruitment/index",
+                url: !wx.getStorageSync('userInfo').card ? "/secondary/pages/createTraCQ/index" : "/pages/index/recruitment/index",
               })
               wx.showToast({
                 title: '切换成功',
@@ -616,7 +618,7 @@ Page({
               })
               storage.role = 1
               wx.setStorageSync('userInfo', storage)
-            }else{
+            } else {
               wx.showToast({
                 title: '网络出错~',
                 icon: 'error',
@@ -628,6 +630,9 @@ Page({
       }
     })
   },
+  getData() {
+
+  },
   /**
    * 生命周期函数--监听页面加载
    */
@@ -637,6 +642,7 @@ Page({
       citys: userInfo.citys,
       cityss: userInfo.citys.slice(0, userInfo.citys.length - 1),
       citycode: userInfo.citycode,
+      areacodes: [userInfo.citycode.slice(0, 4)]
     })
     this.getAreas(userInfo.citycode)
     wx.setNavigationBarTitle({
@@ -703,14 +709,14 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload() {
-    if(wx.getStorageSync('userInfo').role){
+    if (wx.getStorageSync('userInfo').role) {
       let pages = getCurrentPages()
-      var index =  pages[pages.length - 2]
+      var index = pages[pages.length - 2]
       var components = JSON.parse(JSON.stringify(index.data.components))
-      components[7].url = !wx.getStorageSync('userInfo').role?"/pages/index/jobRecruitment/index":!wx.getStorageSync('userInfo').card?"/secondary/pages/createTraCQ/index":"/pages/index/recruitment/index",
-      index.setData({
-        components:components
-      })
+      components[7].url = !wx.getStorageSync('userInfo').role ? "/pages/index/jobRecruitment/index" : !wx.getStorageSync('userInfo').card ? "/secondary/pages/createTraCQ/index" : "/pages/index/recruitment/index",
+        index.setData({
+          components: components
+        })
     }
   },
 

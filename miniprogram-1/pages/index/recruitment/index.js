@@ -39,7 +39,7 @@ Page({
     educationNum: [],
     salaryNum: [],
     experienceNum: [],
-    jobStatusNum:[],
+    jobStatusNum: [],
     filtersNum: 0,
     confirm: 0,
     educationBackgrounds: [],
@@ -49,7 +49,7 @@ Page({
     educationNums: [],
     salaryNums: [],
     experienceNums: [],
-    jobStatusNums:[],
+    jobStatusNums: [],
     id: 0,
     active1: 'active',
     active2: 'active',
@@ -82,7 +82,12 @@ Page({
     dutys: 0,
     filter: 0,
     location: 0,
-    city:'',
+    city: '',
+    education:0,
+    salary:0,
+    experience:0,
+    job_status:0,
+    dutyx:''
   },
   tabToggle(e) {
     var index = e.currentTarget.dataset.index
@@ -132,8 +137,7 @@ Page({
       desiredPosition: desiredPosition,
       scroll: index * 65 > 136 ? index * 65 - 136 : 0
     })
-    console.log(this.data.location);
-    this.getData(this.data.dutys, this.data.location)
+    this.getData(this.data.dutys, this.data.location,0)
   },
   leftTilter(e) {
     var item = e.currentTarget.dataset.item
@@ -145,7 +149,7 @@ Page({
         leftTilterNum: 1,
         filter: 0
       })
-      this.getData(this.data.dutys, this.data.location)
+      this.getData(this.data.dutys, this.data.location,0)
     } else if (item == 2) {
       this.setData({
         leftTilterActive1: '',
@@ -154,7 +158,7 @@ Page({
         leftTilterNum: 2,
         filter: 1
       })
-      this.getData(this.data.dutys, this.data.location)
+      this.getData(this.data.dutys, this.data.location,0)
     }
   },
   openMask(e) {
@@ -166,11 +170,11 @@ Page({
       educationNum: this.data.educationNums,
       salaryNum: this.data.salaryNums,
       experienceNum: this.data.experienceNums,
-      jobStatusNum:this.data.jobStatusNums,
+      jobStatusNum: this.data.jobStatusNums,
       educationBackground: this.data.educationBackgrounds,
       salaryPackage: this.data.salaryPackages,
       experienceRequirement: this.data.experienceRequirements,
-      jobStatus:this.data.jobStatuss
+      jobStatus: this.data.jobStatuss
     })
     if (item == 1) {
       this.setTitle()
@@ -384,13 +388,13 @@ Page({
       educationNums: this.data.educationNum,
       salaryNums: this.data.salaryNum,
       experienceNums: this.data.experienceNum,
-      jobStatusNums:this.data.jobStatusNum,
+      jobStatusNums: this.data.jobStatusNum,
       educationBackgrounds: this.data.educationBackground,
       salaryPackages: this.data.salaryPackage,
       experienceRequirements: this.data.experienceRequirement,
-      jobStatuss:this.data.jobStatus
+      jobStatuss: this.data.jobStatus
     })
-    
+    this.getData(this.data.dutys, this.data.location,0)
   },
   empty() {
     var educationBackground = JSON.parse(JSON.stringify(this.data.educationBackground))
@@ -417,11 +421,11 @@ Page({
       educationNum: [],
       salaryNum: [],
       experienceNum: [],
-      jobStatusNum:[],
+      jobStatusNum: [],
       educationBackground: educationBackground,
       salaryPackage: salaryPackage,
       experienceRequirement: experienceRequirement,
-      jobStatus:jobStatus
+      jobStatus: jobStatus
     })
     this.setTitle()
   },
@@ -622,38 +626,72 @@ Page({
       }
     })
   },
-  getData( dutys, location, first) {
-    var obj = { 
+  getData(dutys, location, first) {
+    var obj = {
       token: wx.getStorageSync('userInfo').token,
       rc_id: wx.getStorageSync('userInfo').rc_id,
+      location : location.slice(0, 4),
       filter: this.data.filter
     }
     if (dutys) {
       obj.duty = dutys
     }
-    if (location) {
-      obj.location = location.slice(0, 4)
-      if(this.data.city){
-        qqMapSdk.geocoder({
-          address: this.data.city,
-          success:function(res){
-            obj.longitude = res.result.location.lng
-            obj.latitude = res.result.location.lat
-          }
-        })
+    if(this.data.educationNums.length!=0){
+      if(this.data.educationNums.length<2){
+        obj.education_id = this.data.educationNums.join('')
       }else{
-        obj.longitude = wx.getStorageSync('userInfo').longitude
-        obj.latitude = wx.getStorageSync('userInfo').latitude
+        obj.education_id = this.data.educationNums.join(',')
       }
     }
-    console.log(obj);
+    if(this.data.salaryNums.length!=0){
+      obj.salary_id = this.data.salaryNums.join('')
+    }
+    if(this.data.experienceNums.length!=0){
+      if(this.data.experienceNums.length<2){
+        obj.experience_id = this.data.experienceNums.join('')
+      }else{
+        obj.experience_id = this.data.experienceNums.join(',')
+      }
+    }
+    if(this.data.jobStatusNums.length!=0){
+      obj.job_status = this.data.jobStatusNums.join('')
+    }
+    var that  = this
+    if (this.data.city) {
+      qqMapSdk.geocoder({
+        address: this.data.city,
+        success: function (res) {
+          obj.longitude = res.result.location.lng
+          obj.latitude = res.result.location.lat
+          that.aaa(obj,first)
+        }
+      })
+    } else {
+      obj.longitude = wx.getStorageSync('userInfo').longitude
+      obj.latitude = wx.getStorageSync('userInfo').latitude
+      this.aaa(obj,first)
+    }
+  },
+  aaa(obj,first){
     app.post('/Recruit/recommendPosition', obj).then((res) => {
       if (res.data.status == 1) {
         var rex = res.data.data
-        console.log(rex);
+        var duty = rex.duty.indexOf(',') == -1 ? rex.duty.split() : rex.duty.split(',')
         rex.list.forEach(i => {
           i.r_age = this.data.month > i.r_born.slice(5, 7) ? this.data.year - i.r_born.slice(0, 4) + 1 : this.data.year - i.r_born.slice(0, 4)
           i.r_experience = this.data.month > i.r_working_time.slice(5, 7) ? this.data.year - i.r_working_time.slice(0, 4) + 1 : this.data.year - i.r_working_time.slice(0, 4)
+          if (duty.length != 0) {
+            var job_expectation = []
+            duty.forEach(j => {
+              var item = i.job_expectation.find(k => k == j)
+              if (item) {
+                var items = this.data.desiredPositionx.find(k => k.p_id == item).p_name
+                job_expectation.push(items)
+              }
+            })
+            job_expectation = job_expectation.join(',')
+            i.job_expectation = job_expectation
+          }
         })
         if (first) {
           var arr = [{
@@ -661,7 +699,6 @@ Page({
             p_name: '推荐厨师',
             active: 'active'
           }]
-          var duty = rex.duty.indexOf(',') == -1 ? rex.duty.split() : rex.duty.split(',')
           if (duty.length != 0) {
             duty.forEach(i => {
               var item = this.data.desiredPositions.find(j => j.p_id == i)
@@ -671,6 +708,7 @@ Page({
           }
           this.setData({
             desiredPosition: arr,
+            dutyx:rex.duty
           })
         }
         this.setData({
@@ -679,12 +717,12 @@ Page({
       }
     })
   },
-  toGetgetData(location,city) {
+  toGetgetData(location, city) {
     this.setData({
-      location:location,
-      city:city
+      location: location,
+      city: city
     })
-    this.getData(this.data.dutys, this.data.location)
+    this.getData(this.data.dutys, this.data.location,0)
   },
   /**
    * 生命周期函数--监听页面加载
@@ -696,7 +734,6 @@ Page({
     var date = new Date()
     var year = date.getFullYear()
     var month = date.getMonth() + 1
-    console.log(1);
     this.setData({
       citys: {
         name: wx.getStorageSync('userInfo').citys.slice(0, wx.getStorageSync('userInfo').citys.length - 1),
@@ -706,7 +743,8 @@ Page({
       year: year,
       month: month
     })
-    if (wx.getStorageInfoSync('userInfo').publish == 0) {
+    var storage = wx.getStorageSync('userInfo')
+    if (storage.publish == 0) {
       wx.showModal({
         title: '暂未发布社招',
         content: '前去发布？',
@@ -802,7 +840,7 @@ Page({
         })
       }
     })
-    this.getData( 0, 0, 1)
+    this.getData(0, storage.citycode, 1)
   },
 
   /**

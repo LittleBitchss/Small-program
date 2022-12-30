@@ -17,12 +17,11 @@
         </view>
         <view class="jobSearchSquare_filter">
           <view class="jobSearchSquare_filter_left">
-            <view class="jobSearchSquare_filter_left_item {{leftTilterActive1}}" bindtap="leftTilter" data-item="1">综合</view>
+            <view class="jobSearchSquare_filter_left_item {{leftTilterActive1}}" bindtap="leftTilter" data-item="1">最新</view>
             <view class="jobSearchSquare_filter_left_item {{leftTilterActive2}}" bindtap="leftTilter" data-item="2">附近</view>
-            <view class="jobSearchSquare_filter_left_item {{leftTilterActive3}}" bindtap="leftTilter" data-item="3">最新</view>
           </view>
           <view class="jobSearchSquare_filter_right">
-            <view class="jobSearchSquare_filter_right_item" bindtap="openMask" data-item="1">{{cityss+(areacodes.length?'·'+areacodes.length:'')}}</view>
+            <view class="jobSearchSquare_filter_right_item" bindtap="openMask" data-item="1">{{cityss+(areacodes[0].length==4?'':'·'+areacodes.length)}}</view>
             <view class="jobSearchSquare_filter_right_item" bindtap="openMask" data-item="2">筛选{{filtersNum?'·'+filtersNum:''}}</view>
           </view>
         </view>

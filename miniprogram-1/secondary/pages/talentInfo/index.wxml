@@ -24,10 +24,10 @@
       <view class="title">
         <text>求职期望</text>
       </view>
-      <view class="content">
+      <view class="content" wx:for="{{info.job_expectation}}" wx:key="index">
         <view class="content_left">
-          <text class="content_left_top" space="emsp">{{position[info.je_job_expectation-1].p_name}} <text class="content_left_tops">{{info.je_job_salary_min}}-{{info.je_job_salary_max}}{{item.je_job_salary_max=='面议'?'':'元'}}</text></text>
-          <text>{{info.city_name}}</text>
+          <text class="content_left_top" space="emsp">{{position[item.je_job_expectation-1].p_name}} <text class="content_left_tops">{{item.je_job_salary_min}}-{{item.je_job_salary_max}}{{item.je_job_salary_max=='面议'?'':'元'}}</text></text>
+          <text>{{item.city_name}}</text>
         </view>
       </view>
     </view>
@@ -44,7 +44,7 @@
       <view class="content" wx:for="{{info.education}}" wx:key="index">
         <view class="content_left">
           <text class="content_left_top" space="emsp">{{item.ee_school}}</text>
-          <text>{{education[item.ee_education].e_name}}·{{item.ee_major}}</text>
+          <text>{{education[item.ee_education-1].e_name}}·{{item.ee_major}}</text>
         </view>
         <view class="content_right">
           <text>{{item.ee_start_year}}-{{item.ee_end_year}}</text>
