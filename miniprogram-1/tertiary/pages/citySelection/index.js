@@ -144,7 +144,6 @@ Page({
       })
       prevPage.toGetgetData(citycode+'',this.data.city)
     } else {
-      console.log(this.data.flag);
       if (this.data.flag) {
         var cityss = city.slice(0, city.length - 1)
         prevPage.setData({

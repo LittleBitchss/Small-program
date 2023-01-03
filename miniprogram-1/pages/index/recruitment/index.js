@@ -83,11 +83,11 @@ Page({
     filter: 0,
     location: 0,
     city: '',
-    education:0,
-    salary:0,
-    experience:0,
-    job_status:0,
-    dutyx:''
+    education: 0,
+    salary: 0,
+    experience: 0,
+    job_status: 0,
+    dutyx: ''
   },
   tabToggle(e) {
     var index = e.currentTarget.dataset.index
@@ -137,7 +137,7 @@ Page({
       desiredPosition: desiredPosition,
       scroll: index * 65 > 136 ? index * 65 - 136 : 0
     })
-    this.getData(this.data.dutys, this.data.location,0)
+    this.getData(this.data.dutys, this.data.location, 0)
   },
   leftTilter(e) {
     var item = e.currentTarget.dataset.item
@@ -149,7 +149,7 @@ Page({
         leftTilterNum: 1,
         filter: 0
       })
-      this.getData(this.data.dutys, this.data.location,0)
+      this.getData(this.data.dutys, this.data.location, 0)
     } else if (item == 2) {
       this.setData({
         leftTilterActive1: '',
@@ -158,7 +158,7 @@ Page({
         leftTilterNum: 2,
         filter: 1
       })
-      this.getData(this.data.dutys, this.data.location,0)
+      this.getData(this.data.dutys, this.data.location, 0)
     }
   },
   openMask(e) {
@@ -394,7 +394,7 @@ Page({
       experienceRequirements: this.data.experienceRequirement,
       jobStatuss: this.data.jobStatus
     })
-    this.getData(this.data.dutys, this.data.location,0)
+    this.getData(this.data.dutys, this.data.location, 0)
   },
   empty() {
     var educationBackground = JSON.parse(JSON.stringify(this.data.educationBackground))
@@ -488,6 +488,9 @@ Page({
     })
   },
   getCustom(list) {
+    setTimeout(()=>{
+      wx.hideLoading()
+    },200)
     if (list.length == 0) {
       this.setData({
         onTheJobList: []
@@ -548,6 +551,9 @@ Page({
     })
   },
   getMineInfo() {
+    wx.showLoading({
+      title: '加载中',
+    })
     app.post('/Recruit/getMyInfo', {
       token: wx.getStorageSync('userInfo').token
     }).then((res) => {
@@ -556,12 +562,18 @@ Page({
         this.getCustom(rex.list)
         this.setData({
           photo: rex.card.head_portrait,
-          name: rex.card.name
+          name: rex.card.name,
+          actives1: 'active',
+          actives2: '',
+          actives3: ''
         })
       }
     })
   },
   getJobList(item) {
+    wx.showLoading({
+      title: '加载中',
+    })
     app.post('/Recruit/getPublish', {
       token: wx.getStorageSync('userInfo').token,
       rc_id: wx.getStorageSync('userInfo').rc_id,
@@ -580,19 +592,20 @@ Page({
       content: '是否已完成招聘',
       success(res) {
         if (res.confirm) {
-          app.post('/Recruit/lowerShelf', {
-            token: wx.getStorageSync('userInfo').token,
-            id: that.data.onTheJobList[index].rpr_id
-          }).then(res => {
-            if (res.data.status == 1) {
-              wx.showToast({
-                title: '下架成功',
-                icon: 'success',
-                duration: 1000
-              })
-              that.getMineInfo()
-            }
+          wx.showLoading({
+            title: '加载中',
           })
+          setTimeout(()=>{
+            app.post('/Recruit/lowerShelf', {
+              token: wx.getStorageSync('userInfo').token,
+              id: that.data.onTheJobList[index].rpr_id
+            }).then(res => {
+              if (res.data.status == 1) {
+                wx.hideLoading()
+                that.getMineInfo()
+              }
+            })
+          },500)
         }
       }
     })
@@ -627,55 +640,70 @@ Page({
     })
   },
   getData(dutys, location, first) {
+    wx.showLoading({
+      title: '加载中',
+    })
     var obj = {
       token: wx.getStorageSync('userInfo').token,
       rc_id: wx.getStorageSync('userInfo').rc_id,
-      location : location.slice(0, 4),
+      location: location.slice(0, 4),
       filter: this.data.filter
     }
     if (dutys) {
       obj.duty = dutys
     }
-    if(this.data.educationNums.length!=0){
-      if(this.data.educationNums.length<2){
+    if (this.data.educationNums.length != 0) {
+      if (this.data.educationNums.length < 2) {
         obj.education_id = this.data.educationNums.join('')
-      }else{
+      } else {
         obj.education_id = this.data.educationNums.join(',')
       }
     }
-    if(this.data.salaryNums.length!=0){
+    if (this.data.salaryNums.length != 0) {
       obj.salary_id = this.data.salaryNums.join('')
     }
-    if(this.data.experienceNums.length!=0){
-      if(this.data.experienceNums.length<2){
+    if (this.data.experienceNums.length != 0) {
+      if (this.data.experienceNums.length < 2) {
         obj.experience_id = this.data.experienceNums.join('')
-      }else{
+      } else {
         obj.experience_id = this.data.experienceNums.join(',')
       }
     }
-    if(this.data.jobStatusNums.length!=0){
+    if (this.data.jobStatusNums.length != 0) {
       obj.job_status = this.data.jobStatusNums.join('')
     }
-    var that  = this
+    var that = this
     if (this.data.city) {
       qqMapSdk.geocoder({
         address: this.data.city,
         success: function (res) {
           obj.longitude = res.result.location.lng
           obj.latitude = res.result.location.lat
-          that.aaa(obj,first)
+          that.aaa(obj, first)
         }
       })
     } else {
       obj.longitude = wx.getStorageSync('userInfo').longitude
       obj.latitude = wx.getStorageSync('userInfo').latitude
-      this.aaa(obj,first)
+      this.aaa(obj, first)
     }
   },
-  aaa(obj,first){
+  aaa(obj, first) {
     app.post('/Recruit/recommendPosition', obj).then((res) => {
       if (res.data.status == 1) {
         var rex = res.data.data
+        if (rex.list.length == 0) {
+          setTimeout(function () {
+            wx.hideLoading()
+            wx.showToast({
+              title: '暂无数据',
+              icon: 'error',
+              duration: 1000
+            })
+          }, 500)
+        } else {
+          wx.hideLoading()
+        }
         var duty = rex.duty.indexOf(',') == -1 ? rex.duty.split() : rex.duty.split(',')
         rex.list.forEach(i => {
           i.r_age = this.data.month > i.r_born.slice(5, 7) ? this.data.year - i.r_born.slice(0, 4) + 1 : this.data.year - i.r_born.slice(0, 4)
@@ -708,21 +736,30 @@ Page({
           }
           this.setData({
             desiredPosition: arr,
-            dutyx:rex.duty
+            dutyx: rex.duty
           })
         }
         this.setData({
           list: rex.list
         })
+      } else {
+        wx.hideLoading()
+        wx.showToast({
+          title: '网络错误',
+          icon: 'error',
+          duration: 1000
+        })
       }
     })
   },
   toGetgetData(location, city) {
-    this.setData({
-      location: location,
-      city: city
+    setTimeout(() => {
+      this.setData({
+        location: location,
+        city: city
+      })
+      this.getData(this.data.dutys, this.data.location, 0)
     })
-    this.getData(this.data.dutys, this.data.location,0)
   },
   /**
    * 生命周期函数--监听页面加载

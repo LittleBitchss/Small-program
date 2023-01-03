@@ -48,6 +48,9 @@ Page({
         this.setData({
           lists: res.data.data
         })
+        setTimeout(()=>{
+          wx.hideLoading()
+        },500)
       }
     })
   },
@@ -144,6 +147,11 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
+    setTimeout(()=>{
+      wx.showLoading({
+        title: '加载中',
+      })
+    },200)
     var date = new Date()
     var year = date.getFullYear()
     var month = date.getMonth() + 1

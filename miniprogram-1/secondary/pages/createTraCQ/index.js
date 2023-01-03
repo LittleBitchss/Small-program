@@ -327,6 +327,17 @@ Page({
               icon: 'success',
               duration: 1000
             })
+            let pages = getCurrentPages()
+            var index = pages[pages.length - 2]
+            if (index.data.components) {
+              var components = JSON.parse(JSON.stringify(index.data.components))
+              components[7].url = "/pages/index/recruitment/index"
+              index.setData({
+                components: components
+              })
+            } else {
+              index.getMineInfo()
+            }
             if (!storage.card) {
               storage.card = 1
               setTimeout(() => {
@@ -385,6 +396,11 @@ Page({
    */
   // 91330327MA298MDQ8F
   onLoad(options) {
+    setTimeout(()=>{
+      wx.showLoading({
+        title: '加载中',
+      })
+    },200)
     wx.setNavigationBarTitle({
       title: '编辑名片',
     })
@@ -395,6 +411,9 @@ Page({
       token: wx.getStorageSync('userInfo').token
     }).then((res) => {
       if (res.data.status == 1) {
+        setTimeout(()=>{
+          wx.hideLoading()
+        },500)
         this.setData({
           rc_id: res.data.data.rc_id,
           avatar: res.data.data.head_portrait,
@@ -441,17 +460,7 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload() {
-    let pages = getCurrentPages()
-    var index = pages[pages.length - 2]
-    if (index.data.components) {
-      var components = JSON.parse(JSON.stringify(index.data.components))
-      components[7].url = "/pages/index/recruitment/index"
-      index.setData({
-        components: components
-      })
-    } else {
-      index.getMineInfo()
-    }
+    
   },
 
   /**

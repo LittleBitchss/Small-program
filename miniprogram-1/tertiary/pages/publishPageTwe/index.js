@@ -629,6 +629,11 @@ Page({
         id: options.id,
         edit: options.edit
       })
+      setTimeout(function () {
+        wx.showLoading({
+          title: '加载中',
+        })
+      }, 200)
     } else {
       this.setData({
         title: options.title,
@@ -692,6 +697,9 @@ Page({
                 rpr_id: this.data.id
               }).then((res) => {
                 if (res.data.status == 1) {
+                  setTimeout(function () {
+                    wx.hideLoading()
+                  }, 500)
                   if (res.data.data.info.rpr_experience) {
                     var kinds = JSON.parse(JSON.stringify(this.data.kinds))
                     var dutys = JSON.parse(JSON.stringify(this.data.dutys))
