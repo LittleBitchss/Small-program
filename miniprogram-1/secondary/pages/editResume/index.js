@@ -868,6 +868,9 @@ Page({
       token: wx.getStorageSync('userInfo').token
     }).then((res) => {
       if (res.data.status == 1) {
+        setTimeout(function () {
+          wx.hideLoading()
+        }, 500)
         try {
           if (res.data.data.job_expectation.length != 0) {
             res.data.data.job_expectation.forEach(i => {
@@ -1028,6 +1031,11 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
+    setTimeout(()=>{
+      wx.showLoading({
+        title: '加载中',
+      })
+    },200)
     wx.setNavigationBarTitle({
       title: '在线简历',
     })

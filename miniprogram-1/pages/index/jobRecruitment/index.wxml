@@ -72,7 +72,7 @@
           <view class="mine_state_item {{actives3}}" bindtap="mineToggle" data-item="3">已完成</view>
         </view>
         <scroll-view scroll-y="true" class="list">
-          <view class="list_item" wx:for="{{mineRecruitment}}" wx:key="index">
+          <navigator class="list_item" wx:for="{{mineRecruitment}}" wx:key="index" url="/secondary/pages/JobPostings/index">
             <view class="list_item1">
               <view class="list_item1_left">
                 {{item.rpr_title}}
@@ -99,7 +99,7 @@
                 简历已发送
               </view>
             </view>
-          </view>
+          </navigator>
         </scroll-view>
       </view>
     </view>
