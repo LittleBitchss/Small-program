@@ -17,8 +17,8 @@
         </view>
         <view class="jobSearchSquare_filter">
           <view class="jobSearchSquare_filter_left">
-            <view class="jobSearchSquare_filter_left_item {{leftTilterActive1}}" bindtap="leftTilter" data-item="1">最新</view>
-            <view class="jobSearchSquare_filter_left_item {{leftTilterActive2}}" bindtap="leftTilter" data-item="2">附近</view>
+            <view class="jobSearchSquare_filter_left_item {{leftTilterActive1}}" bindtap="leftTilter" data-item="0">最新</view>
+            <view class="jobSearchSquare_filter_left_item {{leftTilterActive2}}" bindtap="leftTilter" data-item="1">附近</view>
           </view>
           <view class="jobSearchSquare_filter_right">
             <view class="jobSearchSquare_filter_right_item" bindtap="openMask" data-item="1">{{cityss+(areacodes[0].length==4?'':'·'+areacodes.length)}}</view>
@@ -26,29 +26,32 @@
           </view>
         </view>
         <scroll-view scroll-y="true" class="list">
-          <navigator class="list_item" url="/secondary/pages/JobPostings/index">
+          <navigator class="list_item" url="/secondary/pages/JobPostings/index" wx:for="{{jobList}}" wx:key="index">
             <view class="list_item1">
               <view class="list_item1_left">
-                行政主厨1名
+                {{item.rpr_title}}
               </view>
               <view class="list_item1_right">
-                1.3万-1.6万
+                {{item.rpr_minimum_waga=="面议"?"面议":item.rpr_minimum_waga}}-{{item.rpr_maximum_waga=="面议"?"面议":item.rpr_maximum_waga+"元"}}
               </view>
             </view>
             <view class="list_item2">
-              杭州西溪喜来登度假大酒店
+              {{item.rc_company}}
             </view>
             <view class="list_item3">
-              <view class="list_item3_item">从业10年</view>
-              <view class="list_item3_item">主厨</view>
-              <view class="list_item3_item">年终奖</view>
+              <view class="list_item3_item" wx:if="{{item.catering}}">{{item.catering}}</view>
+              <view class="list_item3_item" wx:if="{{item.duty}}">{{item.duty}}</view>
+              <view class="list_item3_item" wx:if="{{item.rpr_experience}}">{{item.rpr_experience}}</view>
+              <view class="list_item3_item" wx:if="{{item.rpr_experience}}">{{item.rpr_minimum_education}}</view>
+              <view class="list_item3_item" wx:if="{{item.welfare}}">{{item.welfare}}</view>
+              <view class="list_item3_item" wx:if="{{item.custom}}">{{item.custom}}</view>
             </view>
             <view class="list_item4">
               <view class="list_item4_left">
-                <image class="photo"></image>
-                <text class="callPosition">郑女士 · 人事经理</text>
+                <image class="photo" src="{{item.rc_head_portrait}}"></image>
+                <text class="callPosition">{{item.rc_name[0]}}{{item.rc_sex=="男"?"先生":"女士"}} · {{item.rc_post}}</text>
               </view>
-              <view class="list_item4_right">上城区 中山南路</view>
+              <view class="list_item4_right">{{item.area}} {{item.street}}</view>
             </view>
           </navigator>
         </scroll-view>

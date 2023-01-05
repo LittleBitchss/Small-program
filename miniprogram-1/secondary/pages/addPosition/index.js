@@ -191,7 +191,7 @@ Page({
         try {
           res.data.data.forEach(i => {
             cityList.forEach(j => {
-              var a = j.cityInfo.find(k => k.code == i.je_job_location+'00')
+              var a = j.cityInfo.find(k => k.code == i.je_job_location + '00')
               if (a) {
                 i.city = a.city.slice(0, a.city.length - 1)
                 i.citys = a.city
@@ -216,15 +216,13 @@ Page({
     wx.setNavigationBarTitle({
       title: '编辑求职期望',
     })
-    app.post('/comm/getPosition').then((res) => {
-      var arr = []
-      res.data.data.forEach(i => {
-        arr.push(i.p_name)
-      })
-      this.setData({
-        expectJobArray: arr,
-        position: res.data.data
-      })
+    var arr = []
+    wx.getStorageSync('position').forEach(i => {
+      arr.push(i.p_name)
+    })
+    this.setData({
+      expectJobArray: arr,
+      position: wx.getStorageSync('position')
     })
     this.getData()
   },

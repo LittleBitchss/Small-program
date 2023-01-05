@@ -34,21 +34,9 @@ Page({
       r_id: options.r_id,
       duty: options.duty.indexOf(',')==-1?options.duty.split(''):options.duty.split(','),
       year: year,
-      month: month
-    })
-    app.post('/comm/getEducation').then(res => {
-      if (res.data.status == 1) {
-        this.setData({
-          education: res.data.data
-        })
-      }
-    })
-    app.post('/comm/getPosition').then(res => {
-      if (res.data.status == 1) {
-        this.setData({
-          position: res.data.data
-        })
-      }
+      month: month,
+      position:  wx.getStorageSync('position'),
+      education:  wx.getStorageSync('education')
     })
     app.post('/Recruit/showResume', {
       token: wx.getStorageSync('userInfo').token,

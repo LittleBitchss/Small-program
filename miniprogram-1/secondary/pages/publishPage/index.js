@@ -10,15 +10,15 @@ Page({
     value2: '',
     value2Num: '',
     value3: '',
-    areaWords:0,
-    array:[],
-    arrays:[],
+    areaWords: 0,
+    array: [],
+    arrays: [],
     value3s: '',
     active1: '',
     active2: '',
     active3: '',
     id: 0,
-    show:false
+    show: false
   },
   inputs(e) {
     var item = e.currentTarget.dataset.item
@@ -26,13 +26,13 @@ Page({
       this.setData({
         value1: e.detail.value
       })
-      if(this.data.value1&&this.data.value2&&this.data.value3s){
+      if (this.data.value1 && this.data.value2 && this.data.value3s) {
         this.setData({
-          active1:'active',
+          active1: 'active',
         })
-      }else{
+      } else {
         this.setData({
-          active1:'',
+          active1: '',
         })
       }
     } else if (item == 2) {
@@ -44,26 +44,26 @@ Page({
         this.setData({
           active3: 'active'
         })
-      }else{
+      } else {
         this.setData({
           active3: ''
         })
       }
     }
   },
-  bindPickerChange(e){
+  bindPickerChange(e) {
     this.setData({
       value2: this.data.arrays[e.detail.value].p_name,
       value2Num: this.data.arrays[e.detail.value].p_id,
-      active2:'actives'
+      active2: 'actives'
     })
-    if(this.data.value1&&this.data.value2&&this.data.value3s){
+    if (this.data.value1 && this.data.value2 && this.data.value3s) {
       this.setData({
-        active1:'active',
+        active1: 'active',
       })
-    }else{
+    } else {
       this.setData({
-        active1:'',
+        active1: '',
       })
     }
   },
@@ -73,7 +73,7 @@ Page({
         token: wx.getStorageSync('userInfo').token,
         rc_id: wx.getStorageSync('userInfo').rc_id,
         id: this.data.id,
-        title:this.data.value1,
+        title: this.data.value1,
         position_name: this.data.value2Num,
         job_description: this.data.value3s
       }).then((res) => {
@@ -88,26 +88,26 @@ Page({
       })
     }
   },
-  openMask(){
+  openMask() {
     this.setData({
-      show:true,
-      value3:this.data.value3s
+      show: true,
+      value3: this.data.value3s
     })
   },
-  save(){
+  save() {
     if (this.data.value3) {
       this.setData({
-        value3s:this.data.value3,
-        show:false
+        value3s: this.data.value3,
+        show: false
       })
-      if(this.data.value3s){
+      if (this.data.value3s) {
         this.setData({
-          active3:'actives',
+          active3: 'actives',
         })
       }
-      if(this.data.value1&&this.data.value2&&this.data.value3s){
+      if (this.data.value1 && this.data.value2 && this.data.value3s) {
         this.setData({
-          active1:'active',
+          active1: 'active',
         })
       }
     }
@@ -119,17 +119,13 @@ Page({
     wx.setNavigationBarTitle({
       title: '发布社招',
     })
-    app.post('/comm/getPosition').then(res=>{
-      if(res.data.status==1){
-        var arr = []
-        res.data.data.forEach(i=>{
-          arr.push(i.p_name)
-        })
-        this.setData({
-          array:arr,
-          arrays:res.data.data
-        })
-      }
+    var arr = []
+    wx.getStorageSync('position').forEach(i => {
+      arr.push(i.p_name)
+    })
+    this.setData({
+      array: arr,
+      arrays: wx.getStorageSync('position')
     })
   },
 

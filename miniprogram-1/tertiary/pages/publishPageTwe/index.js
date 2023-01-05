@@ -104,6 +104,7 @@ Page({
     longitudes: '',
     latitudes: '',
     workFullAddress: '请填写精确的工作地址',
+    active1: '',
     active2: ''
   },
   bindChange(e) {
@@ -115,11 +116,11 @@ Page({
       })
       if (this.data.sufferValue.e_name != '请选择经验' && this.data.learnValue.e_name != '请选择学历' && this.data.salaryMin != '' && this.data.txt != '选择关键词提供给求职者' && this.data.workFullAddress != '请填写精确的工作地址') {
         this.setData({
-          active2: 'actives'
+          active1: 'actives'
         })
       } else {
         this.setData({
-          active2: ''
+          active1: ''
         })
       }
     } else if (item == 2) {
@@ -128,11 +129,11 @@ Page({
       })
       if (this.data.sufferValue.e_name != '请选择经验' && this.data.learnValue.e_name != '请选择学历' && this.data.salaryMin != '' && this.data.txt != '选择关键词提供给求职者' && this.data.workFullAddress != '请填写精确的工作地址') {
         this.setData({
-          active2: 'actives'
+          active1: 'actives'
         })
       } else {
         this.setData({
-          active2: ''
+          active1: ''
         })
       }
     } else if (item == 3) {
@@ -143,11 +144,11 @@ Page({
       })
       if (this.data.sufferValue.e_name != '请选择经验' && this.data.learnValue.e_name != '请选择学历' && this.data.salaryMin != '' && this.data.txt != '选择关键词提供给求职者' && this.data.workFullAddress != '请填写精确的工作地址') {
         this.setData({
-          active2: 'actives'
+          active1: 'actives'
         })
       } else {
         this.setData({
-          active2: ''
+          active1: ''
         })
       }
     }
@@ -199,6 +200,7 @@ Page({
           fullAddress: this.data.fullAddresss,
           longitude: this.data.longitudes,
           latitude: this.data.latitudes,
+          active2:'active'
         })
       } else {
         this.setData({
@@ -319,6 +321,7 @@ Page({
     })
   },
   confirm(e) {
+    var that = this
     var item = e.currentTarget.dataset.item
     if (item == 1) {
       var dutyTxt = ''
@@ -393,36 +396,51 @@ Page({
       }
       if (this.data.sufferValue.e_name != '请选择经验' && this.data.learnValue.e_name != '请选择学历' && this.data.salaryMin != '' && this.data.txt != '选择关键词提供给求职者' && this.data.workFullAddress != '请填写精确的工作地址') {
         this.setData({
-          active2: 'actives'
+          active1: 'actives'
         })
       } else {
         this.setData({
-          active2: ''
+          active1: ''
         })
       }
     } else if (item == 2) {
-      if (this.data.provinces && this.data.city && this.data.area && this.data.workAddress && this.data.fullAddress && this.data.longitude && this.data.latitude) {
-        this.setData({
-          provincess: this.data.provinces,
-          citys: this.data.city,
-          areas: this.data.area,
-          workAddresss: this.data.workAddress,
-          fullAddresss: this.data.fullAddress,
-          longitudes: this.data.longitude,
-          latitudes: this.data.latitude,
-          workFullAddress: this.data.workAddress + this.data.fullAddress,
-          show: false
+      if (this.data.provinces && this.data.city && this.data.area && this.data.workAddress && this.data.fullAddress) {
+        qqMapSdk.geocoder({
+          address:that.data.workAddress + that.data.fullAddress,
+          success(res){
+            that.setData({
+              provincess: that.data.provinces,
+              citys: that.data.city,
+              areas: that.data.area,
+              workAddresss: that.data.workAddress,
+              fullAddresss: that.data.fullAddress,
+              longitudes: res.result.location.lng,
+              latitudes: res.result.location.lat,
+              workFullAddress: that.data.workAddress + that.data.fullAddress,
+              show: false
+            })
+          }
         })
+      }
+      setTimeout(()=>{
+        if(this.data.longitudes==''){
+          wx.showToast({
+            title: '当前位置已失效',
+            icon: 'error',
+            duration: 1000
+          })
+          return
+        }
         if (this.data.sufferValue.e_name != '请选择经验' && this.data.learnValue.e_name != '请选择学历' && this.data.salaryMin != '' && this.data.txt != '选择关键词提供给求职者' && this.data.workFullAddress != '请填写精确的工作地址') {
           this.setData({
-            active2: 'actives'
+            active1: 'actives'
           })
         } else {
           this.setData({
-            active2: ''
+            active1: ''
           })
         }
-      }
+      },500)
     }
   },
   focus(e) {
@@ -463,7 +481,7 @@ Page({
           provinces: res.result.ad_info.city_code.slice(0, 2),
           city: res.result.ad_info.city_code.slice(3, 7),
           area: res.result.ad_info.adcode,
-          workAddress: res.result.formatted_addresses.recommend,
+          workAddress: res.result.formatted_addresses?res.result.formatted_addresses.recommend:'',
           longitude: res.result.location.lng,
           latitude: res.result.location.lat,
         }, (() => {
@@ -546,7 +564,6 @@ Page({
   // 选择地址
   cilckItem(e) {
     var index = e.currentTarget.dataset.index
-    this.data.addressArr[index]
     this.getAddress(this.data.addressArr[index].longitude, this.data.addressArr[index].latitude)
     this.setData({
       showview: '1',
@@ -645,173 +662,150 @@ Page({
     wx.setNavigationBarTitle({
       title: this.data.edit ? '编辑社招' : '发布社招',
     })
-    app.post('/comm/getExperience').then((res) => {
-      if (res.data.status == 1) {
-        var arr = []
-        res.data.data.forEach(i => {
-          arr.push(i.e_name)
-        });
-        this.setData({
-          sufferArrs: res.data.data,
-          sufferArr: arr
-        })
-      }
-    }).then(() => {
-      app.post('/comm/getEducation').then((res) => {
+    var arr = []
+    wx.getStorageSync('education').forEach(i => {
+      arr.push(i.e_name)
+    });
+    var arrs = []
+    wx.getStorageSync('experience').forEach(i => {
+      arrs.push(i.e_name)
+    });
+    var position = wx.getStorageSync('position')
+    position.forEach(i => {
+      i.active = ''
+    });
+    var welfare = wx.getStorageSync('welfare')
+    welfare.forEach(i => {
+      i.active = ''
+    });
+    this.setData({
+      learnArrs: wx.getStorageSync('education'),
+      learnArr: arr,
+      sufferArrs: wx.getStorageSync('experience'),
+      sufferArr: arrs,
+      duty: position,
+      dutys: position,
+      welfare: welfare,
+      welfares: welfare
+    })
+    if (options.edit) {
+      app.post('/Recruit/getPublishDetail', {
+        token: wx.getStorageSync('userInfo').token,
+        rpr_id: this.data.id
+      }).then((res) => {
+        console.log(res.data.data);
         if (res.data.status == 1) {
-          var arr = []
-          res.data.data.forEach(i => {
-            arr.push(i.e_name)
-          });
-          this.setData({
-            learnArrs: res.data.data,
-            learnArr: arr
-          })
-        }
-      }).then(() => {
-        app.post('/comm/getRecruitDuty').then((res) => {
-          if (res.data.status == 1) {
-            res.data.data.forEach(i => {
-              i.active = ''
-            });
-            this.setData({
-              duty: res.data.data,
-              dutys: res.data.data
-            })
-          }
-        }).then(() => {
-          app.post('/comm/getWelfare').then((res) => {
-            if (res.data.status == 1) {
-              res.data.data.forEach(i => {
-                i.active = ''
-              });
-              this.setData({
-                welfare: res.data.data,
-                welfares: res.data.data
-              })
-            }
-          }).then(() => {
-            if (options.edit) {
-              app.post('/Recruit/getPublishDetail', {
-                token: wx.getStorageSync('userInfo').token,
-                rpr_id: this.data.id
-              }).then((res) => {
-                if (res.data.status == 1) {
-                  setTimeout(function () {
-                    wx.hideLoading()
-                  }, 500)
-                  if (res.data.data.info.rpr_experience) {
-                    var kinds = JSON.parse(JSON.stringify(this.data.kinds))
-                    var dutys = JSON.parse(JSON.stringify(this.data.dutys))
-                    var welfares = JSON.parse(JSON.stringify(this.data.welfares))
-                    var kindTxt = ''
-                    var dutyTxt = ''
-                    var welfareTxt = ''
-                    var customTxt = ''
-                    var kindNum = ''
-                    var dutyNum = ''
-                    var welfareNum = ''
-                    var rpr_custom = JSON.parse(res.data.data.info.rpr_custom)
-                    kinds.forEach(i => {
-                      res.data.data.catering.forEach(j => {
-                        if (i.ke_id == j) {
-                          i.active = 'active'
-                          kindTxt += i.ke_name + '/'
-                          kindNum += i.ke_id + '/'
-                        }
-                      })
-                    })
-                    dutys.forEach(i => {
-                      res.data.data.duty.forEach(j => {
-                        if (i.rd_id == j) {
-                          i.active = 'active'
-                          dutyTxt += i.rd_name + '/'
-                          dutyNum += i.rd_id + '/'
-                        }
-                      })
-                    })
-                    welfares.forEach(i => {
-                      res.data.data.welfare.forEach(j => {
-                        if (i.rf_id == j) {
-                          i.active = 'active'
-                          welfareTxt += i.rf_name + '/'
-                          welfareNum += i.rf_id + '/'
-                        }
-                      })
-                    })
-                    if (rpr_custom) {
-                      if (rpr_custom.length != 0) {
-                        rpr_custom.forEach(i => {
-                          if (i.active) {
-                            customTxt += i.rc_name + '/'
-                          }
-                        })
-                      }
-                    }
-                    if (kindTxt) {
-                      kindTxt = kindTxt.slice(0, kindTxt.length - 1)
-                      kindNum = kindNum.slice(0, kindNum.length - 1)
-                    }
-                    if (dutyTxt) {
-                      dutyTxt = dutyTxt.slice(0, dutyTxt.length - 1)
-                      dutyNum = dutyNum.slice(0, dutyNum.length - 1)
-                    }
-                    if (welfareTxt) {
-                      welfareTxt = welfareTxt.slice(0, welfareTxt.length - 1)
-                      welfareNum = welfareNum.slice(0, welfareNum.length - 1)
-                    }
-                    if (customTxt) {
-                      customTxt = customTxt.slice(0, customTxt.length - 1)
-                    }
-                    var txt = kindTxt + ((kindTxt && dutyTxt) || (kindTxt && welfareTxt) || (kindTxt && customTxt) ? ',' : '') + dutyTxt + ((dutyTxt && welfareTxt) || (dutyTxt && customTxt) ? ',' : '') + welfareTxt + ((welfareTxt && customTxt) ? ',' : '') + customTxt
-                    var num = kindNum + ',' + dutyNum + ',' + welfareNum
-                    this.setData({
-                      title: res.data.data.info.rpr_title,
-                      jobName: res.data.data.info.rpr_position_name,
-                      jobDescribe: res.data.data.info.rpr_job_description,
-                      sufferIndex: res.data.data.info.rpr_experience - 1,
-                      sufferValue: this.data.sufferArrs[res.data.data.info.rpr_experience - 1],
-                      learnIndex: res.data.data.info.rpr_minimum_education - 1,
-                      learnValue: this.data.learnArrs[res.data.data.info.rpr_minimum_education - 1],
-                      salaryArray: res.data.data.info.rpr_maximum_waga == '面议' ? this.data.salaryArray : this.data.salaryArrays,
-                      salaryIndex: [
-                        res.data.data.info.rpr_maximum_waga == '面议' ? this.data.salaryArray[0].indexOf(res.data.data.info.rpr_minimum_waga) : this.data.salaryArrays[0].indexOf(res.data.data.info.rpr_minimum_waga),
-                        res.data.data.info.rpr_maximum_waga == '面议' ? this.data.salaryArray[1].indexOf(res.data.data.info.rpr_maximum_waga) : this.data.salaryArrays[1].indexOf(res.data.data.info.rpr_maximum_waga),
-                        this.data.salaryArray[2].indexOf(res.data.data.info.rpr_few_salaries + '薪')
-                      ],
-                      salaryMin: res.data.data.info.rpr_minimum_waga,
-                      salaryMax: res.data.data.info.rpr_maximum_waga,
-                      fewPay: res.data.data.info.rpr_few_salaries,
-                      kinds: kinds,
-                      dutys: dutys,
-                      welfares: welfares,
-                      customs: rpr_custom,
-                      txt: txt,
-                      num: num,
-                      provincess: res.data.data.info.rpr_provinces,
-                      citys: res.data.data.info.rpr_city,
-                      areas: res.data.data.info.rpr_area,
-                      workAddresss: res.data.data.info.rpr_work_address,
-                      fullAddresss: res.data.data.info.rpr_doorplate,
-                      longitudes: res.data.data.info.rpr_longitude,
-                      latitudes: res.data.data.info.rpr_latitude,
-                      workFullAddress: res.data.data.info.rpr_work_address + res.data.data.info.rpr_doorplate,
-                      active2: 'actives'
-                    })
-                  }else{
-                    this.setData({
-                      title: res.data.data.info.rpr_title,
-                      jobName: res.data.data.info.rpr_position_name,
-                      jobDescribe: res.data.data.info.rpr_job_description
-                    })
-                  }
+          setTimeout(function () {
+            wx.hideLoading()
+          }, 500)
+          if (res.data.data.info.rpr_experience) {
+            var kinds = JSON.parse(JSON.stringify(this.data.kinds))
+            var dutys = JSON.parse(JSON.stringify(this.data.dutys))
+            var welfares = JSON.parse(JSON.stringify(this.data.welfares))
+            var kindTxt = ''
+            var dutyTxt = ''
+            var welfareTxt = ''
+            var customTxt = ''
+            var kindNum = ''
+            var dutyNum = ''
+            var welfareNum = ''
+            var rpr_custom = JSON.parse(res.data.data.info.rpr_custom)
+            kinds.forEach(i => {
+              res.data.data.catering.forEach(j => {
+                if (i.ke_id == j) {
+                  i.active = 'active'
+                  kindTxt += i.ke_name + '/'
+                  kindNum += i.ke_id + '/'
                 }
               })
+            })
+            dutys.forEach(i => {
+              res.data.data.duty.forEach(j => {
+                if (i.rd_id == j) {
+                  i.active = 'active'
+                  dutyTxt += i.rd_name + '/'
+                  dutyNum += i.rd_id + '/'
+                }
+              })
+            })
+            welfares.forEach(i => {
+              res.data.data.welfare.forEach(j => {
+                if (i.rf_id == j) {
+                  i.active = 'active'
+                  welfareTxt += i.rf_name + '/'
+                  welfareNum += i.rf_id + '/'
+                }
+              })
+            })
+            if (rpr_custom) {
+              if (rpr_custom.length != 0) {
+                rpr_custom.forEach(i => {
+                  if (i.active) {
+                    customTxt += i.rc_name + '/'
+                  }
+                })
+              }
             }
-          })
-        })
+            if (kindTxt) {
+              kindTxt = kindTxt.slice(0, kindTxt.length - 1)
+              kindNum = kindNum.slice(0, kindNum.length - 1)
+            }
+            if (dutyTxt) {
+              dutyTxt = dutyTxt.slice(0, dutyTxt.length - 1)
+              dutyNum = dutyNum.slice(0, dutyNum.length - 1)
+            }
+            if (welfareTxt) {
+              welfareTxt = welfareTxt.slice(0, welfareTxt.length - 1)
+              welfareNum = welfareNum.slice(0, welfareNum.length - 1)
+            }
+            if (customTxt) {
+              customTxt = customTxt.slice(0, customTxt.length - 1)
+            }
+            var txt = kindTxt + ((kindTxt && dutyTxt) || (kindTxt && welfareTxt) || (kindTxt && customTxt) ? ',' : '') + dutyTxt + ((dutyTxt && welfareTxt) || (dutyTxt && customTxt) ? ',' : '') + welfareTxt + ((welfareTxt && customTxt) ? ',' : '') + customTxt
+            var num = kindNum + ',' + dutyNum + ',' + welfareNum
+            this.setData({
+              title: res.data.data.info.rpr_title,
+              jobName: res.data.data.info.rpr_position_name,
+              jobDescribe: res.data.data.info.rpr_job_description,
+              sufferIndex: res.data.data.info.rpr_experience - 1,
+              sufferValue: this.data.sufferArrs[res.data.data.info.rpr_experience - 1],
+              learnIndex: res.data.data.info.rpr_minimum_education - 1,
+              learnValue: this.data.learnArrs[res.data.data.info.rpr_minimum_education - 1],
+              salaryArray: res.data.data.info.rpr_maximum_waga == '面议' ? this.data.salaryArray : this.data.salaryArrays,
+              salaryIndex: [
+                res.data.data.info.rpr_maximum_waga == '面议' ? this.data.salaryArray[0].indexOf(res.data.data.info.rpr_minimum_waga) : this.data.salaryArrays[0].indexOf(res.data.data.info.rpr_minimum_waga),
+                res.data.data.info.rpr_maximum_waga == '面议' ? this.data.salaryArray[1].indexOf(res.data.data.info.rpr_maximum_waga) : this.data.salaryArrays[1].indexOf(res.data.data.info.rpr_maximum_waga),
+                this.data.salaryArray[2].indexOf(res.data.data.info.rpr_few_salaries + '薪')
+              ],
+              salaryMin: res.data.data.info.rpr_minimum_waga,
+              salaryMax: res.data.data.info.rpr_maximum_waga,
+              fewPay: res.data.data.info.rpr_few_salaries,
+              kinds: kinds,
+              dutys: dutys,
+              welfares: welfares,
+              customs: rpr_custom,
+              txt: txt,
+              num: num,
+              provincess: res.data.data.info.rpr_provinces,
+              citys: res.data.data.info.rpr_city,
+              areas: res.data.data.info.rpr_area,
+              workAddresss: res.data.data.info.rpr_work_address,
+              fullAddresss: res.data.data.info.rpr_doorplate,
+              longitudes: res.data.data.info.rpr_longitude,
+              latitudes: res.data.data.info.rpr_latitude,
+              workFullAddress: res.data.data.info.rpr_work_address + res.data.data.info.rpr_doorplate,
+              active1: 'actives'
+            })
+          } else {
+            this.setData({
+              title: res.data.data.info.rpr_title,
+              jobName: res.data.data.info.rpr_position_name,
+              jobDescribe: res.data.data.info.rpr_job_description
+            })
+          }
+        }
       })
-    })
+    }
   },
 
   /**

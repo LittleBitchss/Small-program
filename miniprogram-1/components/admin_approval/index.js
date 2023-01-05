@@ -131,6 +131,10 @@ Component({
         }).then(res => {
           if (res.data.status == 1) {
             callback(res.data.data.data)
+          }else{
+            wx.navigateTo({
+              url: '/pages/error/error'
+            })
           }
         })
       } catch {

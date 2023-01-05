@@ -801,6 +801,7 @@ Page({
           desiredPosition: res.data.data,
           desiredPositionx: res.data.data
         })
+        wx.setStorageSync('position', res.data.data)
       } else {
         wx.showToast({
           title: '网络出错~',
@@ -815,6 +816,7 @@ Page({
           salaryPackage: res.data.data,
           salaryPackages: res.data.data
         })
+        wx.setStorageSync('salary', res.data.data)
       } else {
         wx.showToast({
           title: '网络出错~',
@@ -832,6 +834,7 @@ Page({
           educationBackground: res.data.data,
           educationBackgrounds: res.data.data
         })
+        wx.setStorageSync('education', res.data.data)
       }
     })
     app.post('/comm/getExperience').then((res) => {
@@ -843,6 +846,7 @@ Page({
           experienceRequirement: res.data.data,
           experienceRequirements: res.data.data
         })
+        wx.setStorageSync('experience', res.data.data)
       }
     })
     app.post('/comm/getJobStatus').then((res) => {
@@ -854,6 +858,7 @@ Page({
           jobStatus: res.data.data,
           jobStatuss: res.data.data
         })
+        wx.setStorageSync('jobStatus', res.data.data)
       }
     })
     app.post('/comm/getRecruitDuty').then((res) => {
@@ -861,13 +866,7 @@ Page({
         this.setData({
           duty: res.data.data
         })
-      }
-    })
-    app.post('/comm/getWorkExperience').then((res) => {
-      if (res.data.status == 1) {
-        this.setData({
-          suffer: res.data.data
-        })
+        wx.setStorageSync('recruitDuty', res.data.data)
       }
     })
     app.post('/comm/getWelfare').then((res) => {
@@ -875,6 +874,7 @@ Page({
         this.setData({
           welfare: res.data.data
         })
+        wx.setStorageSync('welfare', res.data.data)
       }
     })
     this.getData(0, storage.citycode, 1)

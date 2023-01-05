@@ -17,6 +17,12 @@ Page({
     actives3: '',
     rc_id: 0,
     avatar: '',
+    sex:'请选择性别',
+    sexArr:[
+      '男',
+      '女'
+    ],
+    sexIndex:0,
     name: '',
     names: '请进行身份验证',
     IDCard: '',
@@ -73,6 +79,21 @@ Page({
       }
     }
   },
+  bindPickerChange(e){
+    this.setData({
+      sex:this.data.sexArr[e.detail.value],
+      sexIndex:e.detail.value,
+    })
+    if (this.data.avatar != '' && this.data.sex != '请选择性别' && this.data.names != '请进行身份验证' && this.data.companyNames != '请填写您当前就职的公司' && this.data.dutuies != '') {
+      this.setData({
+        actives3: 'actives'
+      })
+    } else {
+      this.setData({
+        actives3: ''
+      })
+    }
+  },
   // 上传图片
   upload(e) {
     var item = e.currentTarget.dataset.item
@@ -111,7 +132,7 @@ Page({
                 that.setData({
                   avatar: res.data.fullurl
                 })
-                if (that.data.avatar != '' && that.data.names != '请进行身份验证' && that.data.companyNames != '请填写您当前就职的公司' && that.data.dutuies != '') {
+                if (that.data.avatar != '' && this.data.sex != '请选择性别' && that.data.names != '请进行身份验证' && that.data.companyNames != '请填写您当前就职的公司' && that.data.dutuies != '') {
                   that.setData({
                     actives3: 'actives'
                   })
@@ -222,7 +243,7 @@ Page({
       this.setData({
         dutuies: val
       })
-      if (this.data.avatar != '' && this.data.names != '请进行身份验证' && this.data.companyNames != '请填写您当前就职的公司' && this.data.dutuies != '') {
+      if (this.data.avatar != '' && this.data.sex != '请选择性别' && this.data.names != '请进行身份验证' && this.data.companyNames != '请填写您当前就职的公司' && this.data.dutuies != '') {
         this.setData({
           actives3: 'actives'
         })
@@ -277,7 +298,7 @@ Page({
           names: this.data.name,
           show: false
         })
-        if (this.data.avatar != '' && this.data.names != '请进行身份验证' && this.data.companyNames != '请填写您当前就职的公司' && this.data.dutuies != '') {
+        if (this.data.avatar != '' && this.data.sex != '请选择性别' && this.data.names != '请进行身份验证' && this.data.companyNames != '请填写您当前就职的公司' && this.data.dutuies != '') {
           this.setData({
             actives3: 'actives'
           })
@@ -293,7 +314,7 @@ Page({
           companyNames: this.data.companyName,
           show: false
         })
-        if (this.data.avatar != '' && this.data.names != '请进行身份验证' && this.data.companyNames != '请填写您当前就职的公司' && this.data.dutuies != '') {
+        if (this.data.avatar != '' && this.data.sex != '请选择性别' && this.data.names != '请进行身份验证' && this.data.companyNames != '请填写您当前就职的公司' && this.data.dutuies != '') {
           this.setData({
             actives3: 'actives'
           })
@@ -304,11 +325,12 @@ Page({
         }
       }
     } else if (item == 3) {
-      if (this.data.avatar != '' && this.data.names != '请进行身份验证' && this.data.companyNames != '请填写您当前就职的公司' && this.data.dutuies != '') {
+      if (this.data.avatar != '' && this.data.sex != '请选择性别' && this.data.names != '请进行身份验证' && this.data.companyNames != '请填写您当前就职的公司' && this.data.dutuies != '') {
         var obj = {
           token: wx.getStorageSync('userInfo').token,
           rc_id: this.data.rc_id,
           head_portrait: this.data.avatar,
+          sex:this.data.sex,
           name: this.data.name,
           idcard: this.data.IDCard,
           idcard_path: this.data.IDCardIs,
@@ -417,6 +439,8 @@ Page({
         this.setData({
           rc_id: res.data.data.rc_id,
           avatar: res.data.data.head_portrait,
+          sex: res.data.data.sex,
+          sexIndex: res.data.data.sex=='男'?0:1,
           name: res.data.data.name,
           names: res.data.data.name,
           IDCard: res.data.data.idcard,

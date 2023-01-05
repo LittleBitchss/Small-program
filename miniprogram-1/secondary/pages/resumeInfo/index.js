@@ -159,21 +159,9 @@ Page({
       id: options.id,
       year: year,
       month: month,
-      item: options.item
-    })
-    app.post('/comm/getEducation').then(res => {
-      if (res.data.status == 1) {
-        this.setData({
-          education: res.data.data
-        })
-      }
-    })
-    app.post('/comm/getPosition').then(res => {
-      if (res.data.status == 1) {
-        this.setData({
-          position: res.data.data
-        })
-      }
+      item: options.item,
+      position: wx.getStorageSync('position'),
+      education: wx.getStorageSync('education')
     })
     this.getList()
   },

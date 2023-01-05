@@ -1,6 +1,10 @@
 // pages/index/jobRecruitment/index.js
 var city = require('../../../utils/city');
 const app = getApp()
+var QQMapWX = require('../../../utils/js/qqmap-wx-jssdk.min');
+const qqMapSdk = new QQMapWX({
+  key: 'ABNBZ-GKPLS-FOAOJ-6HOP3-GAWZO-NNFDH'
+});
 Page({
   /**
    * 页面的初始数据
@@ -31,7 +35,7 @@ Page({
     leftTilterActive1: 'active',
     leftTilterActive2: '',
     leftTilterActive3: '',
-    leftTilterNum: 1,
+    leftTilterNum: 0,
     show: false,
     maskType: 0,
     active1: 'active',
@@ -54,7 +58,8 @@ Page({
     educationNums: [],
     salaryNums: [],
     experienceNums: [],
-    id: 0
+    id: 0,
+    jobList: []
   },
   tabToggle(e) {
     var index = e.currentTarget.dataset.index
@@ -103,57 +108,24 @@ Page({
       desiredPosition: desiredPosition,
       scroll: index * 65 > 120 ? index * 65 - 120 : 0
     })
-    var a = this.data.educationNum
-    var b = this.data.salaryNum
-    var c = this.data.experienceNum
-    var d = this.data.p_id
-    var e = this.data.leftTilterNum
-    var f = this.data.areacodes
-    console.log(a);
-    console.log(b);
-    console.log(c);
-    console.log(d);
-    console.log(e);
-    console.log(f);
+    this.getData(this.data.p_id, this.data.areacodes.join(','), this.data.leftTilterNum, this.data.educationNum.join(','), this.data.salaryNum.join(','), this.data.experienceNum.join(','))
   },
   leftTilter(e) {
     var item = e.currentTarget.dataset.item
-    if (item == 1) {
+    if (item == 0) {
       this.setData({
         leftTilterActive1: 'active',
         leftTilterActive2: '',
-        leftTilterNum: 1,
+        leftTilterNum: 0,
       })
-      var a = this.data.educationNum
-      var b = this.data.salaryNum
-      var c = this.data.experienceNum
-      var d = this.data.p_id
-      var e = this.data.leftTilterNum
-      var f = this.data.areacodes
-      console.log(a);
-      console.log(b);
-      console.log(c);
-      console.log(d);
-      console.log(e);
-      console.log(f);
-    } else if (item == 2) {
+      this.getData(this.data.p_id, this.data.areacodes.join(','), this.data.leftTilterNum, this.data.educationNum.join(','), this.data.salaryNum.join(','), this.data.experienceNum.join(','))
+    } else if (item == 1) {
       this.setData({
         leftTilterActive1: '',
         leftTilterActive2: 'active',
-        leftTilterNum: 2,
+        leftTilterNum: 1,
       })
-      var a = this.data.educationNum
-      var b = this.data.salaryNum
-      var c = this.data.experienceNum
-      var d = this.data.p_id
-      var e = this.data.leftTilterNum
-      var f = this.data.areacodes
-      console.log(a);
-      console.log(b);
-      console.log(c);
-      console.log(d);
-      console.log(e);
-      console.log(f);
+      this.getData(this.data.p_id, this.data.areacodes.join(','), this.data.leftTilterNum, this.data.educationNum.join(','), this.data.salaryNum.join(','), this.data.experienceNum.join(','))
     }
   },
   openMask(e) {
@@ -176,14 +148,14 @@ Page({
       this.setTitle()
     }
   },
-  setTitles(cityss,citycode) {
+  setTitles(cityss, citycode) {
     setTimeout(() => {
       wx.setNavigationBarTitle({
         title: cityss,
       })
       this.setData({
-        areacode: [citycode.slice(0,4)],
-        areacodes: [citycode.slice(0,4)]
+        areacode: [citycode.slice(0, 4)],
+        areacodes: [citycode.slice(0, 4)]
       })
       this.getAreas(this.data.citycode.toString())
     })
@@ -369,18 +341,7 @@ Page({
       show: false,
       confirm: 1
     })
-    var a = this.data.educationNum
-    var b = this.data.salaryNum
-    var c = this.data.experienceNum
-    var d = this.data.p_id
-    var e = this.data.leftTilterNum
-    var f = this.data.areacodes
-    console.log(a);
-    console.log(b);
-    console.log(c);
-    console.log(d);
-    console.log(e);
-    console.log(f);
+    this.getData(this.data.p_id, this.data.areacodes.join(','), this.data.leftTilterNum, this.data.educationNum.join(','), this.data.salaryNum.join(','), this.data.experienceNum.join(','))
   },
   empty() {
     var educationBackground = JSON.parse(JSON.stringify(this.data.educationBackground))
@@ -451,6 +412,7 @@ Page({
           i.active = ''
         })
         var desiredPosition = res.data.data
+        wx.setStorageSync('position', desiredPosition)
         app.post('/Job/getExpectationsList', {
           token: wx.getStorageSync('userInfo').token
         }).then((res) => {
@@ -469,18 +431,7 @@ Page({
               p_id: arr[0].p_id,
               desiredPosition: arr
             })
-            var a = this.data.educationNum
-            var b = this.data.salaryNum
-            var c = this.data.experienceNum
-            var d = this.data.p_id
-            var e = this.data.leftTilterNum
-            var f = this.data.areacodes
-            console.log(a);
-            console.log(b);
-            console.log(c);
-            console.log(d);
-            console.log(e);
-            console.log(f);
+            this.getData(this.data.p_id, this.data.areacodes.join(','), this.data.leftTilterNum)
           }
         })
       } else {
@@ -529,7 +480,7 @@ Page({
       //   areacode = [area[0].code.slice(0, 4)]
       //   area[0].num = 1
       // }
-      
+
       var indes = areacode.indexOf(area[index].code.toString())
       console.log(indes);
       if (indes == -1) {
@@ -547,7 +498,7 @@ Page({
         areacode.push(area[index].code + '')
       } else {
         areacode.splice(indes, 1)
-        if(areacode.length==0){
+        if (areacode.length == 0) {
           areacode.push(area[0].code.slice(0, 4))
           area[0].num = 1
           this.remove()
@@ -585,18 +536,7 @@ Page({
       areas: this.data.area,
       areacodes: this.data.areacode
     })
-    var a = this.data.educationNum
-    var b = this.data.salaryNum
-    var c = this.data.experienceNum
-    var d = this.data.p_id
-    var e = this.data.leftTilterNum
-    var f = this.data.areacodes
-    console.log(a);
-    console.log(b);
-    console.log(c);
-    console.log(d);
-    console.log(e);
-    console.log(f);
+    this.getData(this.data.p_id, this.data.areacodes.join(','), this.data.leftTilterNum, this.data.educationNum.join(','), this.data.salaryNum.join(','), this.data.experienceNum.join(','))
   },
   goRecruitment() {
     var storage = wx.getStorageSync('userInfo')
@@ -630,8 +570,73 @@ Page({
       }
     })
   },
-  getData() {
-
+  getData(duty, location, filter, education, salary, experience) {
+    wx.showLoading({
+      title: '加载中',
+    })
+    var obj = {
+      token: wx.getStorageSync('userInfo').token,
+      duty: duty,
+      location: location,
+      filter: filter
+    }
+    if (filter) {
+      obj.longitude = wx.getStorageSync('userInfo').longitude
+      obj.latitude = wx.getStorageSync('userInfo').latitude
+    }
+    if (education) {
+      obj.education_id = education
+    }
+    if (salary) {
+      obj.salary_id = salary
+    }
+    if (experience) {
+      obj.experience_id = experience
+    }
+    app.post('/Job/recommendPosition', obj).then((res) => {
+      if (res.data.status == 1) {
+        console.log(res.data.data);
+        if (res.data.data.list.length == 0) {
+          wx.hideLoading()
+          wx.showToast({
+            title: '暂无数据',
+            icon: 'error',
+            duration: 1000
+          })
+          this.setData({
+            jobList: res.data.data.list
+          })
+        } else {
+          setTimeout(() => {
+            res.data.data.list.forEach(i => {
+              qqMapSdk.geocoder({
+                address: i.rpr_work_address + i.rpr_doorplate,
+                success(res) {
+                  i.area = res.result.address_components.district
+                  i.street = res.result.address_components.street
+                }
+              })
+              i.catering = i.catering == 1 ? '中餐' : i.catering == 2 ? '西餐' : i.catering == 2 ? '糕点/甜品' : ''
+              i.duty = i.duty ? wx.getStorageSync('recruitDuty').find(j => j.rd_id == i.duty).rd_name : ''
+              i.welfare = i.welfare ? wx.getStorageSync('welfare').find(j => j.rf_id == i.welfare).rf_name : ''
+              i.rpr_experience = i.rpr_experience ? wx.getStorageSync('experience').find(j => j.e_id == i.rpr_experience).e_name : ''
+              i.rpr_minimum_education = i.rpr_minimum_education ? wx.getStorageSync('education').find(j => j.e_id == i.rpr_minimum_education).e_name : ''
+            })
+          })
+          setTimeout(() => {
+            wx.hideLoading()
+            this.setData({
+              jobList: res.data.data.list
+            })
+          }, 500)
+        }
+      } else {
+        wx.hideLoading()
+        wx.navigateTo({
+          url: '/pages/error/error'
+        })
+      }
+    })
   },
   /**
    * 生命周期函数--监听页面加载
@@ -658,6 +663,7 @@ Page({
           educationBackground: res.data.data,
           educationBackgrounds: res.data.data
         })
+        wx.setStorageSync('education', res.data.data)
       }
     })
     app.post('/comm/getSalary').then((res) => {
@@ -669,6 +675,7 @@ Page({
           salaryPackage: res.data.data,
           salaryPackages: res.data.data
         })
+        wx.setStorageSync('salary', res.data.data)
       }
     })
     app.post('/comm/getExperience').then((res) => {
@@ -680,6 +687,25 @@ Page({
           experienceRequirement: res.data.data,
           experienceRequirements: res.data.data
         })
+        wx.setStorageSync('experience', res.data.data)
+      }
+    })
+    app.post('/comm/getJobStatus').then((res) => {
+      if (res.data.status == 1) {
+        res.data.data.forEach(i => {
+          i.active = ''
+        })
+        wx.setStorageSync('jobStatus', res.data.data)
+      }
+    })
+    app.post('/comm/getRecruitDuty').then((res) => {
+      if (res.data.status == 1) {
+        wx.setStorageSync('recruitDuty', res.data.data)
+      }
+    })
+    app.post('/comm/getWelfare').then((res) => {
+      if (res.data.status == 1) {
+        wx.setStorageSync('welfare', res.data.data)
       }
     })
   },

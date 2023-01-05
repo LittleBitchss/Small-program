@@ -9,6 +9,18 @@
       </view>
     </view>
     <view class="item">
+      <view class="item_title">性别</view>
+      <picker bindchange="bindPickerChange" value="{{sexIndex}}" range="{{sexArr}}">
+        <view class="picker">
+          <view class="item_conts">
+            <text class="{{sex=='请选择性别'?'':'active'}}">{{sex}}</text>
+            <image class="item_conts_img" src="../../../icon/mine_right_arrow.png"></image>
+          </view>
+        </view>
+      </picker>
+
+    </view>
+    <view class="item">
       <view class="item_title">真实姓名</view>
       <view class="item_conts" bindtap="openpage" data-item="1">
         <text class="{{names=='请进行身份验证'?'':'active'}}">{{names}}</text>
