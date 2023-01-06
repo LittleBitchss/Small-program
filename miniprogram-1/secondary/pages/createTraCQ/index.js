@@ -17,27 +17,39 @@ Page({
     actives3: '',
     rc_id: 0,
     avatar: '',
-    sex:'请选择性别',
-    sexArr:[
+    sex: '请选择性别',
+    sexArr: [
       '男',
       '女'
     ],
-    sexIndex:0,
+    sexIndex: 0,
     name: '',
-    names: '请进行身份验证',
+    names: '',
     IDCard: '',
-    IDCardPlaceholder: "请填写您的身份证号码",
+    IDCards: "",
     IDCardPlaceholderClass: "",
     IDCardIs: '',
+    IDCardIss: '',
     IDCardThe: '',
+    IDCardThes: '',
     companyName: '',
-    companyNames: '请填写您当前就职的公司',
+    companyNames: '',
     companyNameNum: 0,
+    companyNameNums: 0,
+    companySize: '请选择公司规模',
+    companyNum: 0,
+    companyNums: 0,
+    companySizeIndex: 0,
+    companySizeIndexs: 0,
+    companySizeArray: [],
+    companySizeArrays: [],
     license: '',
-    licensePlaceholder: "请填写您所属公司的营业执照编号",
+    licenses: '',
     licensePlaceholderClass: "",
     licenseNum: 0,
+    licenseNums: 0,
     licensePhoto: '',
+    licensePhotos: '',
     dutuies: '',
     maskType: 0,
     card: 0
@@ -59,14 +71,21 @@ Page({
         })
       } else {
         this.setData({
-          actives1: 'actives'
+          actives1: 'actives',
+          name: this.data.names,
+          IDCard: this.data.IDCards,
+          IDCardIs: this.data.IDCardIss,
+          IDCardThe: this.data.IDCardThes
         })
       }
     } else if (item == 2) {
-      if (this.data.companyNames == '请填写您当前就职的公司') {
+      if (this.data.companyNames == '') {
         this.setData({
           companyName: '',
           companyNameNum: 0,
+          companySize:'请选择公司规模',
+          companyNum: 0,
+          companySizeIndex: 0,
           license: '',
           licenseNum: 0,
           licensePhoto: '',
@@ -74,15 +93,25 @@ Page({
         })
       } else {
         this.setData({
-          actives2: 'actives'
+          actives2: 'actives',
+          companyName: this.data.companyNames,
+          companyNameNum: this.data.companyNameNums,
+          companyNum: this.data.companyNums,
+          license: this.data.licenses,
+          licenseNum: this.data.licenseNums,
+          licensePhoto: this.data.licensePhotos
+        })
+        this.setData({
+          companySize:this.data.companySizeArrays.find(i=>i.rcn_id==this.data.companyNum).rcn_name,
+          companySizeIndex: this.data.companySizeArrays.findIndex(i=>i.rcn_id==this.data.companyNum),
         })
       }
     }
   },
-  bindPickerChange(e){
+  bindPickerChange(e) {
     this.setData({
-      sex:this.data.sexArr[e.detail.value],
-      sexIndex:e.detail.value,
+      sex: this.data.sexArr[e.detail.value],
+      sexIndex: e.detail.value,
     })
     if (this.data.avatar != '' && this.data.sex != '请选择性别' && this.data.names != '请进行身份验证' && this.data.companyNames != '请填写您当前就职的公司' && this.data.dutuies != '') {
       this.setData({
@@ -163,9 +192,13 @@ Page({
                 that.setData({
                   licensePhoto: res.data.fullurl
                 })
-                if (that.data.companyName != '' && that.data.license != '' && that.data.licensePhoto != '') {
-                  that.setData({
+                if (this.data.companyName != '' && this.data.companySize != '请选择公司规模' && this.data.license != '' && this.data.licensePhoto != '') {
+                  this.setData({
                     actives2: 'actives'
+                  })
+                } else {
+                  this.setData({
+                    actives2: ''
                   })
                 }
               }
@@ -216,7 +249,7 @@ Page({
         companyName: val,
         companyNameNum: cur
       })
-      if (this.data.companyName != '' && this.data.license != '' && this.data.licensePhoto != '') {
+      if (this.data.companyName != '' && this.data.companySize != '请选择公司规模' && this.data.license != '' && this.data.licensePhoto != '') {
         this.setData({
           actives2: 'actives'
         })
@@ -288,6 +321,31 @@ Page({
           licenseNum: 0
         })
       }
+      if (this.data.companyName != '' && this.data.companySize != '请选择公司规模' && this.data.license != '' && this.data.licensePhoto != '') {
+        this.setData({
+          actives2: 'actives'
+        })
+      } else {
+        this.setData({
+          actives2: ''
+        })
+      }
+    }
+  },
+  bindPickerChanges(e) {
+    this.setData({
+      companySize: this.data.companySizeArray[e.detail.value],
+      companyNum: this.data.companySizeArrays[e.detail.value].rcn_id,
+      companySizeIndex: e.detail.value
+    })
+    if (this.data.companyName != '' && this.data.companySize != '请选择公司规模' && this.data.license != '' && this.data.licensePhoto != '') {
+      this.setData({
+        actives2: 'actives'
+      })
+    } else {
+      this.setData({
+        actives2: ''
+      })
     }
   },
   complete(e) {
@@ -296,6 +354,9 @@ Page({
       if (this.data.name != '' && this.data.IDCard != '' && this.data.IDCardIs != '' && this.data.IDCardThe != '') {
         this.setData({
           names: this.data.name,
+          IDCards: this.data.IDCard,
+          IDCardIss: this.data.IDCardIs,
+          IDCardThes: this.data.IDCardThe,
           show: false
         })
         if (this.data.avatar != '' && this.data.sex != '请选择性别' && this.data.names != '请进行身份验证' && this.data.companyNames != '请填写您当前就职的公司' && this.data.dutuies != '') {
@@ -309,9 +370,14 @@ Page({
         }
       }
     } else if (item == 2) {
-      if (this.data.companyName != '' && this.data.license != '' && this.data.licensePhoto != '') {
+      if (this.data.companyName != '' && this.data.companySize != '请选择公司规模' && this.data.license != '' && this.data.licensePhoto != '') {
         this.setData({
           companyNames: this.data.companyName,
+          companyNameNums: this.data.companyNameNum,
+          companyNums: this.data.companyNum,
+          licenses: this.data.license,
+          licenseNums: this.data.licenseNum,
+          licensePhotos: this.data.licensePhoto,
           show: false
         })
         if (this.data.avatar != '' && this.data.sex != '请选择性别' && this.data.names != '请进行身份验证' && this.data.companyNames != '请填写您当前就职的公司' && this.data.dutuies != '') {
@@ -325,25 +391,25 @@ Page({
         }
       }
     } else if (item == 3) {
-      if (this.data.avatar != '' && this.data.sex != '请选择性别' && this.data.names != '请进行身份验证' && this.data.companyNames != '请填写您当前就职的公司' && this.data.dutuies != '') {
+      if (this.data.avatar != '' && this.data.sex != '请选择性别' && this.data.names != '' && this.data.companyNames != '' && this.data.dutuies != '') {
         var obj = {
           token: wx.getStorageSync('userInfo').token,
           rc_id: this.data.rc_id,
           head_portrait: this.data.avatar,
-          sex:this.data.sex,
-          name: this.data.name,
-          idcard: this.data.IDCard,
-          idcard_path: this.data.IDCardIs,
-          idcard_other_path: this.data.IDCardThe,
-          company: this.data.companyName,
-          business_license: this.data.license,
-          business_license_path: this.data.licensePhoto,
+          sex: this.data.sex,
+          name: this.data.names,
+          idcard: this.data.IDCards,
+          idcard_path: this.data.IDCardIss,
+          idcard_other_path: this.data.IDCardThes,
+          company: this.data.companyNames,
+          number: this.data.companyNums,
+          business_license: this.data.licenses,
+          business_license_path: this.data.licensePhotos,
           post: this.data.dutuies,
         }
         var storage = wx.getStorageSync('userInfo')
         app.post('/Recruit/setRecruitCard', obj).then((res) => {
           if (res.data.status == 1) {
-            console.log(res);
             wx.showToast({
               title: '保存成功',
               icon: 'success',
@@ -418,40 +484,45 @@ Page({
    */
   // 91330327MA298MDQ8F
   onLoad(options) {
-    setTimeout(()=>{
+    setTimeout(() => {
       wx.showLoading({
         title: '加载中',
       })
-    },200)
+    }, 200)
     wx.setNavigationBarTitle({
       title: '编辑名片',
     })
+    var arrz = []
+    wx.getStorageSync('companySize').forEach(i => {
+      arrz.push(i.rcn_name)
+    })
     this.setData({
-      card: wx.getStorageSync('userInfo').card
+      card: wx.getStorageSync('userInfo').card,
+      companySizeArray: arrz,
+      companySizeArrays: wx.getStorageSync('companySize')
     })
     app.post('/Recruit/getRecruitCard', {
       token: wx.getStorageSync('userInfo').token
     }).then((res) => {
       if (res.data.status == 1) {
-        setTimeout(()=>{
+        setTimeout(() => {
           wx.hideLoading()
-        },500)
+        }, 500)
         this.setData({
           rc_id: res.data.data.rc_id,
           avatar: res.data.data.head_portrait,
           sex: res.data.data.sex,
-          sexIndex: res.data.data.sex=='男'?0:1,
-          name: res.data.data.name,
+          sexIndex: res.data.data.sex == '男' ? 0 : 1,
           names: res.data.data.name,
-          IDCard: res.data.data.idcard,
-          IDCardIs: res.data.data.idcard_path,
-          IDCardThe: res.data.data.idcard_other_path,
-          companyName: res.data.data.company,
+          companyNums: res.data.data.number,
+          IDCards: res.data.data.idcard,
+          IDCardIss: res.data.data.idcard_path,
+          IDCardThes: res.data.data.idcard_other_path,
           companyNames: res.data.data.company,
-          companyNameNum: res.data.data.company.length,
-          license: res.data.data.business_license,
-          licenseNum: res.data.data.business_license.length,
-          licensePhoto: res.data.data.business_license_path,
+          companyNameNums: res.data.data.company.length,
+          licenses: res.data.data.business_license,
+          licenseNums: res.data.data.business_license.length,
+          licensePhotos: res.data.data.business_license_path,
           dutuies: res.data.data.post,
           actives3: 'actives',
         })
@@ -484,7 +555,7 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload() {
-    
+
   },
 
   /**

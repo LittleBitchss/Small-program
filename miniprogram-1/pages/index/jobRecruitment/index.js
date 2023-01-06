@@ -150,15 +150,18 @@ Page({
   },
   setTitles(cityss, citycode) {
     setTimeout(() => {
+      wx.showLoading({
+        title: '加载中',
+      })
       wx.setNavigationBarTitle({
         title: cityss,
       })
       this.setData({
-        areacode: [citycode.slice(0, 4)],
-        areacodes: [citycode.slice(0, 4)]
+        areacode: [(citycode + '').slice(0, 4)],
+        areacodes: [(citycode + '').slice(0, 4)]
       })
       this.getAreas(this.data.citycode.toString())
-    })
+    },200)
   },
   setTitle() {
     var t = '筛选 '
@@ -375,6 +378,7 @@ Page({
       token: wx.getStorageSync('userInfo').token
     }).then((res) => {
       if (res.data.status == 1) {
+        console.log(res.data.data.list);
         this.setData({
           name: res.data.data.info.r_name,
           photo: res.data.data.info.r_head_portrait,
@@ -460,6 +464,9 @@ Page({
           area: res.data.data,
           areas: res.data.data
         })
+        setTimeout(()=>{
+          wx.hideLoading()
+        },500)
       }
     })
   },
@@ -474,15 +481,7 @@ Page({
       } else {
         area[index].num = 1
       }
-      // if (areacode[0].length == 4) {
-      //   areacode = []
-      // } else if (areacode[0].length != 4 && areacode[0].length == 0) {
-      //   areacode = [area[0].code.slice(0, 4)]
-      //   area[0].num = 1
-      // }
-
       var indes = areacode.indexOf(area[index].code.toString())
-      console.log(indes);
       if (indes == -1) {
         if (areacode[0].length == 4) {
           areacode = []
@@ -496,20 +495,20 @@ Page({
           return
         }
         areacode.push(area[index].code + '')
+
       } else {
         areacode.splice(indes, 1)
         if (areacode.length == 0) {
-          areacode.push(area[0].code.slice(0, 4))
+          areacode.push((area[0].code + '').slice(0, 4))
           area[0].num = 1
           this.remove()
         }
       }
-      console.log(areacode);
       this.setData({
         area: area,
         areacode: areacode
       })
-      var a = this.data.areacode.length ? ' · ' + this.data.areacode.length : ''
+      var a = this.data.areacode.length && this.data.areacode[0].length != 4 ? ' · ' + this.data.areacode.length : ''
       wx.setNavigationBarTitle({
         title: this.data.cityss + a,
       })
@@ -525,10 +524,12 @@ Page({
     area[0].num = 1
     this.setData({
       area: area,
-      areacode: [area[0].code.slice(0, 4)]
+      areacode: [(area[0].code + '').slice(0, 4)]
     })
-    console.log(this.data.areacode);
-    this.setTitle()
+    var a = this.data.areacode.length && this.data.areacode[0].length != 4 ? ' · ' + this.data.areacode.length : ''
+    wx.setNavigationBarTitle({
+      title: this.data.cityss + a,
+    })
   },
   ensure() {
     this.setData({
@@ -595,7 +596,6 @@ Page({
     }
     app.post('/Job/recommendPosition', obj).then((res) => {
       if (res.data.status == 1) {
-        console.log(res.data.data);
         if (res.data.data.list.length == 0) {
           wx.hideLoading()
           wx.showToast({
@@ -607,13 +607,17 @@ Page({
             jobList: res.data.data.list
           })
         } else {
+          console.log(res.data.data.list);
           setTimeout(() => {
             res.data.data.list.forEach(i => {
-              qqMapSdk.geocoder({
-                address: i.rpr_work_address + i.rpr_doorplate,
+              qqMapSdk.reverseGeocoder({
+                location: {
+                  longitude: i.rpr_longitude,
+                  latitude: i.rpr_latitude
+                },
                 success(res) {
-                  i.area = res.result.address_components.district
-                  i.street = res.result.address_components.street
+                  i.area = res.result.address_component.district
+                  i.street = res.result.address_component.street
                 }
               })
               i.catering = i.catering == 1 ? '中餐' : i.catering == 2 ? '西餐' : i.catering == 2 ? '糕点/甜品' : ''
@@ -621,6 +625,8 @@ Page({
               i.welfare = i.welfare ? wx.getStorageSync('welfare').find(j => j.rf_id == i.welfare).rf_name : ''
               i.rpr_experience = i.rpr_experience ? wx.getStorageSync('experience').find(j => j.e_id == i.rpr_experience).e_name : ''
               i.rpr_minimum_education = i.rpr_minimum_education ? wx.getStorageSync('education').find(j => j.e_id == i.rpr_minimum_education).e_name : ''
+              var custom = i.custom?JSON.parse(i.custom):''
+              i.custom = custom?custom[0].rc_name:''
             })
           })
           setTimeout(() => {
@@ -706,6 +712,11 @@ Page({
     app.post('/comm/getWelfare').then((res) => {
       if (res.data.status == 1) {
         wx.setStorageSync('welfare', res.data.data)
+      }
+    })
+    app.post('/comm/getCompanyNumber').then((res) => {
+      if (res.data.status == 1) {
+        wx.setStorageSync('companySize', res.data.data)
       }
     })
   },

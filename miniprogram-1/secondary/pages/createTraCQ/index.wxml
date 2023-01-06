@@ -53,7 +53,7 @@
       <input class="verify_item_inp" placeholder="请填写您的真实姓名" placeholder-class="placeholder" value="{{name}}" bindinput="inputs" data-item="1" />
     </view>
     <view class="verify_item">
-      <input class="verify_item_inp" type="number" placeholder="{{IDCardPlaceholder}}" placeholder-class="placeholder {{IDCardPlaceholderClass}}" value="{{IDCard}}" bindinput="inputs" bindblur="blur" data-item="2" />
+      <input class="verify_item_inp" type="number" placeholder="请填写您的身份证号码" placeholder-class="placeholder {{IDCardPlaceholderClass}}" value="{{IDCard}}" bindinput="inputs" bindblur="blur" data-item="2" />
     </view>
     <view class="verify_items">
       <view class="verify_items_left">
@@ -91,8 +91,16 @@
       <input class="company_item_inp" type="text" placeholder="请填写您所属公司的营业执照上的公司全称" placeholder-class="placeholder" value="{{companyName}}" bindinput="inputs" data-item="3" maxlength="30" />
       <text><text class="company_item_txt {{companyNameNum?'NotEmpty':''}}">{{companyNameNum}}</text>/30</text>
     </view>
+    <picker bindchange="bindPickerChanges" value="{{companySizeIndex}}" range="{{companySizeArray}}">
+      <view class="picker">
+        <view class="company_item">
+          <view class="company_item_inp {{companySize=='请选择公司规模'?'placeholder':''}}">{{companySize}}</view>
+          <image class="company_item_img" src="../../../icon/mine_right_arrow.png"></image>
+        </view>
+      </view>
+    </picker>
     <view class="company_item">
-      <input class="company_item_inp" type="text" placeholder="{{licensePlaceholder}}" placeholder-class="placeholder {{licensePlaceholderClass}}" value="{{license}}" bindinput="inputs" bindblur="blur" data-item="4" maxlength="30" />
+      <input class="company_item_inp" type="text" placeholder="请填写您所属公司的营业执照编号" placeholder-class="placeholder {{licensePlaceholderClass}}" value="{{license}}" bindinput="inputs" bindblur="blur" data-item="4" maxlength="30" />
       <text><text class="company_item_txt {{licenseNum?'NotEmpty':''}}">{{licenseNum}}</text>/30</text>
     </view>
     <view class="company_items">

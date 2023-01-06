@@ -193,7 +193,6 @@
 .list_item .list_item4 .list_item4_left .photo {
   height: 42rpx;
   width: 42rpx;
-  background-color: #4768f3;
   border-radius: 50%;
   display: block;
   margin-right: 14rpx;

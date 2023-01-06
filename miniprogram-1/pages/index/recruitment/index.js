@@ -877,6 +877,11 @@ Page({
         wx.setStorageSync('welfare', res.data.data)
       }
     })
+    app.post('/comm/getCompanyNumber').then((res) => {
+      if (res.data.status == 1) {
+        wx.setStorageSync('companySize', res.data.data)
+      }
+    })
     this.getData(0, storage.citycode, 1)
   },
 

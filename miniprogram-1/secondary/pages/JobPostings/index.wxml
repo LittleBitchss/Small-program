@@ -3,58 +3,57 @@
   <view class="content">
     <view class="titles">
       <view class="titles1">
-        <view class="title">行政总厨1名</view>
-        <view class="salary">1.3万-1.6万</view>
+        <view class="title">{{info.rpr_title}}</view>
+        <view class="salary">{{info.rpr_minimum_waga}}-{{info.rpr_maximum_waga=="面议"?info.rpr_maximum_waga:info.rpr_maximum_waga+"元"}}</view>
       </view>
       <view class="titles2">
         <view class="item">
-          <image class="icon"></image>
-          <text>杭州市</text>
+          <image class="icon" src="../../icon/address.png"></image>
+          <text>{{info.cityArea}}</text>
         </view>
         <view class="item">
-          <image class="icon"></image>
-          <text>5-10年</text>
+          <image class="icon" src="../../icon/work.png"></image>
+          <text>{{info.rpr_experience}}</text>
         </view>
         <view class="item">
-          <image class="icon"></image>
-          <text>大专</text>
+          <image class="icon" src="../../icon/education.png"></image>
+          <text>{{info.rpr_minimum_education}}</text>
         </view>
       </view>
     </view>
     <view class="personnel">
-      <image class="portrait"></image>
-      <text>周先生</text>·
-      <text>人事经理</text>
+      <image class="portrait" src="{{info.rc_head_portrait?info.rc_head_portrait:info.rc_sex=='男'?'../../../secondary/icon/sir.png':'../../../secondary/icon/lady.png'}}"></image>
+      <text>{{info.rc_name[0]}}{{info.rc_sex=="男"?"先生":"女士"}} · {{info.rc_post}}</text>
     </view>
     <view class="obligations">
       <view class="title">岗位职责</view>
       <view class="demand">
-        <view class="item">厨师长</view>
-        <view class="item">炒菜</view>
+        <view class="item" wx:for="{{info.dutyBenefit}}" wx:key="index">{{item}}</view>
       </view>
       <view class="obligation">
-        <text>1、在餐饮部经总监的领导下，全面负责食品的制作，控制厨房出品
-          2、制定厨房管理制度、服务标准、操作规程，制定各岗位职责，了解各岗位人员的技术水平和专长，合理安排工作岗位，确保厨房工作的正常运作。
-          3、制定各餐厅菜单和厨房菜谱，确定出品价格，控制成本费用，保持良好的毛利率。</text>
+        <text>{{info.rpr_job_description}}</text>
       </view>
     </view>
     <view class="company">
       <view class="company_name">
         <view class="left">
-          <image class="img"></image>
+          <image class="img" src="../../icon/company.png"></image>
         </view>
         <view class="right">
-          <view class="name">餐安科技（浙江）有限公司</view>
-          <view class="industry">5-20人·餐饮</view>
+          <view class="name">{{info.rc_company}}</view>
+          <view class="industry">{{info.companySize}}</view>
         </view>
       </view>
-      <view class="company_map">
-        <map class="map" name=""></map>
+      <view class="company_map" bindtap="goMap">
+        <map class="map" name="" latitude="{{info.rpr_latitude}}" longitude="{{info.rpr_longitude}}">
+          <image class="cover-image" src="{{domains}}mark.png"></image>
+        </map>
         <cover-view class="cover"></cover-view>
       </view>
     </view>
   </view>
   <view class="bottom">
-    <button class="btn">点击提交简历</button>
+    <button class="btn" bindtap="deliver" wx:if="{{info.send==0}}">点击提交简历</button>
+    <view class="btn btns" wx:if="{{info.send}}">已提交简历</view>
   </view>
 </view>

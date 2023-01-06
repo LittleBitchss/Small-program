@@ -79,7 +79,7 @@
     <view class="item">
       <view class="item_title">此岗位在后厨的职责是？</view>
       <view class="item_cont">
-        <view class="item_cont_item {{item.active}}" wx:for="{{duty}}" wx:key="index" bindtap="clickItem" data-item="1" data-index="{{index}}">{{item.p_name}}</view>
+        <view class="item_cont_item {{item.active}}" wx:for="{{duty}}" wx:key="index" bindtap="clickItem" data-item="1" data-index="{{index}}">{{item.rd_name}}</view>
       </view>
     </view>
     <view class="item">

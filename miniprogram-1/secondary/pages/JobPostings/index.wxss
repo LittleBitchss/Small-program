@@ -22,10 +22,10 @@
   padding-top: 30rpx;
 }
 .JobPostings .content .titles .titles1 .title{
-  font-size: 45rpx;
+  font-size: 55rpx;
 }
 .JobPostings .content .titles .titles1 .salary{
-  font-size: 25rpx;
+  font-size: 30rpx;
   color: #4768f3;
 }
 .JobPostings .content .titles .titles2{
@@ -35,7 +35,7 @@
   padding-bottom: 20rpx;
 }
 .JobPostings .content .titles .titles2 .item{
-  font-size: 18rpx;
+  font-size: 24rpx;
   display: flex;
   align-items: center;
   margin-right: 26rpx;
@@ -43,7 +43,6 @@
 .JobPostings .content .titles .titles2 .item .icon{
   width: 24rpx;
   height: 24rpx;
-  background-color: #4768f3;
   margin-right: 8rpx;
 }
 .JobPostings .content .personnel{
@@ -52,7 +51,7 @@
   display: flex;
   align-items: center;
   padding: 0 38rpx;
-  font-size: 28rpx;
+  font-size: 35rpx;
   color: #3c3c3c;
 }
 .JobPostings .content .personnel .portrait{
@@ -70,24 +69,25 @@
 
 }
 .JobPostings .content .obligations .title{
-  font-size: 22rpx;
+  font-size: 35rpx;
   color: #676767;
 }
 .JobPostings .content .obligations .demand{
-  height: 70rpx;
+  padding: 20rpx 0;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  font-size: 15rpx;
+  font-size: 24rpx;
 }
 .JobPostings .content .obligations .demand .item{
   padding: 6rpx 16rpx;
   background-color: #eee;
   border-radius: 5rpx;
   line-height: 1;
-  margin-right: 6rpx;
+  margin: 10rpx 0 10rpx 6rpx;
 }
 .JobPostings .content .obligations .obligation{
-  font-size: 22rpx;
+  font-size: 30rpx;
 }
 .JobPostings .content .company{
   padding: 0 34rpx;
@@ -96,13 +96,12 @@
   height: 138rpx;
   display: flex;
   align-items: center;
-  font-size: 25rpx;
+  font-size: 30rpx;
   color: #3c3c3c;
 }
 .JobPostings .content .company .company_name .left{
   width: 82rpx;
   height: 82rpx;
-  background-color: #4768f3;
   border-radius: 10rpx;
   margin-right: 30rpx;
 }
@@ -121,6 +120,16 @@
   position: relative;
   top: -10%;
   width: 100%;
+}
+.JobPostings .content .company .company_map .map .cover-image {
+  height: 50rpx;
+  width: 36rpx;
+  position: absolute;
+  z-index: 200;
+  top: 50%;
+  left: 50%;
+  margin-top: -50rpx;
+  margin-left: -18rpx;
 }
 .JobPostings .content .company .company_map .cover{
   height: 100%;
@@ -166,4 +175,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.JobPostings .bottom .btns{
+  background-color: #96aafa;
 }

@@ -26,7 +26,7 @@
           </view>
         </view>
         <scroll-view scroll-y="true" class="list">
-          <navigator class="list_item" url="/secondary/pages/JobPostings/index" wx:for="{{jobList}}" wx:key="index">
+          <navigator class="list_item" url="/secondary/pages/JobPostings/index?rpr_id={{item.rpr_id}}" wx:for="{{jobList}}" wx:key="index">
             <view class="list_item1">
               <view class="list_item1_left">
                 {{item.rpr_title}}
@@ -48,7 +48,7 @@
             </view>
             <view class="list_item4">
               <view class="list_item4_left">
-                <image class="photo" src="{{item.rc_head_portrait}}"></image>
+                <image class="photo" src="{{item.rc_head_portrait?item.rc_head_portrait:item.rc_sex=='男'?'../../../icon/sir.png':'../../../icon/lady.png'}}"></image>
                 <text class="callPosition">{{item.rc_name[0]}}{{item.rc_sex=="男"?"先生":"女士"}} · {{item.rc_post}}</text>
               </view>
               <view class="list_item4_right">{{item.area}} {{item.street}}</view>
@@ -75,7 +75,7 @@
           <view class="mine_state_item {{actives3}}" bindtap="mineToggle" data-item="3">已完成</view>
         </view>
         <scroll-view scroll-y="true" class="list">
-          <navigator class="list_item" wx:for="{{mineRecruitment}}" wx:key="index" url="/secondary/pages/JobPostings/index">
+          <navigator class="list_item" wx:for="{{mineRecruitment}}" wx:key="index" url="/secondary/pages/JobPostings/index?rpr_id={{item.rpr_id}}">
             <view class="list_item1">
               <view class="list_item1_left">
                 {{item.rpr_title}}

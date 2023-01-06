@@ -200,7 +200,7 @@ Page({
           fullAddress: this.data.fullAddresss,
           longitude: this.data.longitudes,
           latitude: this.data.latitudes,
-          active2:'active'
+          active2: 'active'
         })
       } else {
         this.setData({
@@ -343,6 +343,7 @@ Page({
           kindNum += i.ke_id + '/'
         }
       })
+      
       this.data.welfare.forEach(i => {
         if (i.active) {
           welfareTxt += i.rf_name + '/'
@@ -404,10 +405,10 @@ Page({
         })
       }
     } else if (item == 2) {
-      if (this.data.provinces && this.data.city && this.data.area && this.data.workAddress && this.data.fullAddress) {
+      if (this.data.provinces && this.data.city && this.data.area && this.data.workAddress) {
         qqMapSdk.geocoder({
-          address:that.data.workAddress + that.data.fullAddress,
-          success(res){
+          address: that.data.workAddress + (that.data.fullAddress?that.data.fullAddress:''),
+          success(res) {
             that.setData({
               provincess: that.data.provinces,
               citys: that.data.city,
@@ -419,28 +420,31 @@ Page({
               workFullAddress: that.data.workAddress + that.data.fullAddress,
               show: false
             })
+          },
+          fail(res){
+            that.setData({
+              provincess: that.data.provinces,
+              citys: that.data.city,
+              areas: that.data.area,
+              workAddresss: that.data.workAddress,
+              fullAddresss: that.data.fullAddress,
+              longitudes: that.data.longitude,
+              latitudes: that.data.latitude,
+              workFullAddress: that.data.workAddress + that.data.fullAddress,
+              show: false
+            })
           }
         })
       }
-      setTimeout(()=>{
-        if(this.data.longitudes==''){
-          wx.showToast({
-            title: '当前位置已失效',
-            icon: 'error',
-            duration: 1000
-          })
-          return
-        }
-        if (this.data.sufferValue.e_name != '请选择经验' && this.data.learnValue.e_name != '请选择学历' && this.data.salaryMin != '' && this.data.txt != '选择关键词提供给求职者' && this.data.workFullAddress != '请填写精确的工作地址') {
-          this.setData({
-            active1: 'actives'
-          })
-        } else {
-          this.setData({
-            active1: ''
-          })
-        }
-      },500)
+      if (this.data.sufferValue.e_name != '请选择经验' && this.data.learnValue.e_name != '请选择学历' && this.data.salaryMin != '' && this.data.txt != '选择关键词提供给求职者') {
+        this.setData({
+          active1: 'actives'
+        })
+      } else {
+        this.setData({
+          active1: ''
+        })
+      }
     }
   },
   focus(e) {
@@ -459,7 +463,7 @@ Page({
       this.setData({
         fullAddress: e.detail.value
       })
-      if (this.data.provinces && this.data.city && this.data.area && this.data.workAddress && this.data.fullAddress && this.data.longitude && this.data.latitude) {
+      if (this.data.provinces && this.data.city && this.data.area && (this.data.workAddress || this.data.fullAddress) && this.data.longitude && this.data.latitude) {
         this.setData({
           active2: 'active'
         })
@@ -481,7 +485,7 @@ Page({
           provinces: res.result.ad_info.city_code.slice(0, 2),
           city: res.result.ad_info.city_code.slice(3, 7),
           area: res.result.ad_info.adcode,
-          workAddress: res.result.formatted_addresses?res.result.formatted_addresses.recommend:'',
+          workAddress: res.result.formatted_addresses ? res.result.formatted_addresses.recommend : '',
           longitude: res.result.location.lng,
           latitude: res.result.location.lat,
         }, (() => {
@@ -569,6 +573,15 @@ Page({
       showview: '1',
       fullAddress: ''
     })
+    if (this.data.provinces && this.data.city && this.data.area && (this.data.workAddress || this.data.fullAddress) && this.data.longitude && this.data.latitude) {
+      this.setData({
+        active2: 'active'
+      })
+    } else {
+      this.setData({
+        active2: ''
+      })
+    }
   },
   confirms() {
     var storage = wx.getStorageSync('userInfo')
@@ -670,7 +683,7 @@ Page({
     wx.getStorageSync('experience').forEach(i => {
       arrs.push(i.e_name)
     });
-    var position = wx.getStorageSync('position')
+    var position = wx.getStorageSync('recruitDuty')
     position.forEach(i => {
       i.active = ''
     });
@@ -693,7 +706,6 @@ Page({
         token: wx.getStorageSync('userInfo').token,
         rpr_id: this.data.id
       }).then((res) => {
-        console.log(res.data.data);
         if (res.data.status == 1) {
           setTimeout(function () {
             wx.hideLoading()

@@ -126,6 +126,10 @@
   font-size: 25rpx;
   font-family: 'Regular';
 }
+.page-container .company .company_item .company_item_img{
+  width: 16rpx;
+  height: 24rpx;
+}
 .page-container .company .company_item .company_item_txt{
   color: #f14c44;
 }
