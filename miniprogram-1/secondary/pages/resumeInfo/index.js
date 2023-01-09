@@ -16,7 +16,8 @@ Page({
     rrr_id: '',
     sign:'',
     year: '',
-    month: ''
+    month: '',
+    rpr_rc_id:0
   },
   getList() {
     var title = ''
@@ -41,7 +42,6 @@ Page({
     })
     app.post('/Recruit/resumeList', obj).then((res) => {
       if (res.data.status == 1) {
-        console.log(res);
         res.data.data.forEach(i => {
           i.r_age = this.data.month > i.r_born.slice(5, 7) ? this.data.year - i.r_born.slice(0, 4) + 1 : this.data.year - i.r_born.slice(0, 4)
         })
@@ -66,7 +66,9 @@ Page({
     })
     app.post('/Recruit/showResume', {
       token: wx.getStorageSync('userInfo').token,
-      r_id: this.data.lists[index].rrr_id
+      rc_id:this.data.rpr_rc_id,
+      r_id: this.data.lists[index].r_id,
+      duty: this.data.lists[index].rpr_position_name
     }).then(res => {
       if (res.data.status == 1) {
         res.data.data.r_age = this.data.month > res.data.data.r_born.slice(5, 7) ? this.data.year - res.data.data.r_born.slice(0, 4) + 1 : this.data.year - res.data.data.r_born.slice(0, 4)
@@ -161,7 +163,8 @@ Page({
       month: month,
       item: options.item,
       position: wx.getStorageSync('position'),
-      education: wx.getStorageSync('education')
+      education: wx.getStorageSync('education'),
+      rpr_rc_id:options.rpr_rc_id
     })
     this.getList()
   },

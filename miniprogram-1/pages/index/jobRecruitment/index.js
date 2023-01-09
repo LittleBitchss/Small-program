@@ -378,12 +378,37 @@ Page({
       token: wx.getStorageSync('userInfo').token
     }).then((res) => {
       if (res.data.status == 1) {
-        console.log(res.data.data.list);
         this.setData({
           name: res.data.data.info.r_name,
-          photo: res.data.data.info.r_head_portrait,
-          mineRecruitment: res.data.data.list
+          photo: res.data.data.info.r_head_portrait
         })
+        setTimeout(() => {
+          res.data.data.list.forEach(i => {
+            qqMapSdk.reverseGeocoder({
+              location: {
+                longitude: i.rpr_longitude,
+                latitude: i.rpr_latitude
+              },
+              success(res) {
+                i.area = res.result.address_component.district
+                i.street = res.result.address_component.street
+              }
+            })
+            i.catering = i.catering == 1 ? '中餐' : i.catering == 2 ? '西餐' : i.catering == 2 ? '糕点/甜品' : ''
+            i.duty = i.duty ? wx.getStorageSync('recruitDuty').find(j => j.rd_id == i.duty).rd_name : ''
+            i.welfare = i.welfare ? wx.getStorageSync('welfare').find(j => j.rf_id == i.welfare).rf_name : ''
+            i.rpr_experience = i.rpr_experience ? wx.getStorageSync('experience').find(j => j.e_id == i.rpr_experience).e_name : ''
+            i.rpr_minimum_education = i.rpr_minimum_education ? wx.getStorageSync('education').find(j => j.e_id == i.rpr_minimum_education).e_name : ''
+            var custom = i.custom?JSON.parse(i.custom):''
+            i.custom = custom?custom[0].rc_name:''
+          })
+        })
+        setTimeout(() => {
+          wx.hideLoading()
+          this.setData({
+            mineRecruitment: res.data.data.list
+          })
+        }, 500)
       }
     })
   },
@@ -410,6 +435,9 @@ Page({
     }
   },
   getPosition() {
+    wx.showLoading({
+      title: '加载中',
+    })
     app.post('/comm/getPosition').then((res) => {
       if (res.data.status == 1) {
         res.data.data.forEach(i => {
@@ -607,7 +635,6 @@ Page({
             jobList: res.data.data.list
           })
         } else {
-          console.log(res.data.data.list);
           setTimeout(() => {
             res.data.data.list.forEach(i => {
               qqMapSdk.reverseGeocoder({
@@ -630,10 +657,10 @@ Page({
             })
           })
           setTimeout(() => {
-            wx.hideLoading()
             this.setData({
               jobList: res.data.data.list
             })
+            wx.hideLoading()
           }, 500)
         }
       } else {

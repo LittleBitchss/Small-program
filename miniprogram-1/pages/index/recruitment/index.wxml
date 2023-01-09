@@ -75,7 +75,7 @@
               <view class="recruitment_list2_item" wx:for="{{item.key_word}}" wx:for-index="idx" wx:for-item="itemName" wx:key="idx">{{itemName}}</view>
             </view>
             <view class="recruitment_list3">
-              <navigator class="recruitment_list3_item" url="{{url}}?item=1&id={{item.rpr_id}}">
+              <navigator class="recruitment_list3_item" url="{{url}}?item=1&id={{item.rpr_id}}&rpr_rc_id={{item.rpr_rc_id}}">
                 <view class="recruitment_list3_item_left">
                   <text>已
                     收
@@ -86,7 +86,7 @@
                   {{item.resume.received}}<text class="x">人</text>
                 </view>
               </navigator>
-              <navigator class="recruitment_list3_item" url="{{url}}?item=2&id={{item.rpr_id}}">
+              <navigator class="recruitment_list3_item" url="{{url}}?item=2&id={{item.rpr_id}}&rpr_rc_id={{item.rpr_rc_id}}">
                 <view class="recruitment_list3_item_left">
                   <text>未
                     阅
@@ -97,7 +97,7 @@
                   {{item.resume.unread}}<text class="x">人</text>
                 </view>
               </navigator>
-              <navigator class="recruitment_list3_item" url="{{url}}?item=3&id={{item.rpr_id}}">
+              <navigator class="recruitment_list3_item" url="{{url}}?item=3&id={{item.rpr_id}}&rpr_rc_id={{item.rpr_rc_id}}">
                 <view class="recruitment_list3_item_left">
                   <text>已
                     阅
@@ -108,7 +108,7 @@
                   {{item.resume.read}}<text class="x">人</text>
                 </view>
               </navigator>
-              <navigator class="recruitment_list3_item" url="{{url}}?item=4&id={{item.rpr_id}}">
+              <navigator class="recruitment_list3_item" url="{{url}}?item=4&id={{item.rpr_id}}&rpr_rc_id={{item.rpr_rc_id}}">
                 <view class="recruitment_list3_item_left red">
                   <text>标
                     记

@@ -32,9 +32,11 @@ Page({
           icon: 'success',
           duration: 1000
         })
-        wx.navigateBack({
-          delta: 1
-        })
+        setTimeout(()=>{
+          wx.navigateBack({
+            delta: 1
+          })
+        },1000)
       }else{
 
       }

@@ -137,7 +137,7 @@ Page({
       desiredPosition: desiredPosition,
       scroll: index * 65 > 136 ? index * 65 - 136 : 0
     })
-    this.getData(this.data.dutys, this.data.location, 0)
+    this.getData(this.data.dutys, this.data.location, 0, desiredPosition[index].p_id)
   },
   leftTilter(e) {
     var item = e.currentTarget.dataset.item
@@ -488,9 +488,9 @@ Page({
     })
   },
   getCustom(list) {
-    setTimeout(()=>{
+    setTimeout(() => {
       wx.hideLoading()
-    },200)
+    }, 200)
     if (list.length == 0) {
       this.setData({
         onTheJobList: []
@@ -595,7 +595,7 @@ Page({
           wx.showLoading({
             title: '加载中',
           })
-          setTimeout(()=>{
+          setTimeout(() => {
             app.post('/Recruit/lowerShelf', {
               token: wx.getStorageSync('userInfo').token,
               id: that.data.onTheJobList[index].rpr_id
@@ -605,7 +605,7 @@ Page({
                 that.getMineInfo()
               }
             })
-          },500)
+          }, 500)
         }
       }
     })
@@ -639,7 +639,7 @@ Page({
       }
     })
   },
-  getData(dutys, location, first) {
+  getData(dutys, location, first, post) {
     wx.showLoading({
       title: '加载中',
     })
@@ -679,16 +679,16 @@ Page({
         success: function (res) {
           obj.longitude = res.result.location.lng
           obj.latitude = res.result.location.lat
-          that.aaa(obj, first)
+          that.aaa(obj, first, post)
         }
       })
     } else {
       obj.longitude = wx.getStorageSync('userInfo').longitude
       obj.latitude = wx.getStorageSync('userInfo').latitude
-      this.aaa(obj, first)
+      this.aaa(obj, first, post)
     }
   },
-  aaa(obj, first) {
+  aaa(obj, first, post) {
     app.post('/Recruit/recommendPosition', obj).then((res) => {
       if (res.data.status == 1) {
         var rex = res.data.data
@@ -703,45 +703,50 @@ Page({
           }, 500)
         } else {
           wx.hideLoading()
-        }
-        var duty = rex.duty.indexOf(',') == -1 ? rex.duty.split() : rex.duty.split(',')
-        rex.list.forEach(i => {
-          i.r_age = this.data.month > i.r_born.slice(5, 7) ? this.data.year - i.r_born.slice(0, 4) + 1 : this.data.year - i.r_born.slice(0, 4)
-          i.r_experience = this.data.month > i.r_working_time.slice(5, 7) ? this.data.year - i.r_working_time.slice(0, 4) + 1 : this.data.year - i.r_working_time.slice(0, 4)
-          if (duty.length != 0) {
-            var job_expectation = []
-            duty.forEach(j => {
-              var item = i.job_expectation.find(k => k == j)
-              if (item) {
-                var items = this.data.desiredPositionx.find(k => k.p_id == item).p_name
-                job_expectation.push(items)
+          var duty = rex.duty.indexOf(',') == -1 ? rex.duty.split() : rex.duty.split(',')
+          rex.list.forEach(i => {
+            i.r_age = this.data.month > i.r_born.slice(5, 7) ? this.data.year - i.r_born.slice(0, 4) + 1 : this.data.year - i.r_born.slice(0, 4)
+            i.r_experience = this.data.month > i.r_working_time.slice(5, 7) ? this.data.year - i.r_working_time.slice(0, 4) + 1 : this.data.year - i.r_working_time.slice(0, 4)
+            if(post){
+              i.job_expectation = wx.getStorageSync('position')[i.job_expectation.find(k => k == post)-1].p_name
+            }else{
+              if (duty.length != 0) {
+                var job_expectation = []
+                duty.forEach(j => {
+                  var item = i.job_expectation.find(k => k == j)
+                  if (item) {
+                    var items = this.data.desiredPositionx.find(k => k.p_id == item).p_name
+                    job_expectation.push(items)
+                  }
+                })
+                job_expectation = job_expectation.join(',')
+                i.job_expectation = job_expectation
               }
-            })
-            job_expectation = job_expectation.join(',')
-            i.job_expectation = job_expectation
-          }
-        })
-        if (first) {
-          var arr = [{
-            p_id: 0,
-            p_name: '推荐厨师',
-            active: 'active'
-          }]
-          if (duty.length != 0) {
-            duty.forEach(i => {
-              var item = this.data.desiredPositions.find(j => j.p_id == i)
-              item.active = ''
-              arr.push(item)
+            }
+          })
+          if (first) {
+            var arr = [{
+              p_id: 0,
+              p_name: '推荐厨师',
+              active: 'active'
+            }]
+            if (duty.length != 0) {
+              duty.forEach(i => {
+                var item = this.data.desiredPositions.find(j => j.p_id == i)
+                item.active = ''
+                arr.push(item)
+              })
+            }
+            this.setData({
+              desiredPosition: arr,
+              dutyx: rex.duty
             })
           }
           this.setData({
-            desiredPosition: arr,
-            dutyx: rex.duty
+            list: rex.list
           })
         }
-        this.setData({
-          list: rex.list
-        })
+
       } else {
         wx.hideLoading()
         wx.showToast({

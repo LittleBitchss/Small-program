@@ -276,10 +276,9 @@
 .jobRecruitment .jobSearch .jobSearch_top .mine .mine_state {
   width: calc(100% - 36rpx);
   height: 34rpx;
-  margin: 122rpx auto 18rpx;
+  margin: 50rpx auto 18rpx;
   display: flex;
   align-items: center;
-
 }
 
 .jobRecruitment .jobSearch .jobSearch_top .mine .mine_state .mine_state_item {
@@ -319,7 +318,9 @@
   margin-right: 8rpx;
   margin-top: 5rpx;
 }
-
+.jobRecruitment .jobSearch .jobSearch_top .mine .list .list_item4 .list_item4_right .states{
+  background-color: red;
+}
 .jobRecruitment .jobSearch .jobSearch_bottom {
   height: 8%;
   background-color: #fff;
