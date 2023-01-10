@@ -68,7 +68,7 @@ Page({
         text: "餐饮食堂"
       },
       {
-        img: "../../icon/index-components6.png",
+        img: app.domain+"/img/index/index-components6.png",
         type: "navigate",
         appid: 'wx0ab3540bc984be96',
         text: "食安严选",
@@ -94,13 +94,13 @@ Page({
         text: "培训入口"
       },
       {
-        img: "../../icon/index-components10.png",
+        img: app.domain+"/img/index/index-components10.png",
         url: "/pages/index/foodSafetySupervision/index?id=2",
         type: "navigate",
         text: "餐饮协会"
       },
       {
-        img: "../../icon/index-components11.png",
+        img: app.domain+"/img/index/index-components11.png",
         type: "navigate",
         url: "",
         text: "中华保险"
