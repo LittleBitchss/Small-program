@@ -68,7 +68,7 @@ Page({
         text: "餐饮食堂"
       },
       {
-        img: app.domain+"/img/index/index-components6.png",
+        img: app.domain + "/img/index/index-components6.png",
         type: "navigate",
         appid: 'wx0ab3540bc984be96',
         text: "食安严选",
@@ -82,7 +82,7 @@ Page({
       },
       {
         img: "../../icon/index-components8.png",
-        url: !wx.getStorageSync('userInfo').role?"/pages/index/jobRecruitment/index":!wx.getStorageSync('userInfo').card?"/secondary/pages/createTraCQ/index":"/pages/index/recruitment/index",
+        url: !wx.getStorageSync('userInfo').role ? "/pages/index/jobRecruitment/index" : !wx.getStorageSync('userInfo').card ? "/secondary/pages/createTraCQ/index" : "/pages/index/recruitment/index",
         type: "navigate",
         text: "求职招聘"
       }
@@ -94,13 +94,13 @@ Page({
         text: "培训入口"
       },
       {
-        img: app.domain+"/img/index/index-components10.png",
+        img: app.domain + "/img/index/index-components10.png",
         url: "/pages/index/foodSafetySupervision/index?id=2",
         type: "navigate",
         text: "餐饮协会"
       },
       {
-        img: app.domain+"/img/index/index-components11.png",
+        img: app.domain + "/img/index/index-components11.png",
         type: "navigate",
         url: "",
         text: "中华保险"
@@ -122,10 +122,9 @@ Page({
         longitude: lng
       },
       success: (res) => {
-        // console.log(res.result.ad_info);
         var userInfo = wx.getStorageSync('userInfo')
         userInfo.citys = res.result.ad_info.city
-        userInfo.citycode = res.result.ad_info.city_code.slice(3,9)
+        userInfo.citycode = res.result.ad_info.city_code.slice(3, 9)
         wx.setStorageSync('userInfo', userInfo)
         // var lat1 = that.data.currentLatitude,
         //   lng1 = that.data.currentLongitude,
@@ -167,7 +166,7 @@ Page({
           currentLongitude: res.longitude
         })
         that.getAddress(res.longitude, res.latitude);
-        storage.longitude = res.longitude 
+        storage.longitude = res.longitude
         storage.latitude = res.latitude
         wx.setStorageSync('userInfo', storage)
       }
@@ -176,7 +175,6 @@ Page({
   regionchange(e) {
     var that = this
     // 地图发生变化的时候，获取中间点，也就是cover-image指定的位置
-    // console.log(e);
     if (e.type == 'end' && (e.causedBy == 'scale' || e.causedBy == 'drag')) {
       this.setData({
         address: "正在获取地址..."
@@ -278,7 +276,7 @@ Page({
             this.setData({
               anima: "middleToDown"
             })
-          }else if (this.data.anima == "downToMiddle") {
+          } else if (this.data.anima == "downToMiddle") {
             this.setData({
               anima: "middleToDown"
             })
@@ -368,32 +366,49 @@ Page({
       complete: function (res) {},
     })
   },
-  goUserOrder(){
+  goUserOrder() {
     wx.navigateTo({
       url: '/pages/mine/userOrder/index?index=1'
     })
   },
   onLoad() {
-    this.getNowLocation()
-    this.getSetting()
-    try {
-      app.post('/index/getMatsuiType').then(res => {
-        if (res.data.status == 1) {
-          wx.setStorageSync('types', res.data.data)
+    var that = this
+    wx.checkSession({
+      success: function (res) {
+        if(wx.getStorageSync('userInfo').isLogin!=1){
+          wx.redirectTo({
+            url: "/pages/authorizedLogin/index"
+          })
+          wx.removeStorageSync('userInfo')
+          return
         }
-      })
-      app.post('/comm/getCuisine').then(res => {
-        if (res.data.status == 1) {
-          wx.setStorageSync('cuisine', res.data.data)
+        that.getNowLocation()
+        that.getSetting()
+        try {
+          app.post('/index/getMatsuiType').then(res => {
+            if (res.data.status == 1) {
+              wx.setStorageSync('types', res.data.data)
+            }
+          })
+          app.post('/comm/getCuisine').then(res => {
+            if (res.data.status == 1) {
+              wx.setStorageSync('cuisine', res.data.data)
+            }
+          })
+        } catch {
+          wx.showToast({
+            title: '网络不稳定~',
+            icon: 'error',
+            duration: 1000 //持续的时间
+          })
         }
-      })
-    } catch {
-      wx.showToast({
-        title: '网络不稳定~',
-        icon: 'error',
-        duration: 1000 //持续的时间
-      })
-    }
+      },
+      fail: function (res) {
+        wx.redirectTo({
+          url: "/pages/authorizedLogin/index"
+        })
+      }
+    })
   },
   onShow: function () {
     var systeminfo = wx.getSystemInfoSync()
@@ -430,7 +445,7 @@ Page({
     }
     if (wx.getStorageSync('association').m_token) {
       components2[1].url = "/secondary/pages/association/index"
-    } 
+    }
     this.setData({
       components2: components2
     })

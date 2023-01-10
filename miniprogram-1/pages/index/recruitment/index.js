@@ -693,12 +693,37 @@ Page({
       if (res.data.status == 1) {
         var rex = res.data.data
         if (rex.list.length == 0) {
+          var that = this
           setTimeout(function () {
             wx.hideLoading()
             wx.showToast({
               title: '暂无数据',
               icon: 'error',
               duration: 1000
+            })
+            if (first) {
+              var arr = [{
+                p_id: 0,
+                p_name: '推荐厨师',
+                active: 'active'
+              }]
+              if(typeof rex.duty == 'string'){
+                rex.duty = rex.duty.split()
+              }
+              if (rex.duty.length != 0) {
+                rex.duty.forEach(i => {
+                  var item = that.data.desiredPositions.find(j => j.p_id == i)
+                  item.active = ''
+                  arr.push(item)
+                })
+              }
+              that.setData({
+                desiredPosition: arr,
+                dutyx: rex.duty
+              })
+            }
+            that.setData({
+              list: rex.list
             })
           }, 500)
         } else {
@@ -746,7 +771,6 @@ Page({
             list: rex.list
           })
         }
-
       } else {
         wx.hideLoading()
         wx.showToast({
