@@ -373,42 +373,33 @@ Page({
   },
   onLoad() {
     var that = this
-    wx.checkSession({
-      success: function (res) {
-        if(wx.getStorageSync('userInfo').isLogin!=1){
-          wx.redirectTo({
-            url: "/pages/authorizedLogin/index"
-          })
-          wx.removeStorageSync('userInfo')
-          return
+    if(wx.getStorageSync('userInfo').isLogin!=1){
+      wx.redirectTo({
+        url: "/pages/authorizedLogin/index"
+      })
+      wx.removeStorageSync('userInfo')
+      return
+    }
+    that.getNowLocation()
+    that.getSetting()
+    try {
+      app.post('/index/getMatsuiType').then(res => {
+        if (res.data.status == 1) {
+          wx.setStorageSync('types', res.data.data)
         }
-        that.getNowLocation()
-        that.getSetting()
-        try {
-          app.post('/index/getMatsuiType').then(res => {
-            if (res.data.status == 1) {
-              wx.setStorageSync('types', res.data.data)
-            }
-          })
-          app.post('/comm/getCuisine').then(res => {
-            if (res.data.status == 1) {
-              wx.setStorageSync('cuisine', res.data.data)
-            }
-          })
-        } catch {
-          wx.showToast({
-            title: '网络不稳定~',
-            icon: 'error',
-            duration: 1000 //持续的时间
-          })
+      })
+      app.post('/comm/getCuisine').then(res => {
+        if (res.data.status == 1) {
+          wx.setStorageSync('cuisine', res.data.data)
         }
-      },
-      fail: function (res) {
-        wx.redirectTo({
-          url: "/pages/authorizedLogin/index"
-        })
-      }
-    })
+      })
+    } catch {
+      wx.showToast({
+        title: '网络不稳定~',
+        icon: 'error',
+        duration: 1000 //持续的时间
+      })
+    }
   },
   onShow: function () {
     var systeminfo = wx.getSystemInfoSync()
