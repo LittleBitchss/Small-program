@@ -43,7 +43,8 @@
         "pages/resumeInfo/index",
         "pages/publishPage/index",
         "pages/JobPostings/index",
-        "pages/talentInfo/index"
+        "pages/talentInfo/index",
+        "pages/mine_setName/index"
       ]
     },
     {

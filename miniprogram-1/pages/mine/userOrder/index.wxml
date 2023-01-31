@@ -14,7 +14,7 @@
               <view class="time">
                 {{item.m_start_date}}
               </view>
-              <view class="">{{item.o_refund_application==1?"退款中":item.o_status==-1?"已退款":item.o_status==3?"已支付定金":"订单待支付"}}</view>
+              <view class="">{{item.o_status==-1?"已退款":item.o_refund_application==1?"退款中":item.o_status==3?"已支付定金":"订单待支付"}}</view>
             </view>
             <view class="items items2">
               <view class="left">
@@ -73,7 +73,7 @@
               <view class="time">
                 {{item.m_start_date}}
               </view>
-              <view class="">{{item.o_refund_application==1?"退款中":item.o_refund_id?"已退款":item.o_paid==1?"已支付定金":"订单待支付"}}</view>
+              <view class="">{{item.o_refund_id?"已退款":item.o_refund_application==1?"退款中":item.o_paid==1?"已支付定金":"订单待支付"}}</view>
             </view>
             <view class="items items2">
               <view class="left">
@@ -371,7 +371,7 @@
               <view class="time">
                 {{item.m_start_date}}
               </view>
-              <view class="">{{item.o_refund_application==1?"退款中":item.o_refund_id?"已退款":item.o_paid==1?"已支付定金":"订单待支付"}}</view>
+              <view class="">{{item.o_refund_id?"已退款":item.o_refund_application==1?"退款中":item.o_paid==1?"已支付定金":"订单待支付"}}</view>
             </view>
             <view class="items items2">
               <view class="left">
@@ -418,7 +418,7 @@
               <view class="time">
                 {{item.m_start_date}}
               </view>
-              <view class="">{{item.o_refund_application==1?"退款中":item.o_refund_id?"已退款":item.o_paid==1?"已支付定金":"订单待支付"}}</view>
+              <view class="">{{item.o_refund_id?"已退款":item.o_refund_application==1?"退款中":item.o_paid==1?"已支付定金":"订单待支付"}}</view>
             </view>
             <view class="items items2">
               <view class="left">

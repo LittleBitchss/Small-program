@@ -12,27 +12,27 @@ Page({
     functionBars: [{
         src: "../../icon/mine_refundAfterSale.png",
         text: "待支付",
-        point:0
+        point: 0
       },
       {
         src: "../../icon/mine_order.png",
         text: "待审核",
-        point:0
+        point: 0
       },
       {
         src: "../../icon/mine_collect.png",
         text: "服务中",
-        point:0
+        point: 0
       },
       {
         src: "../../icon/mine_refundAfterSale.png",
         text: "退款",
-        point:0
+        point: 0
       },
       {
         src: "../../icon/mine_assess.png",
         text: "待评论",
-        point:0
+        point: 0
       }
     ],
     functionLists: [{
@@ -74,6 +74,26 @@ Page({
     let day = parseInt((end_num.getTime() - start_num.getTime()) / (1000 * 60 * 60 * 24))
     return day
   },
+  getUserInfo() {
+    try {
+      app.post('/comm/getUserInfo', {
+        token: wx.getStorageSync('userInfo').token
+      }).then(res => {
+        if (res.data.status == 1) {
+          this.setData({
+            avatar: res.data.data.pic_path,
+            nickName: res.data.data.name,
+          })
+        }
+      })
+    } catch {
+      wx.showToast({
+        title: '网络不稳定~',
+        icon: 'error',
+        duration: 1000 //持续的时间
+      })
+    }
+  },
   getOrder() {
     var functionBars = JSON.parse(JSON.stringify(this.data.functionBars))
     try {
@@ -89,21 +109,22 @@ Page({
               i.banCancel = false
             }
           })
-          var listArr2 = res.data.data.filter(i => i.o_status!=3 && i.m_approval != (3 || 2) && i.banCancel == false && i.mi_accept_invitation != (2 || 3))
+          var listArr2 = res.data.data.filter(i => i.o_status != 3 && i.m_approval != (3 || 2) && i.banCancel == false && i.mi_accept_invitation != (2 || 3))
           var listArr3 = res.data.data.filter(i => i.m_approval == 0 && i.m_matsuri_type == 1 && i.banCancel == false)
-          var listArr4 = res.data.data.filter(i => i.o_status==3 && ((i.m_approval == 1 && i.m_matsuri_type == 1) || (i.m_approval == 0 && i.m_matsuri_type == 2)) && i.mi_accept_invitation == 1)
-          var listArr5 = res.data.data.filter(i => i.o_status==3 && (i.mi_accept_invitation == 3 || (i.mi_accept_invitation == 2 && i.banCancel == true) || (i.mi_accept_invitation == 0 && i.banCancel == true) || i.m_approval == 2 || (i.m_approval == 3 && i.mi_accept_invitation != 1) || (i.m_approval == 1 && i.banCancel == true && i.mi_accept_invitation != 1) || (i.m_approval == 0 && i.banCancel == true && i.mi_accept_invitation != 1)) && i.o_refund_id == null)
-          var listArr6 = res.data.data.filter(i => i.o_status==3 && (i.m_approval == 1 && i.m_matsuri_type == 1) && i.mi_accept_invitation == 3 && i.expired == 1 && i.o_refund_id && i.mi_score == null)
-          functionBars[0].point=listArr2.length
-          functionBars[1].point=listArr3.length
-          functionBars[2].point=listArr4.length
-          functionBars[3].point=listArr5.length
-          functionBars[4].point=listArr6.length
+          var listArr4 = res.data.data.filter(i => i.o_status == 3 && ((i.m_approval == 1 && i.m_matsuri_type == 1) || (i.m_approval == 0 && i.m_matsuri_type == 2)) && i.mi_accept_invitation == 1)
+          var listArr5 = res.data.data.filter(i => i.o_status == 3 && (i.mi_accept_invitation == 3 || (i.mi_accept_invitation == 2 && i.banCancel == true) || (i.mi_accept_invitation == 0 && i.banCancel == true) || i.m_approval == 2 || (i.m_approval == 3 && i.mi_accept_invitation != 1) || (i.m_approval == 1 && i.banCancel == true && i.mi_accept_invitation != 1) || (i.m_approval == 0 && i.banCancel == true && i.mi_accept_invitation != 1)) && i.o_refund_id == null)
+          var listArr6 = res.data.data.filter(i => i.o_status == 3 && (i.m_approval == 1 && i.m_matsuri_type == 1) && i.mi_accept_invitation == 3 && i.expired == 1 && i.o_refund_id && i.mi_score == null)
+          functionBars[0].point = listArr2.length
+          functionBars[1].point = listArr3.length
+          functionBars[2].point = listArr4.length
+          functionBars[3].point = listArr5.length
+          functionBars[4].point = listArr6.length
           this.setData({
-            functionBars:functionBars
+            functionBars: functionBars
           })
         }
       })
+      this.getUserInfo() 
     } catch {
       wx.showToast({
         title: '网络不稳定~',
@@ -118,10 +139,6 @@ Page({
   onLoad(options) {
     var userInfo = wx.getStorageSync('userInfo')
     var functionLists = JSON.parse(JSON.stringify(this.data.functionLists))
-    this.setData({
-      avatar: userInfo.avatarUrl,
-      nickName: userInfo.nickName,
-    })
     if (userInfo.chef_token) {
       functionLists[0].url = '/pages/mine/chefRegister/index'
     } else {
@@ -144,7 +161,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
-    
+
   },
 
   /**

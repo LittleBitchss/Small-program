@@ -47,9 +47,7 @@ Page({
                       au_openid: userInfo.openid,
                       au_nick_name: userInfo.nickName
                     }).then(res => {
-                      console.log(res);
                       if (res.data.status == 1) {
-                        console.log(res);
                         userInfo.token = res.data.data.token
                         userInfo.user_id = res.data.data.user_id
                         userInfo.role = res.data.data.role
@@ -63,9 +61,7 @@ Page({
                           icon: 'success',
                           duration: 1000 //持续的时间
                         })
-                        console.log(5);
                         setTimeout(() => {
-                          console.log(2.3);
                           wx.switchTab({
                             url: "/pages/index/index"
                           })
@@ -83,7 +79,6 @@ Page({
               }
             },
             fail:res => {
-              console.log(3);
             },
           });
         }

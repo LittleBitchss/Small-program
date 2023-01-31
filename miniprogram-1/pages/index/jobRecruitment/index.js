@@ -59,7 +59,8 @@ Page({
     salaryNums: [],
     experienceNums: [],
     id: 0,
-    jobList: []
+    jobList: [],
+    has_resume:0
   },
   tabToggle(e) {
     var index = e.currentTarget.dataset.index
@@ -624,6 +625,7 @@ Page({
     }
     app.post('/Job/recommendPosition', obj).then((res) => {
       if (res.data.status == 1) {
+        console.log(res);
         if (res.data.data.list.length == 0) {
           wx.hideLoading()
           wx.showToast({
@@ -653,7 +655,7 @@ Page({
               i.rpr_experience = i.rpr_experience ? wx.getStorageSync('experience').find(j => j.e_id == i.rpr_experience).e_name : ''
               i.rpr_minimum_education = i.rpr_minimum_education ? wx.getStorageSync('education').find(j => j.e_id == i.rpr_minimum_education).e_name : ''
               var custom = i.custom?JSON.parse(i.custom):''
-              i.custom = custom?custom[0].rc_name:''
+              i.custom = custom.length!=0?custom[0].rc_name:''
             })
           })
           setTimeout(() => {
@@ -663,6 +665,9 @@ Page({
             wx.hideLoading()
           }, 500)
         }
+        this.setData({
+          has_resume:res.data.data.has_resume
+        })
       } else {
         wx.hideLoading()
         wx.navigateTo({

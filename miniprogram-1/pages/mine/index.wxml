@@ -1,10 +1,10 @@
 <!--pages/mine/index.wxml-->
 <view class="mine">
   <view class="top">
-    <view class="userInfo">
+    <navigator class="userInfo" url="/secondary/pages/mine_setName/index?avatar={{avatar}}&nickName={{nickName}}">
       <image class="userInfo_avatar" src="{{avatar}}"></image>
-      <text class="nickName">{{nickName}}</text>
-    </view>
+      <text class="nickName">{{nickName?nickName:"未设置"}}</text>
+    </navigator>
   </view>
   <view class="functionBar">
     <view class="myOrder">

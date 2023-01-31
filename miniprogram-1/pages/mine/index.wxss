@@ -25,6 +25,9 @@
   border-radius: 50%;
   border: 4rpx solid #ffa175;
   margin-right: 16rpx;
+  background-image: url(https://qunyan.canancn.com/assets/applet/img/mine/mine_img.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
 }
 
 .mine .top .userInfo .nickName{
