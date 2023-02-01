@@ -75,22 +75,11 @@ Page({
     return day
   },
   getUserInfo() {
-    try {
-      app.post('/comm/getUserInfo', {
-        token: wx.getStorageSync('userInfo').token
-      }).then(res => {
-        if (res.data.status == 1) {
-          this.setData({
-            avatar: res.data.data.pic_path,
-            nickName: res.data.data.name,
-          })
-        }
-      })
-    } catch {
-      wx.showToast({
-        title: '网络不稳定~',
-        icon: 'error',
-        duration: 1000 //持续的时间
+    var storage = wx.getStorageSync('userInfo')
+    if (storage.nickName) {
+      this.setData({
+        avatar: storage.avatarUrl,
+        nickName: storage.nickName
       })
     }
   },
@@ -124,7 +113,6 @@ Page({
           })
         }
       })
-      this.getUserInfo() 
     } catch {
       wx.showToast({
         title: '网络不稳定~',
@@ -144,6 +132,7 @@ Page({
     } else {
       functionLists[0].url = '/pages/mine/login/index'
     }
+    this.getUserInfo()
     this.setData({
       functionLists: functionLists
     })

@@ -24,13 +24,13 @@
         <view class="swiper" bindtouchstart="touchStart" bindtouchmove="touchMove" bindtouchend="touchEnd" data-item="2">
           <view class="slider {{animas}}">
             <view class="item">
-              <navigator class="components" wx:for="{{components}}" wx:key="index" open-type="{{item.type}}" url="{{item.url}}" bindtap="aaa" data-appid="{{item.appid}}">
+              <navigator class="components" wx:for="{{components}}" wx:key="index" open-type="{{item.type}}" url="{{item.url}}" bindtap="aaa" data-appid="{{item.appid}}" data-url="{{item.url}}">
                 <image class="img" src="{{item.img}}"></image>
                 <text class="text">{{item.text}}</text>
               </navigator>
             </view>
             <view class="item">
-              <navigator class="components" wx:for="{{components2}}" wx:key="index" open-type="{{item.type}}" url="{{item.url}}">
+              <navigator class="components" wx:for="{{components2}}" wx:key="index" open-type="{{item.type}}" url="{{item.url}}" bindtap="aaa" data-url="{{item.url}}">
                 <image class="img" src="{{item.img}}"></image>
                 <text class="text">{{item.text}}</text>
               </navigator>

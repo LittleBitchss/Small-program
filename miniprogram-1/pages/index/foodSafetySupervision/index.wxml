@@ -3,7 +3,7 @@
   <view class="login">
     <view class="item item1">
       <image class="item1_img" src="{{domain}}association_logo.png"></image>
-      <text class="item1_bom" space="nbsp">厨 师 后 台 管 理 系 统</text>
+      <text class="item1_bom" space="nbsp">{{id == 1 ? '监 管 后 台 管 理 系 统' : '协 会 后 台 管 理 系 统'}}</text>
     </view>
     <view class="item item2 {{bdColor1}}">
       <image class="imgs" src="{{users}}"></image>

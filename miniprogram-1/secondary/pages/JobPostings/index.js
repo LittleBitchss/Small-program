@@ -1,6 +1,6 @@
 // secondary/pages/JobPostings/index.js
 const app = getApp()
-var QQMapWX = require('../../../utils/js/qqmap-wx-jssdk.min');
+var QQMapWX = require('../../../utils/qqmap-wx-jssdk.min');
 const qqMapSdk = new QQMapWX({
   key: 'ABNBZ-GKPLS-FOAOJ-6HOP3-GAWZO-NNFDH'
 });
@@ -61,7 +61,6 @@ Page({
       token:wx.getStorageSync('userInfo').token,
       rpr_id:options.rpr_id
     }).then((res)=>{
-      console.log(res);
       var rex = res
       if(res.data.status==1){
         setTimeout(()=>{
@@ -76,7 +75,7 @@ Page({
           })
           res.data.data.rpr_experience = res.data.data.rpr_experience ? wx.getStorageSync('experience').find(j => j.e_id == res.data.data.rpr_experience).e_name : ''
           res.data.data.rpr_minimum_education = res.data.data.rpr_minimum_education ? wx.getStorageSync('education').find(j => j.e_id == res.data.data.rpr_minimum_education).e_name : ''
-          res.data.data.companySize = this.data.companySize.find(i=>i.rcn_id==res.data.data.number).rcn_name
+          res.data.data.companySize = this.data.companySize.find(i=>i.rcn_id==res.data.data.number)?this.data.companySize.find(i=>i.rcn_id==res.data.data.number).rcn_name:''
           var caterings = []
           var dutys = []
           var welfares = []
@@ -97,7 +96,7 @@ Page({
             var duty = res.data.data.duty.split(',')
             var recruitDuty = wx.getStorageSync('recruitDuty')
             duty.forEach(i=>{
-              var a = recruitDuty.find(j=>j.rd_id == i).rd_name
+              var a = recruitDuty.find(j=>j.rd_id == i)?recruitDuty.find(j=>j.rd_id == i).rd_name:''
               if(a){
                 dutys.push(a)
               }
@@ -107,7 +106,7 @@ Page({
             var welfare = res.data.data.welfare.split(',')
             var welfarex = wx.getStorageSync('welfare')
             welfare.forEach(i=>{
-              var a = welfarex.find(j=>j.rf_id == i).rf_name
+              var a = welfarex.find(j=>j.rf_id == i)?welfarex.find(j=>j.rf_id == i).rf_name:''
               if(a){
                 welfares.push(a)
               }
@@ -133,6 +132,9 @@ Page({
           wx.hideLoading()
         },500)
       }
+      setTimeout(()=>{
+        wx.hideLoading()
+      },500)
     })
   },
 

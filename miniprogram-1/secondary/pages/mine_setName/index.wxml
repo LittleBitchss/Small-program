@@ -3,22 +3,13 @@
   <view class="save">
     <text class="saves" bindtap="saves">保存</text>
   </view>
-  <view class="headPicture" bindtap="upload">
-    <image class="picture" src="{{headPicture}}"></image>
-  </view>
-  <view class="item" bindtap="setName">
+  <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+    <image class="avatar" src="{{avatarUrl}}"></image>
+  </button>
+  <view class="item">
     <view class="item_">
       <text>昵称</text>
-      <view class="items {{values?'':'itemx'}}">{{values?values:"未设置"}}</view>
+      <input type="nickname" class="weui-input" placeholder="请输入昵称" value="{{nickname}}" bindinput="inputs" />
     </view>
-    <image class="itemi" src="../../../icon/mine_right_arrow.png"></image>
-  </view>
+  </view> 
 </view>
-<page-container class="page-container" show="{{show}}" position="right">
-  <view class="save">
-    <text class="saves" bindtap="complete">完成</text>
-  </view>
-  <view class="name">
-    <input type="text" placeholder="请输入昵称" value="{{value}}" bindinput="inputs"/>
-  </view>
-</page-container>

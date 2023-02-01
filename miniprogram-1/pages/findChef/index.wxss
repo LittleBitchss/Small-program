@@ -22,6 +22,7 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  padding: 0 15rpx;
 }
 .findChef .search-group .select{
   height: 100%;

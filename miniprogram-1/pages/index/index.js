@@ -1,6 +1,6 @@
 // index.js
 const app = getApp()
-var QQMapWX = require('../../utils/js/qqmap-wx-jssdk.min');
+var QQMapWX = require('../../utils/qqmap-wx-jssdk.min');
 const qqMapSdk = new QQMapWX({
   key: 'ABNBZ-GKPLS-FOAOJ-6HOP3-GAWZO-NNFDH'
 });
@@ -41,7 +41,7 @@ Page({
         img: "../../icon/index-components1.png",
         url: "/pages/index/familyDinnerApplication/index",
         type: "navigate",
-        text: "家宴报备"
+        text: "家宴预订"
       },
       {
         img: "../../icon/index-components2.png",
@@ -57,13 +57,13 @@ Page({
       },
       {
         img: "../../icon/index-components4.png",
-        url: "",
+        url: 0,
         type: "navigate",
         text: "景区民宿"
       },
       {
         img: "../../icon/index-components5.png",
-        url: "",
+        url: 0,
         type: "navigate",
         text: "餐饮食堂"
       },
@@ -71,14 +71,14 @@ Page({
         img: app.domain + "/img/index/index-components6.png",
         type: "navigate",
         appid: 'wx0ab3540bc984be96',
-        text: "食安严选",
+        text: "预制菜",
         url: "/pages/index/index",
       },
       {
         img: "../../icon/index-components7.png",
-        url: "",
+        url: 0,
         type: "navigate",
-        text: "智慧农场"
+        text: "智慧农业"
       },
       {
         img: "../../icon/index-components8.png",
@@ -89,20 +89,20 @@ Page({
     ],
     components2: [{
         img: "../../icon/index-components9.png",
-        url: "",
+        url: 0,
         type: "navigate",
-        text: "培训入口"
+        text: "培训报名"
       },
       {
         img: app.domain + "/img/index/index-components10.png",
         url: "/pages/index/foodSafetySupervision/index?id=2",
         type: "navigate",
-        text: "餐饮协会"
+        text: "餐厨协会"
       },
       {
         img: app.domain + "/img/index/index-components11.png",
         type: "navigate",
-        url: "",
+        url: 0,
         text: "中华保险"
       },
       {
@@ -214,6 +214,7 @@ Page({
   },
   aaa(e) {
     var appId = e.currentTarget.dataset.appid
+    var url = e.currentTarget.dataset.url
     if (appId) {
       wx.navigateToMiniProgram({
         appId: appId, //appid
@@ -226,6 +227,11 @@ Page({
           console.log('成功')
           // 打开成功
         }
+      })
+    }
+    if(!url){
+      wx.showToast({
+        title: '暂未开放',
       })
     }
   },

@@ -15,24 +15,21 @@
   background-color: #eee;
   border-radius: 5rpx;
 }
-.headPicture{
+.avatar-wrapper{
   height: 360rpx;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.headPicture .picture{
-  height: 300rpx;
+.avatar-wrapper .avatar{
+  height: 280rpx;
   width: 300rpx;
   background-color: #eee;
   border-radius: 50%;
-  background-image: url(https://qunyan.canancn.com/assets/applet/img/mine/mine_img.png);
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
 }
 .item{
   font-size: 28rpx;
-  width: 96%;
+  width: 80%;
   margin: 30rpx auto;
   display: flex;
   align-items: center;
@@ -45,20 +42,13 @@
   display: flex;
   flex: 1;
 }
-.item .item_ .items{
+.item .item_ .weui-input{
   flex: 1;
   width: 380rpx;
   display: flex;
+  text-align: center;
   justify-content:  center;
 }
 .item .item_ .itemx{
   color: #aaa;
-}
-.item .itemi{
-  width: 14rpx;
-  height: 28rpx;
-}
-.name{
-  margin: 20rpx auto;
-  padding: 0 30rpx;
 }

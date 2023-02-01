@@ -1,9 +1,11 @@
 // pages/index/recruitment/index.js
-var QQMapWX = require('../../../utils/js/qqmap-wx-jssdk.min');
+var QQMapWX = require('../../../utils/qqmap-wx-jssdk.min');
 const qqMapSdk = new QQMapWX({
   key: 'ABNBZ-GKPLS-FOAOJ-6HOP3-GAWZO-NNFDH'
 });
 const app = getApp()
+const ctx = wx.createCanvasContext('myCanvas')
+ctx.drawImage('/img/study/shareimg.png', 0, 0, 690, 1085)
 Page({
 
   /**
@@ -788,6 +790,18 @@ Page({
         city: city
       })
       this.getData(this.data.dutys, this.data.location, 0)
+    })
+  },
+  share(){
+    wx.downloadFile({
+      url: 'https://qunyan.canancn.com/assets/applet/img/jobRecruitment/photo.png',
+      success: (res) => {
+        wx.showShareImageMenu({
+          path: res.tempFilePath,
+          success: (res) => {},
+          fail: (res) => {},
+        })
+      }
     })
   },
   /**

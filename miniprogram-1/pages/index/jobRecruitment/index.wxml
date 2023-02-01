@@ -10,7 +10,7 @@
               <view wx:for="{{desiredPosition}}" wx:key="index" class="{{item.active}} item" bindtap="topTilter" data-index="{{index}}">{{item.p_name}}</view>
             </view>
           </scroll-view>
-          <navigator class="jobSearchSquare_top_right" url="/secondary/pages/addPosition/index" >
+          <navigator class="jobSearchSquare_top_right" url="/secondary/pages/addPosition/index">
             <view class="cross"></view>
             <view class="vertical"></view>
           </navigator>
@@ -26,7 +26,7 @@
           </view>
         </view>
         <scroll-view scroll-y="true" class="list">
-          <navigator class="list_item" url="/secondary/pages/JobPostings/index?rpr_id={{item.rpr_id}}" wx:for="{{jobList}}" wx:key="index">
+          <navigator class="list_item" url="/secondary/pages/JobPostings/index?rpr_id={{item.rpr_id}}" wx:for="{{jobList}}" wx:key="index" wx:if="{{has_resume==1}}">
             <view class="list_item1">
               <view class="list_item1_left">
                 {{item.rpr_title}}
@@ -54,6 +54,34 @@
               <view class="list_item4_right">{{item.area}} {{item.street}}</view>
             </view>
           </navigator>
+          <view class="list_item" wx:for="{{jobList}}" wx:key="index" wx:if="{{has_resume==0}}" bindtap="stop">
+            <view class="list_item1">
+              <view class="list_item1_left">
+                {{item.rpr_title}}
+              </view>
+              <view class="list_item1_right">
+                {{item.rpr_minimum_waga=="面议"?"面议":item.rpr_minimum_waga}}-{{item.rpr_maximum_waga=="面议"?"面议":item.rpr_maximum_waga+"元"}}
+              </view>
+            </view>
+            <view class="list_item2">
+              {{item.rc_company}}
+            </view>
+            <view class="list_item3">
+              <view class="list_item3_item" wx:if="{{item.catering}}">{{item.catering}}</view>
+              <view class="list_item3_item" wx:if="{{item.duty}}">{{item.duty}}</view>
+              <view class="list_item3_item" wx:if="{{item.rpr_experience}}">{{item.rpr_experience}}</view>
+              <view class="list_item3_item" wx:if="{{item.rpr_experience}}">{{item.rpr_minimum_education}}</view>
+              <view class="list_item3_item" wx:if="{{item.welfare}}">{{item.welfare}}</view>
+              <view class="list_item3_item" wx:if="{{item.custom}}">{{item.custom}}</view>
+            </view>
+            <view class="list_item4">
+              <view class="list_item4_left">
+                <image class="photo" src="{{item.rc_head_portrait?item.rc_head_portrait:item.rc_sex=='男'?'../../../icon/sir.png':'../../../icon/lady.png'}}"></image>
+                <text class="callPosition">{{item.rc_name[0]}}{{item.rc_sex=="男"?"先生":"女士"}} · {{item.rc_post}}</text>
+              </view>
+              <view class="list_item4_right">{{item.area}} {{item.street}}</view>
+            </view>
+          </view>
         </scroll-view>
       </view>
       <view class="mine" wx:if="{{index == 2}}">

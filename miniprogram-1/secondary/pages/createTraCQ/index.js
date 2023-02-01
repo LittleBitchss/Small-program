@@ -36,6 +36,10 @@ Page({
     companyNames: '',
     companyNameNum: 0,
     companyNameNums: 0,
+    companyIntroduction:'',
+    companyIntroductions: '',
+    companyIntroductionNum: 0,
+    companyIntroductionNums: 0,
     companySize: '请选择公司规模',
     companyNum: 0,
     companyNums: 0,
@@ -52,7 +56,9 @@ Page({
     licensePhotos: '',
     dutuies: '',
     maskType: 0,
-    card: 0
+    card: 0,
+    company_jpgx:[],
+    company_jpgxs:[],
   },
   openpage(e) {
     var item = e.currentTarget.dataset.item
@@ -83,6 +89,8 @@ Page({
         this.setData({
           companyName: '',
           companyNameNum: 0,
+          companyIntroduction:'',
+          companyIntroductionNum: 0,
           companySize:'请选择公司规模',
           companyNum: 0,
           companySizeIndex: 0,
@@ -96,6 +104,8 @@ Page({
           actives2: 'actives',
           companyName: this.data.companyNames,
           companyNameNum: this.data.companyNameNums,
+          companyIntroduction: this.data.companyIntroductions,
+          companyIntroductionNum: this.data.companyIntroductionNums,
           companyNum: this.data.companyNums,
           license: this.data.licenses,
           licenseNum: this.data.licenseNums,
@@ -192,7 +202,7 @@ Page({
                 that.setData({
                   licensePhoto: res.data.fullurl
                 })
-                if (this.data.companyName != '' && this.data.companySize != '请选择公司规模' && this.data.license != '' && this.data.licensePhoto != '') {
+                if (this.data.companyName != '' && this.data.companyIntroduction != '' && this.data.companySize != '请选择公司规模' && this.data.license != '' && this.data.licensePhoto != '') {
                   this.setData({
                     actives2: 'actives'
                   })
@@ -249,7 +259,7 @@ Page({
         companyName: val,
         companyNameNum: cur
       })
-      if (this.data.companyName != '' && this.data.companySize != '请选择公司规模' && this.data.license != '' && this.data.licensePhoto != '') {
+      if (this.data.companyName != '' && this.data. companyIntroduction != '' && this.data.companySize != '请选择公司规模' && this.data.license != '' && this.data.licensePhoto != '') {
         this.setData({
           actives2: 'actives'
         })
@@ -263,7 +273,7 @@ Page({
         license: val,
         licenseNum: cur
       })
-      if (this.data.companyName != '' && this.data.license != '' && this.data.licensePhoto != '') {
+      if (this.data.companyName != '' && this.data. companyIntroduction != '' && this.data.license != '' && this.data.licensePhoto != '') {
         this.setData({
           actives2: 'actives'
         })
@@ -285,7 +295,21 @@ Page({
           actives3: ''
         })
       }
-    }
+    } else if (item == 6) {
+      this.setData({
+        companyIntroduction: val,
+        companyIntroductionNum: cur
+      })
+      if (this.data.companyName != '' && this.data.companyIntroduction != '' && this.data.companySize != '请选择公司规模' && this.data.license != '' && this.data.licensePhoto != '') {
+        this.setData({
+          actives2: 'actives'
+        })
+      } else {
+        this.setData({
+          actives2: ''
+        })
+      }
+    } 
   },
   blur(e) {
     var item = e.currentTarget.dataset.item
@@ -321,7 +345,7 @@ Page({
           licenseNum: 0
         })
       }
-      if (this.data.companyName != '' && this.data.companySize != '请选择公司规模' && this.data.license != '' && this.data.licensePhoto != '') {
+      if (this.data.companyName != '' && this.data. companyIntroduction != '' && this.data.companySize != '请选择公司规模' && this.data.license != '' && this.data.licensePhoto != '') {
         this.setData({
           actives2: 'actives'
         })
@@ -338,7 +362,7 @@ Page({
       companyNum: this.data.companySizeArrays[e.detail.value].rcn_id,
       companySizeIndex: e.detail.value
     })
-    if (this.data.companyName != '' && this.data.companySize != '请选择公司规模' && this.data.license != '' && this.data.licensePhoto != '') {
+    if (this.data.companyName != '' && this.data. companyIntroduction != '' && this.data.companySize != '请选择公司规模' && this.data.license != '' && this.data.licensePhoto != '') {
       this.setData({
         actives2: 'actives'
       })
@@ -370,10 +394,12 @@ Page({
         }
       }
     } else if (item == 2) {
-      if (this.data.companyName != '' && this.data.companySize != '请选择公司规模' && this.data.license != '' && this.data.licensePhoto != '') {
+      if (this.data.companyName != '' && this.data. companyIntroduction != '' && this.data.companySize != '请选择公司规模' && this.data.license != '' && this.data.licensePhoto != '') {
         this.setData({
           companyNames: this.data.companyName,
           companyNameNums: this.data.companyNameNum,
+          companyIntroductions: this.data.companyIntroduction,
+          companyIntroductionNums: this.data.companyIntroductionNum,
           companyNums: this.data.companyNum,
           licenses: this.data.license,
           licenseNums: this.data.licenseNum,

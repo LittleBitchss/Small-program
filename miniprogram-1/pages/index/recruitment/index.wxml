@@ -133,6 +133,10 @@
                 <image class="recruitment_list5_item_img" src="../../../icon/z_edit.png"></image>
                 <text>编辑</text>
               </navigator>
+              <view class="recruitment_list5_item y" wx:if="{{actives1}}" bindtap="share" data-index="{{index}}">
+                <image class="recruitment_list5_item_img" src="../../../icon/z_share.png"></image>
+                <text>分享</text>
+              </view>
               <view class="recruitment_list5_item y" wx:if="{{!actives1}}" bindtap="remove" data-index="{{index}}">
                 <image class="recruitment_list5_item_img" src="../../../icon/z_soldOut.png"></image>
                 <text>删除</text>
@@ -161,6 +165,7 @@
       <text class="text {{mine.fontColor}}">我 的</text>
     </view>
   </view>
+  <canvas canvas-id="myCanvas" style="width: 690px;height:1085px;position: fixed;top: -10000px;"></canvas>
 </view>
 <page-container class="page-container" show="{{show}}" position="right" bind:leave="eventhandle">
   <view class="filter">

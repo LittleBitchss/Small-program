@@ -1,6 +1,6 @@
 // components/basicInfo/basicInfo.js
 const app = getApp()
-var QQMapWX = require('../../../utils/js/qqmap-wx-jssdk.min');
+var QQMapWX = require('../../../utils/qqmap-wx-jssdk.min');
 const qqMapSdk = new QQMapWX({
   key: 'ABNBZ-GKPLS-FOAOJ-6HOP3-GAWZO-NNFDH'
 });

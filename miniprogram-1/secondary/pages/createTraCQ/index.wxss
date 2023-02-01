@@ -111,20 +111,31 @@
 .createTraCQ .bottom .actives{
   background-color: #4781d8;
 }
+.page-container .company{
+  height: 100%;
+  overflow: auto;
+  padding-bottom: 100rpx;
+}
 .page-container .company .company_title{
   font-size: 45rpx;
   font-family: 'Medium';
   padding: 66rpx 38rpx 40rpx;
 }
 .page-container .company .company_item{
-  height: 112rpx;
+  /* min-height: 80rpx; */
   margin: 0 24rpx;
-  padding: 0 24rpx 18rpx;
+  padding: 18rpx 24rpx 18rpx;
   border-bottom: 2rpx solid #cfcfcf;
   display: flex;
-  align-items: flex-end;
+  justify-content: space-between;
   font-size: 25rpx;
   font-family: 'Regular';
+}
+.page-container .company .company_item_title{
+  padding: 30rpx 24rpx 0;
+  margin: 0 24rpx;
+  font-size: 28rpx;
+  font-family: 'Medium';
 }
 .page-container .company .company_item .company_item_img{
   width: 16rpx;
@@ -137,7 +148,7 @@
   color: #4781d8;
 }
 .page-container .company .company_item .company_item_inp{
-  flex: 1;
+  width: 580rpx;
 }
 .page-container .company .company_item .placeholder{
   color: #b6b6b6;
@@ -147,7 +158,7 @@
 }
 .page-container .company .company_items{
   height: 176rpx;
-  margin: 82rpx 34rpx 0;
+  margin: 30rpx 48rpx 0;
   display: flex;
 }
 .page-container .company .company_items .company_items_left{
@@ -155,11 +166,11 @@
   width: 390rpx;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   font-family: 'Regular';
 }
 .page-container .company .company_items .company_items_left .company_items_left_top{
-  font-size: 30rpx;
+  font-size: 28rpx;
+  font-family: 'Medium';
 }
 .page-container .company .company_items .company_items_left .company_items_left_bottom{
   font-size: 25rpx;
@@ -222,6 +233,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: #fff;
 }
 .page-container .company .company_bottom .bottom_btn{
   height: 60rpx;

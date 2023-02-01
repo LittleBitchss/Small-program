@@ -1,7 +1,7 @@
 // pages/index/jobRecruitment/index.js
 var city = require('../../../utils/city');
 const app = getApp()
-var QQMapWX = require('../../../utils/js/qqmap-wx-jssdk.min');
+var QQMapWX = require('../../../utils/qqmap-wx-jssdk.min');
 const qqMapSdk = new QQMapWX({
   key: 'ABNBZ-GKPLS-FOAOJ-6HOP3-GAWZO-NNFDH'
 });
@@ -61,6 +61,21 @@ Page({
     id: 0,
     jobList: [],
     has_resume:0
+  },
+  stop(){
+    wx.showModal({
+      title: '尚未编辑简历',
+      content: '立即前往',
+      success (res) {
+        if (res.confirm) {
+          wx.navigateTo({
+            url: '/secondary/pages/editResume/index',
+          })
+        } else if (res.cancel) {
+          // console.log('用户点击取消')
+        }
+      }
+    })
   },
   tabToggle(e) {
     var index = e.currentTarget.dataset.index
@@ -625,7 +640,6 @@ Page({
     }
     app.post('/Job/recommendPosition', obj).then((res) => {
       if (res.data.status == 1) {
-        console.log(res);
         if (res.data.data.list.length == 0) {
           wx.hideLoading()
           wx.showToast({

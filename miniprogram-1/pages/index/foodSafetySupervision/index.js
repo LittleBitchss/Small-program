@@ -139,7 +139,7 @@ Page({
       id: options.id
     })
     wx.setNavigationBarTitle({
-      title: options.id == 1 ? '食安监管登录' : '厨师协会登录',
+      title: options.id == 1 ? '监管后台登录' : '协会后台登录',
     })
   },
 

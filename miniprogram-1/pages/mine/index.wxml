@@ -1,7 +1,7 @@
 <!--pages/mine/index.wxml-->
 <view class="mine">
   <view class="top">
-    <navigator class="userInfo" url="/secondary/pages/mine_setName/index?avatar={{avatar}}&nickName={{nickName}}">
+    <navigator class="userInfo" url="/secondary/pages/mine_setName/index">
       <image class="userInfo_avatar" src="{{avatar}}"></image>
       <text class="nickName">{{nickName?nickName:"未设置"}}</text>
     </navigator>

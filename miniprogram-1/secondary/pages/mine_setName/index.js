@@ -1,18 +1,14 @@
 // secondary/pages/mine_setName/index.js
 const app = getApp()
+const defaultAvatarUrl = 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0'
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    show:false,
-    values:'',
-    value:'',
-    headPicture:'',
-    sourceType: [
-      'camera', 'album'
-    ],
+    nickName:'',
+    avatarUrl: defaultAvatarUrl,
   },
 
   /**
@@ -22,96 +18,35 @@ Page({
     wx.setNavigationBarTitle({
       title: '设置头像和昵称',
     })
-    if(options.nickName){
+    var storage = wx.getStorageSync('userInfo')
+    if(storage.nickName){
       this.setData({
-        values:options.nickName,
-        value:options.nickName,
-        headPicture:options.avatar
+        nickName:storage.nickName,
+        avatarUrl:storage.avatarUrl
       })
     }
   },
-  setName(){
-    this.setData({
-      show:true,
-      values:this.data.value
-    })
-  },
   inputs(e){
     this.setData({
-      value:e.detail.value
-    })
-  },
-  complete(){
-    this.setData({
-      values:this.data.value,
-      show:false
+      nickName:e.detail.value
     })
   },
   saves(){
-    app.post('/comm/setUserInfo', {
-      token: wx.getStorageSync('userInfo').token,
-      name:this.data.values,
-      pic_path:this.data.headPicture
-    }).then(res => {
-      if(res.data.status == 1){
-        wx.showToast({
-          title: res.data.msg,
-        })
-      }
-    })
     wx.navigateBack({
       delta: 1
     })
+    var storage = wx.getStorageSync('userInfo')
+    storage.nickName = this.data.nickName
+    storage.avatarUrl = this.data.avatarUrl
+    wx.setStorageSync('userInfo', storage)
     var pages = getCurrentPages();
     var beforePage = pages[pages.length - 2];
     beforePage.getUserInfo()
   },
-  // 上传图片
-  upload() {
-    const that = this
-    //调用微信上传照片的方法
-    wx.showActionSheet({
-      itemList: ['拍照', '相册'],
-      itemColor: "#f7982a",
-      //成功时回调
-      success(res) {
-        if (!res.cancel) {
-          //调用相册或者照相的方法，传参INDEX 
-          that.chooseImage(res.tapIndex)
-        }
-      },
-      //失败时回调
-      fail(res) {
-        console.log('调用失败');
-      }
-    })
-  },
-  //打开相册或者照相的方法
-  chooseImage(tapIndex) {
-    const that = this
-    //调用微信方法 打开相册或者照相的功能
-    wx.chooseMedia({
-      count: 1,
-      sizeType: ['compressed'],
-      //根据下标选择data数据，以此判断是拍照还是相册
-      sourceType: [that.data.sourceType[tapIndex]],
-      success(res) {
-        try {
-          app.upload(res.tempFiles[0].tempFilePath, "userProfilePicture" + wx.getStorageSync('userInfo').user_id).then(res => {
-            if (res.status == 1) {
-              that.setData({
-                headPicture: res.data.fullurl
-              })
-            }
-          })
-        } catch {
-          wx.showToast({
-            title: '网络不稳定~',
-            icon: 'error',
-            duration: 1000 //持续的时间
-          })
-        }
-      }
+  onChooseAvatar(e) {
+    const { avatarUrl } = e.detail 
+    this.setData({
+      avatarUrl,
     })
   },
   /**

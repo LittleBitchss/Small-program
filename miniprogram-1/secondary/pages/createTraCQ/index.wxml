@@ -86,11 +86,21 @@
     </view>
   </view>
   <view class="company" wx:if="{{maskType==2}}">
-    <view class="company_title">公司全称</view>
+    <view class="company_title">我的公司</view>
+    <view class="company_item_title">公司全称</view>
     <view class="company_item">
       <input class="company_item_inp" type="text" placeholder="请填写您所属公司的营业执照上的公司全称" placeholder-class="placeholder" value="{{companyName}}" bindinput="inputs" data-item="3" maxlength="30" />
       <text><text class="company_item_txt {{companyNameNum?'NotEmpty':''}}">{{companyNameNum}}</text>/30</text>
     </view>
+    <view class="company_item_title">公司简介</view>
+    <view class="company_item">
+      <view style="position: relative;width: 550rpx;">
+        <textarea  style="position: absolute;top: 0;left: 0;line-height: 30rpx;width: 100%;height: 100%;" placeholder="请填写您所属公司的简介" placeholder-class="placeholder" value="{{companyIntroduction}}" bindinput="inputs" data-item="6" maxlength="300" ></textarea>
+        <text style="word-break:break-all;display: block;line-height: 30rpx; height: 100%;visibility: hidden;">{{companyIntroduction}}</text>
+      </view>
+      <text><text class="company_item_txt {{companyIntroductionNum?'NotEmpty':''}}">{{companyIntroductionNum}}</text>/300</text>
+    </view>
+    <view class="company_item_title">公司规模</view>
     <picker bindchange="bindPickerChanges" value="{{companySizeIndex}}" range="{{companySizeArray}}">
       <view class="picker">
         <view class="company_item">
@@ -99,10 +109,6 @@
         </view>
       </view>
     </picker>
-    <view class="company_item">
-      <input class="company_item_inp" type="text" placeholder="请填写您所属公司的营业执照编号" placeholder-class="placeholder {{licensePlaceholderClass}}" value="{{license}}" bindinput="inputs" bindblur="blur" data-item="4" maxlength="30" />
-      <text><text class="company_item_txt {{licenseNum?'NotEmpty':''}}">{{licenseNum}}</text>/30</text>
-    </view>
     <view class="company_items">
       <view class="company_items_left">
         <view class="company_items_left_top">营业执照</view>
@@ -115,6 +121,15 @@
         <view class="company_items_right4"></view>
         <image class="company_items_img" src="{{licensePhoto}}"></image>
       </view>
+    </view>
+    <view class="company_item">
+      <input class="company_item_inp" type="text" placeholder="请填写您所属公司的营业执照编号" placeholder-class="placeholder {{licensePlaceholderClass}}" value="{{license}}" bindinput="inputs" bindblur="blur" data-item="4" maxlength="30" />
+      <text><text class="company_item_txt {{licenseNum?'NotEmpty':''}}">{{licenseNum}}</text>/30</text>
+    </view>
+    <view class="company_item_title">公司照片</view>
+    <view class="company_jpgs">
+      <image class="company_jpg" wx:for="{{company_jpgx}}" src="{{item}}"></image>
+      <view class="company_jpg_add"></view>
     </view>
     <view class="company_bottom">
       <button class="bottom_btn {{actives2}}" size="mini" bindtap="complete" data-item="2">完成</button>
