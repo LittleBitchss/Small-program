@@ -62,6 +62,7 @@ Page({
       rpr_id:options.rpr_id
     }).then((res)=>{
       var rex = res
+      console.log(rex);
       if(res.data.status==1){
         setTimeout(()=>{
           qqMapSdk.reverseGeocoder({
@@ -120,6 +121,7 @@ Page({
           }
           var dutyBenefit = caterings.concat(dutys).concat(welfares).concat(customs)
           res.data.data.dutyBenefit = dutyBenefit
+          res.data.data.pic_path = res.data.data.pic_path?res.data.data.pic_path.split(','):[]
         })
         setTimeout(()=>{
           this.setData({

@@ -44,6 +44,19 @@
           <view class="industry">{{info.companySize}}</view>
         </view>
       </view>
+      <view class="introduction">
+        <view class="introduction_title">公司简介</view>
+        <text class="introduction_text">{{info.profile}}</text>
+      </view>
+      <view class="companyPicture" wx:if="{{info.pic_path.length!=0}}">
+        <view class="companyPicture_title">公司照片</view>
+        <view class="companyPicture_imgs">
+          <view class="companyPicture_img_itme">
+            <image class="companyPicture_img" wx:for="{{info.pic_path}}" wx:key="index" src="{{item}}"></image>
+          </view>
+        </view>
+        
+      </view>
       <view class="company_map" bindtap="goMap">
         <map class="map" name="" latitude="{{info.rpr_latitude}}" longitude="{{info.rpr_longitude}}">
           <image class="cover-image" src="{{domains}}mark.png"></image>

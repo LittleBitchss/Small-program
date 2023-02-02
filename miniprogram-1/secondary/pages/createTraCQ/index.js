@@ -36,7 +36,7 @@ Page({
     companyNames: '',
     companyNameNum: 0,
     companyNameNums: 0,
-    companyIntroduction:'',
+    companyIntroduction: '',
     companyIntroductions: '',
     companyIntroductionNum: 0,
     companyIntroductionNums: 0,
@@ -57,8 +57,8 @@ Page({
     dutuies: '',
     maskType: 0,
     card: 0,
-    company_jpgx:[],
-    company_jpgxs:[],
+    company_jpgx: [],
+    company_jpgxs: [],
   },
   openpage(e) {
     var item = e.currentTarget.dataset.item
@@ -89,14 +89,15 @@ Page({
         this.setData({
           companyName: '',
           companyNameNum: 0,
-          companyIntroduction:'',
+          companyIntroduction: '',
           companyIntroductionNum: 0,
-          companySize:'请选择公司规模',
+          companySize: '请选择公司规模',
           companyNum: 0,
           companySizeIndex: 0,
           license: '',
           licenseNum: 0,
           licensePhoto: '',
+          company_jpgxs: [],
           actives2: ''
         })
       } else {
@@ -109,11 +110,12 @@ Page({
           companyNum: this.data.companyNums,
           license: this.data.licenses,
           licenseNum: this.data.licenseNums,
-          licensePhoto: this.data.licensePhotos
+          licensePhoto: this.data.licensePhotos,
+          company_jpgx: this.data.company_jpgxs
         })
         this.setData({
-          companySize:this.data.companySizeArrays.find(i=>i.rcn_id==this.data.companyNum).rcn_name,
-          companySizeIndex: this.data.companySizeArrays.findIndex(i=>i.rcn_id==this.data.companyNum),
+          companySize: this.data.companySizeArrays.find(i => i.rcn_id == this.data.companyNum).rcn_name,
+          companySizeIndex: this.data.companySizeArrays.findIndex(i => i.rcn_id == this.data.companyNum),
         })
       }
     }
@@ -211,6 +213,12 @@ Page({
                     actives2: ''
                   })
                 }
+              } else if (item == 5) {
+                var company_jpgx = JSON.parse(JSON.stringify(that.data.company_jpgx))
+                company_jpgx.push(res.data.fullurl)
+                that.setData({
+                  company_jpgx: company_jpgx
+                })
               }
             }
           })
@@ -222,6 +230,14 @@ Page({
           })
         }
       }
+    })
+  },
+  imgDel(e) {
+    var index = e.currentTarget.dataset.index
+    var company_jpgx = JSON.parse(JSON.stringify(this.data.company_jpgx))
+    company_jpgx.splice(index,1)
+    this.setData({
+      company_jpgx: company_jpgx
     })
   },
   inputs(e) {
@@ -259,7 +275,7 @@ Page({
         companyName: val,
         companyNameNum: cur
       })
-      if (this.data.companyName != '' && this.data. companyIntroduction != '' && this.data.companySize != '请选择公司规模' && this.data.license != '' && this.data.licensePhoto != '') {
+      if (this.data.companyName != '' && this.data.companyIntroduction != '' && this.data.companySize != '请选择公司规模' && this.data.license != '' && this.data.licensePhoto != '') {
         this.setData({
           actives2: 'actives'
         })
@@ -273,7 +289,7 @@ Page({
         license: val,
         licenseNum: cur
       })
-      if (this.data.companyName != '' && this.data. companyIntroduction != '' && this.data.license != '' && this.data.licensePhoto != '') {
+      if (this.data.companyName != '' && this.data.companyIntroduction != '' && this.data.license != '' && this.data.licensePhoto != '') {
         this.setData({
           actives2: 'actives'
         })
@@ -309,7 +325,7 @@ Page({
           actives2: ''
         })
       }
-    } 
+    }
   },
   blur(e) {
     var item = e.currentTarget.dataset.item
@@ -345,7 +361,7 @@ Page({
           licenseNum: 0
         })
       }
-      if (this.data.companyName != '' && this.data. companyIntroduction != '' && this.data.companySize != '请选择公司规模' && this.data.license != '' && this.data.licensePhoto != '') {
+      if (this.data.companyName != '' && this.data.companyIntroduction != '' && this.data.companySize != '请选择公司规模' && this.data.license != '' && this.data.licensePhoto != '') {
         this.setData({
           actives2: 'actives'
         })
@@ -362,7 +378,7 @@ Page({
       companyNum: this.data.companySizeArrays[e.detail.value].rcn_id,
       companySizeIndex: e.detail.value
     })
-    if (this.data.companyName != '' && this.data. companyIntroduction != '' && this.data.companySize != '请选择公司规模' && this.data.license != '' && this.data.licensePhoto != '') {
+    if (this.data.companyName != '' && this.data.companyIntroduction != '' && this.data.companySize != '请选择公司规模' && this.data.license != '' && this.data.licensePhoto != '') {
       this.setData({
         actives2: 'actives'
       })
@@ -394,7 +410,7 @@ Page({
         }
       }
     } else if (item == 2) {
-      if (this.data.companyName != '' && this.data. companyIntroduction != '' && this.data.companySize != '请选择公司规模' && this.data.license != '' && this.data.licensePhoto != '') {
+      if (this.data.companyName != '' && this.data.companyIntroduction != '' && this.data.companySize != '请选择公司规模' && this.data.license != '' && this.data.licensePhoto != '') {
         this.setData({
           companyNames: this.data.companyName,
           companyNameNums: this.data.companyNameNum,
@@ -404,6 +420,7 @@ Page({
           licenses: this.data.license,
           licenseNums: this.data.licenseNum,
           licensePhotos: this.data.licensePhoto,
+          company_jpgxs: this.data.company_jpgx,
           show: false
         })
         if (this.data.avatar != '' && this.data.sex != '请选择性别' && this.data.names != '请进行身份验证' && this.data.companyNames != '请填写您当前就职的公司' && this.data.dutuies != '') {
@@ -431,7 +448,11 @@ Page({
           number: this.data.companyNums,
           business_license: this.data.licenses,
           business_license_path: this.data.licensePhotos,
+          profile:this.data.companyIntroductions,
           post: this.data.dutuies,
+        }
+        if(this.data.company_jpgxs.lenght!=0){
+          obj.pic_path=this.data.company_jpgxs.join(',')
         }
         var storage = wx.getStorageSync('userInfo')
         app.post('/Recruit/setRecruitCard', obj).then((res) => {
@@ -549,7 +570,11 @@ Page({
           licenses: res.data.data.business_license,
           licenseNums: res.data.data.business_license.length,
           licensePhotos: res.data.data.business_license_path,
+          companyIntroductions: res.data.data.profile,
+          companyIntroductionNums: res.data.data.profile.length,
+          company_jpgxs: res.data.data.pic_path?res.data.data.pic_path.split(','):[],
           dutuies: res.data.data.post,
+          //修改
           actives3: 'actives',
         })
       }

@@ -24,6 +24,11 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
+    setTimeout(()=>{
+      wx.showLoading({
+        title: '加载中',
+      })
+    },200)
     wx.setNavigationBarTitle({
       title: '简历信息',
     })
@@ -32,7 +37,7 @@ Page({
     var month = date.getMonth() + 1
     this.setData({
       r_id: options.r_id,
-      duty: options.duty.indexOf(',')==-1?options.duty.split(''):options.duty.split(','),
+      duty: options.duty.split(','),
       year: year,
       month: month,
       position:  wx.getStorageSync('position'),
@@ -40,7 +45,9 @@ Page({
     })
     app.post('/Recruit/showResume', {
       token: wx.getStorageSync('userInfo').token,
-      r_id: this.data.r_id
+      r_id: this.data.r_id,
+      duty: this.data.duty,
+      rc_id: wx.getStorageSync('userInfo').rc_id
     }).then(res => {
       if (res.data.status == 1) {
         res.data.data.r_age = this.data.month > res.data.data.r_born.slice(5, 7) ? this.data.year - res.data.data.r_born.slice(0, 4) + 1 : this.data.year - res.data.data.r_born.slice(0, 4)
@@ -57,6 +64,9 @@ Page({
         this.setData({
           info: res.data.data
         })
+        setTimeout(()=>{
+          wx.hideLoading()
+        },500)
       }
     })
   },

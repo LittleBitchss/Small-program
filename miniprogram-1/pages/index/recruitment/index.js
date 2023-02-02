@@ -809,7 +809,7 @@ Page({
    */
   onLoad(options) {
     wx.setNavigationBarTitle({
-      title: '招聘-我的',
+      title: '招聘-招聘广场',
     })
     var date = new Date()
     var year = date.getFullYear()

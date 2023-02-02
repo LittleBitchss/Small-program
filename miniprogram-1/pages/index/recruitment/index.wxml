@@ -31,7 +31,7 @@
             <view class="list_item2_jobs">应聘岗位：{{item.job_expectation}}</view>
             <view class="list_item2_state">求职状态：{{item.r_job_status==1?'离职-随时到岗':item.r_job_status==2?'在职-月内到岗':item.r_job_status==3?'在职-考虑机会':'在职-暂不考虑'}}</view>
           </view>
-          <navigator class="list_item3" url="/secondary/pages/talentInfo/index?r_id={{item.r_id}}&duty={{dutyx}}">
+          <navigator class="list_item3" url="/secondary/pages/talentInfo/index?r_id={{item.r_id}}&duty={{dutys?dutys:dutyx}}">
             点击查看
           </navigator>
         </view>

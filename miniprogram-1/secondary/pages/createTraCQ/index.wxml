@@ -128,8 +128,13 @@
     </view>
     <view class="company_item_title">公司照片</view>
     <view class="company_jpgs">
-      <image class="company_jpg" wx:for="{{company_jpgx}}" src="{{item}}"></image>
-      <view class="company_jpg_add"></view>
+      <image class="company_jpg" wx:for="{{company_jpgx}}" wx:key="index" src="{{item}}">
+        <image class="imgDel" src="../../../icon/chef_remove.png" bindtap="imgDel" data-index="{{index}}"></image>
+      </image>
+      <view class="company_jpg_add" bindtap="upload" data-item="5">
+        <view class="cross"></view>
+        <view class="vertical"></view>
+      </view>
     </view>
     <view class="company_bottom">
       <button class="bottom_btn {{actives2}}" size="mini" bindtap="complete" data-item="2">完成</button>

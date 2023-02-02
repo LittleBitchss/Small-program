@@ -16,16 +16,18 @@ Component({
     domain: app.domain + "/img/chef/",
     value1: "",
     value2: "",
-    value3: "",
-    value4: "",
+    // value3: "",
+    // value4: "",
     value5: "",
 
     fontColor1: "",
     fontColor2: "",
+    fontColor3: "",
     show1: false,
     val1: "请选择乡宴类型",
+    val2: "请选择开始日期",
+    val3: "请选择结束日期",
     list1: [],
-    data: "请选择举办时间",
   },
 
   methods: {
@@ -41,19 +43,20 @@ Component({
         this.setData({
           value2: valur
         })
-      } else if (index == 3) {
-        this.setData({
-          value3: valur
-        })
       } else if (index == 4) {
         this.setData({
           value4: valur
         })
-      } else if (index == 5) {
-        this.setData({
-          value5: valur
-        })
       }
+      // else if (index == 3) {
+      //   this.setData({
+      //     value3: valur
+      //   })
+      // }  else if (index == 5) {
+      // this.setData({
+      //   value5: valur
+      // })
+      // }
     },
     blur(e) {
       var index = e.currentTarget.dataset.index
@@ -92,23 +95,6 @@ Component({
             value2: ""
           })
         }
-      } else if (index == 3) {
-        if (this.data.value3.trim() != "") {
-          if (this.data.value3.indexOf(" ") != -1 || Number(this.data.value3).toString() == "NaN") {
-            wx.showToast({
-              title: '请输入合法数字',
-              icon: 'error',
-              duration: 1000 //持续的时间
-            })
-            this.setData({
-              value3: ""
-            })
-          }
-        } else {
-          this.setData({
-            value3: ""
-          })
-        }
       } else if (index == 4) {
         if (this.data.value4.trim() != "") {
           if (this.data.value4.indexOf(" ") != -1 || Number(this.data.value4).toString() == "NaN") {
@@ -126,28 +112,46 @@ Component({
             value4: ""
           })
         }
-      } else if (index == 5) {
-        if (this.data.value5.trim() != "") {
-          if (this.data.value5.indexOf(" ") != -1 || Number(this.data.value5).toString() == "NaN") {
-            wx.showToast({
-              title: '请输入数字类型',
-              icon: 'error',
-              duration: 1000 //持续的时间
-            })
-            this.setData({
-              value5: ""
-            })
-          }
-        } else {
-          this.setData({
-            value5: ""
-          })
-        }
-      } 
+      }
+      // else if (index == 3) {
+      //   if (this.data.value3.trim() != "") {
+      //     if (this.data.value3.indexOf(" ") != -1 || Number(this.data.value3).toString() == "NaN") {
+      //       wx.showToast({
+      //         title: '请输入合法数字',
+      //         icon: 'error',
+      //         duration: 1000 //持续的时间
+      //       })
+      //       this.setData({
+      //         value3: ""
+      //       })
+      //     }
+      //   } else {
+      //     this.setData({
+      //       value3: ""
+      //     })
+      //   }
+      // } 
+      // }else if (index == 5) {
+      // if (this.data.value5.trim() != "") {
+      //   if (this.data.value5.indexOf(" ") != -1 || Number(this.data.value5).toString() == "NaN") {
+      //     wx.showToast({
+      //       title: '请输入数字类型',
+      //       icon: 'error',
+      //       duration: 1000 //持续的时间
+      //     })
+      //     this.setData({
+      //       value5: ""
+      //     })
+      //   }
+      // } else {
+      //   this.setData({
+      //     value5: ""
+      //   })
+      // }
     },
     open() {
       this.setData({
-        show1:!this.data.show1,
+        show1: !this.data.show1,
       })
     },
     close(e) {
@@ -180,32 +184,68 @@ Component({
       return a
     },
     bindDateChange(e) {
-      var aa = this.getDate(e.detail.value)
-      if(aa>2){
-        this.setData({
-          data: e.detail.value,
-          fontColor2: "fontColor"
-        })
-      }else{
-        wx.showToast({
-          title: '需提前三天报备',
-          icon: 'error',
-          duration: 1000 //持续的时间
-        })
+      var item = e.currentTarget.dataset.item
+      if (item == 1) {
+        var aa = this.getDate(e.detail.value)
+        if (aa > 2) {
+          this.setData({
+            val2: e.detail.value,
+            fontColor2: "fontColor"
+          })
+          if (this.data.val3 != '请选择结束日期') {
+            var bb = this.getDate(this.data.val3)
+            if (aa > bb) {
+              this.setData({
+                val3: "请选择结束日期",
+                fontColor3: ""
+              })
+            }
+          }
+        } else {
+          wx.showToast({
+            title: '需提前三天报备',
+            icon: 'error',
+            duration: 1000 //持续的时间
+          })
+        }
+      } else if (item == 2) {
+        var aa = this.getDate(e.detail.value)
+        if (this.data.val2 != '请选择开始日期') {
+          var bb = this.getDate(this.data.val2)
+          if (aa < bb) {
+            wx.showToast({
+              title: '请选择正确日期',
+              icon: 'error',
+              duration: 1000 //持续的时间
+            })
+          } else {
+            this.setData({
+              val3: e.detail.value,
+              fontColor3: "fontColor"
+            })
+          }
+        } else {
+          wx.showToast({
+            title: '先选择开始日期',
+            icon: 'error',
+            duration: 1000 //持续的时间
+          })
+        }
       }
     },
     nextStep1() {
       var data = {
-        m_id:0,
+        m_id: 0,
         m_contacts: this.data.value1,
         m_phone: this.data.value2,
         m_type: this.data.list1.indexOf(this.data.val1) + 1,
-        m_start_date: this.data.data,
-        m_banquet_number: this.data.value3,
+        m_start_date: this.data.val2,
+        m_end_date: this.data.val3,
+        // m_banquet_number: this.data.value3,
         m_tables: this.data.value4,
-        m_holding_days: this.data.value5,
+        // m_holding_days: this.data.value5,
       }
-      if (data.m_name != "" && data.m_phone != "" && data.m_type != "请选择乡宴类型" && data.m_start_date != "请选择举办时间" && data.m_banquet_number != "" && data.m_tables != "" && data.m_holding_days != "") {
+      if (data.m_name != "" && data.m_phone != "" && data.m_type != "请选择乡宴类型" && data.m_start_date != "请选择举办时间" && data.m_end_date != "请选择结束时间" && data.m_tables != "") {
         wx.setStorageSync('entryInfo', data)
         this.triggerEvent("nextStep1", {
           go: 2
@@ -238,17 +278,19 @@ Component({
       })
       if (entryInfo) {
         this.setData({
-          value1:  entryInfo.m_contacts,
+          value1: entryInfo.m_contacts,
           value2: entryInfo.m_phone,
           fontColor1: "fontColor",
           fontColor2: "fontColor",
-          value3: entryInfo.m_banquet_number,
-          val1:this.data.list1[entryInfo.m_type],
-          data:entryInfo.m_start_date,
+          fontColor3: "fontColor",
+          // value3: entryInfo.m_banquet_number,
+          val1: this.data.list1[entryInfo.m_type],
+          val2: entryInfo.m_start_date,
+          val3: entryInfo.m_end_date,
           value4: entryInfo.m_tables,
-          value5: entryInfo.m_holding_days
+          // value5: entryInfo.m_holding_days
         })
-      }else{
+      } else {
         wx.showModal({
           title: '',
           content: '创建订单需支付100元定金，完成订单后全额返还',

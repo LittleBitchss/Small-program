@@ -123,8 +123,12 @@ Page({
       },
       success: (res) => {
         var userInfo = wx.getStorageSync('userInfo')
+        userInfo.province = res.result.ad_info.province
+        userInfo.provincecode = res.result.ad_info.city_code.slice(3,5)+'0000'
         userInfo.citys = res.result.ad_info.city
         userInfo.citycode = res.result.ad_info.city_code.slice(3, 9)
+        userInfo.district = res.result.ad_info.district
+        userInfo.adcode = res.result.ad_info.adcode
         wx.setStorageSync('userInfo', userInfo)
         // var lat1 = that.data.currentLatitude,
         //   lng1 = that.data.currentLongitude,

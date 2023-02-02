@@ -46,12 +46,12 @@
       </view>
     </view>
     <view class="item">
-      <text space="emsp" class="title">举办日期</text>
+      <text space="emsp" class="title">开始日期</text>
       <view class="section">
-        <picker mode="date" value="{{date}}" start="2022-07-04" end="2030-12-31" bindchange="bindDateChange">
+        <picker mode="date" value="{{val2}}" start="2022-07-04" end="2030-12-31" bindchange="bindDateChange" data-item="1">
           <view class="picker">
             <view class="inp typ {{fontColor2}}">
-              <text class="txt">{{data}}</text>
+              <text class="txt">{{val2}}</text>
               <image class="img" src="../../icon/mine_right_arrow.png"></image>
             </view>
           </view>
@@ -59,20 +59,33 @@
       </view>
     </view>
     <view class="item">
+      <text space="emsp" class="title">结束日期</text>
+      <view class="section">
+        <picker mode="date" value="{{val3}}" start="2022-07-04" end="2030-12-31" bindchange="bindDateChange" data-item="2">
+          <view class="picker">
+            <view class="inp typ {{fontColor3}}">
+              <text class="txt">{{val3}}</text>
+              <image class="img" src="../../icon/mine_right_arrow.png"></image>
+            </view>
+          </view>
+        </picker>
+      </view>
+    </view>
+    <!-- <view class="item">
       <text space="emsp" class="title">就餐人数</text>
       <input class="inp " type="number" maxlength="10" placeholder="请输入就餐人数" placeholder-style="font-size:22rpx; color:#b6b6b6;" bindinput="inputs" bindblur="blur" data-index="3" value="{{value3}}" />
       人
-    </view>
+    </view> -->
     <view class="item">
       <text space="emsp" class="title">拟办桌数</text>
       <input class="inp" type="number" maxlength="10" placeholder="请输入拟办桌数" placeholder-style="font-size:22rpx; color:#b6b6b6;" bindinput="inputs" bindblur="blur" data-index="4" value="{{value4}}" />
       桌
     </view>
-    <view class="item">
+    <!-- <view class="item">
       <text space="emsp" class="title">拟办天数</text>
       <input class="inp" type="number" maxlength="2" placeholder="请输入拟办天数" placeholder-style="font-size:22rpx; color:#b6b6b6;" bindinput="inputs" bindblur="blur" data-index="5" value="{{value5}}" />
       天
-    </view>
+    </view> -->
   </view>
   <view class="bottom">
     <button class="btn" size="mini" bindtap="nextStep1">下一步</button>

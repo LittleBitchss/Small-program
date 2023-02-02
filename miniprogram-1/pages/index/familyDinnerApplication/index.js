@@ -73,7 +73,7 @@ Page({
    */
   onLoad(options) {
     wx.setNavigationBarTitle({
-      title: '家宴报备',
+      title: '家宴预订',
     })
   },
 

@@ -542,21 +542,22 @@ Component({
         street: e.detail.code[3] || 0,
         village: e.detail.code[4] || 0
       }
-      try {
-        app.post('/comm/getAuditorium', a).then(res => {
-          if (res.data.status == 1) {
-            this.setData({
-              lists: res.data.data.rows,
-            })
-          }
-        })
-      } catch {
-        wx.showToast({
-          title: '网络不稳定~',
-          icon: 'error',
-          duration: 1000 //持续的时间
-        })
-      }
+      this.getAuditorium(a)
+    },
+    getAuditorium(a){
+      app.post('/comm/getAuditorium', a).then(res => {
+        if (res.data.status == 1) {
+          this.setData({
+            lists: res.data.data.rows,
+          })
+        }else{
+          wx.showToast({
+            title: '网络不稳定~',
+            icon: 'error',
+            duration: 1000 //持续的时间
+          })
+        }
+      })
     },
     search() {
       if(this.data.regionCode.length != 0){
@@ -694,9 +695,10 @@ Component({
     },
     cmfclick() {
       var entryInfo = wx.getStorageSync('entryInfo')
-      var aa = utils.getTimeLastWeeks(entryInfo.m_start_date, entryInfo.m_holding_days - 1)
+      // var aa = utils.getTimeLastWeeks(entryInfo.m_start_date, entryInfo.m_holding_days - 1)
+      this.data.selectDays = this.data.selectDays.sort()
       console.log(this.data.selectDays);
-      if (this.data.selectDays[0] == entryInfo.m_start_date && this.data.selectDays[this.data.selectDays.length - 1] == aa && this.data.selectDays.length == entryInfo.m_holding_days) {
+      if (this.data.selectDays[0] == entryInfo.m_start_date && this.data.selectDays[this.data.selectDays.length - 1] == entryInfo.m_end_date) {
         var hallDetails = JSON.parse(JSON.stringify(this.data.hallDetails))
         hallDetails.office[this.data.ao_id].flag = true
         hallDetails.office[this.data.ao_id].selectDays = this.data.selectDays
@@ -741,10 +743,10 @@ Component({
     attached() {
       var entryInfo = wx.getStorageSync('entryInfo')
       var selAddr = wx.getStorageSync('selAddr')
-
-      if(selAddr && selAddr.hallDetails.office[0].selectDays[0]!=entryInfo.m_start_date){
-        wx.removeStorageSync('selAddr')
-      }
+      // if(selAddr && selAddr.hallDetails.office[0].selectDays[0]!=entryInfo.m_start_date){
+      //   wx.removeStorageSync('selAddr')
+      // }
+      // 修改
       if (selAddr && selAddr.m_ids == 1) {
         this.setData({
           fontColor1: "fontColor",
@@ -826,6 +828,19 @@ Component({
           duration: 1000 //持续的时间
         })
       }
+      var userInfo = wx.getStorageSync('userInfo')
+      this.setData({
+        region: [userInfo.province,userInfo.citys,userInfo.district],
+        regionCode: [userInfo.provincecode,userInfo.citycode,userInfo.adcode],
+      })
+      var a = {
+        province: this.data.regionCode[0].slice(0, 2),
+        city: this.data.regionCode[1].slice(0, 4),
+        area: this.data.regionCode[2],
+        street: 0,
+        village: 0
+      }
+      this.getAuditorium(a)
     }
   }
 })
