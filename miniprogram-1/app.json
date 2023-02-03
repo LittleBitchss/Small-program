@@ -44,7 +44,8 @@
         "pages/publishPage/index",
         "pages/JobPostings/index",
         "pages/talentInfo/index",
-        "pages/mine_setName/index"
+        "pages/mine_setName/index",
+        "pages/auditorium/index"
       ]
     },
     {
@@ -114,7 +115,10 @@
       "desc": "你的位置信息将用于小程序位置定位"
     }
   },
-  "style": "v2",
+  "usingComponents": {
+    "van-button": "@vant/weapp/button/index",
+    "van-icon": "@vant/weapp/icon/index"
+  },
   "sitemapLocation": "sitemap.json",
   "lazyCodeLoading": "requiredComponents"
 }

@@ -24,7 +24,7 @@ Component({
     hall: app.domain + "/img/report/hall.png",
     fontColor11: "",
     fontColor22: "fontColor",
-    show: 1,
+    // show: 1,
     province: [],
     provinceValue: "请选择所属省",
     province_code: "",
@@ -98,9 +98,9 @@ Component({
 
     checked: "",
     imgArr: [1, 2, 3],
-    isShow: false,
-    isShows: 0,
-    anima: ""
+    // isShow: false,
+    // isShows: 0,
+    // anima: ""
   },
 
   /**
@@ -542,11 +542,12 @@ Component({
         street: e.detail.code[3] || 0,
         village: e.detail.code[4] || 0
       }
-      this.getAuditorium(a)
+      this.getAuditoriumList(a)
     },
-    getAuditorium(a){
-      app.post('/comm/getAuditorium', a).then(res => {
+    getAuditoriumList(a){
+      app.post('/comm/getAuditoriumList', a).then(res => {
         if (res.data.status == 1) {
+          console.log(res.data.data.rows);
           this.setData({
             lists: res.data.data.rows,
           })
@@ -570,7 +571,7 @@ Component({
           filter: this.data.value1
         }
         try {
-          app.post('/comm/getAuditorium', a).then(res => {
+          app.post('/comm/getAuditoriumList', a).then(res => {
             if (res.data.status == 1) {
               this.setData({
                 lists: res.data.data.rows,
@@ -593,46 +594,7 @@ Component({
         isShows: 1,
       })
     },
-    uncheck(e) {
-      var index = e.currentTarget.dataset.index
-      this.setData({
-        ao_id: index,
-        isOpen: 'true',
-        isShows: 2
-      })
-      try {
-        app.post('/auditorium/getAppointment', {
-          ao_id: this.data.hallDetails.office[index].ao_id
-        }).then(res => {
-          if (res.data.status == 1) {
-            var str = ''
-            res.data.data.forEach(i => {
-              str += i.date
-            })
-            this.setData({
-              lockday: str
-            })
-          }
-        })
-      } catch {
-        wx.showToast({
-          title: '网络不稳定~',
-          icon: 'error',
-          duration: 1000 //持续的时间
-        })
-      }
-      if (this.data.hallDetails.office[index].selectDays != undefined && this.data.hallDetails.office[index].selectDays.length != 0) {
-        this.setData({
-          selectDays: this.data.hallDetails.office[index].selectDays,
-          selected: this.data.hallDetails.office[index].selectDays
-        })
-      } else {
-        this.setData({
-          selectedDays: [],
-          selected: []
-        })
-      }
-    },
+    
     sure() {
       var a = this.data.hallDetails.office.filter(i => i.flag == true)
       var day = utils.formatDate(new Date())
@@ -687,7 +649,6 @@ Component({
       })
       return a
     },
-    block() {},
     getdate(e) {
       this.setData({
         selectDays: e.detail.selectDays
@@ -724,20 +685,6 @@ Component({
         })
       }
     },
-    cancel() {
-      this.setData({
-        anima: "up"
-      })
-      setTimeout(() => {
-        this.setData({
-          isShow: false
-        })
-        var selAddr = wx.getStorageSync('selAddr')
-        this.setData({
-          hallDetails: selAddr.hallDetails?selAddr.hallDetails:this.data.hallDetails
-        })
-      }, 600)
-    }
   },
   lifetimes: {
     attached() {
@@ -800,7 +747,7 @@ Component({
             hall: app.domain + "/img/report/hall-active.png",
             fontColor11: "fontColor",
             fontColor22: "",
-            show: 3,
+            show: 2,
             isFamily: 2,
             hallxss: hallxss,
             startDate: startDate,
@@ -840,7 +787,7 @@ Component({
         street: 0,
         village: 0
       }
-      this.getAuditorium(a)
+      this.getAuditoriumList(a)
     }
   }
 })

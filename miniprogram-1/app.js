@@ -1,6 +1,8 @@
 // app.js
 let utils = require('./utils/utils')
 let request = require('./request/request')
+// const myPackage = require('packageName')
+// const packageOther = require('packageName/other')
 App({
   domain: "https://qunyan.canancn.com/assets/applet",
   ...utils,

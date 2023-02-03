@@ -160,6 +160,7 @@
 }
 
 .bottom .item .nobd .btns_right .btn {
+  min-width: 124rpx;
   height: 40rpx;
   border-radius: 21rpx;
   font-size: 20rpx;

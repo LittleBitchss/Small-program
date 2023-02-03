@@ -1,0 +1,201 @@
+/* secondary/pages/auditorium/index.wxss */
+.auditorium{
+  height: 100vh;
+  box-sizing: border-box;
+  background-color: #fff;
+  overflow: auto;
+}
+
+.auditorium .details .cover{
+  height: 360rpx;
+  width: 700rpx;
+  margin: 0 auto 24rpx;
+  display: block;
+  border: 2rpx solid #b5b5b5;
+}
+.auditorium .details .title{
+  font-size: 35rpx;
+  font-family: 'Bold' !important;
+  width: 670rpx;
+  margin: 0 auto;
+}
+.auditorium .details .addr{
+  height: 32rpx;
+  display: flex;
+  align-items: center;
+  font-size: 22rpx;
+  font-family: 'Medium';
+  width: 670rpx;
+  margin: 0 auto;
+  margin-top: 30rpx;
+  line-height: 20rpx;
+}
+.auditorium .details .addr .addr_img{
+  height: 32rpx;
+  width: 28rpx;
+  margin-right: 10rpx;
+}
+.auditorium .details .tiem{
+  height: 32rpx;
+  display: flex;
+  align-items: center;
+  font-size: 22rpx;
+  font-family: 'Medium';
+  width: 670rpx;
+  margin: 0 auto;
+  margin-top: 30rpx;
+  line-height: 20rpx;
+}
+.auditorium .details .tiem .tiem_img{
+  height: 28rpx;
+  width: 28rpx;
+  margin-right: 10rpx;
+}
+.auditorium .details .hint{
+  width: 670rpx;
+  margin: 26rpx auto;
+  font-size: 28rpx;
+  font-family: 'Medium';
+}
+.auditorium .details .introduce{
+  width: 670rpx;
+  display: block;
+  margin: 26rpx auto;
+  font-size: 22rpx;
+  font-family: 'Medium';
+}
+.auditorium .details .hallSwiper {
+  height: 260rpx;
+  width: 670rpx;
+  margin: 0 auto;
+}
+
+.auditorium .details .hallSwiper .item-img{
+  width: 100%;
+  height: 100%;
+  margin: 0 20rpx;
+}
+.auditorium .details .assure{
+  height: 60rpx;
+  margin-top: 40rpx;
+  background-color: #f1f1f1;
+  border-bottom-left-radius: 10rpx;
+  border-bottom-right-radius: 10rpx; 
+}
+.auditorium .details .assure .assures{
+  width: 602rpx;
+  height: 100%;
+  margin: 0 auto;
+  display: flex;
+}
+.auditorium .details .assure .assures .txts{
+  font-size: 28rpx;
+  font-family: 'Medium';
+  line-height: 60rpx;
+}
+.auditorium .details .assure .assures .item{
+  margin-left: 18rpx;
+  display: flex;
+  align-items: center;
+}
+.auditorium .details .assure .assures .item .item_img{
+  width: 28rpx;
+  height: 28rpx;
+  margin-right: 12rpx;
+}
+.auditorium .details .assure .assures .item .item_txt{
+  font-size: 23rpx;
+  font-family: 'Medium';
+  color: #626262;
+}
+.auditorium .hallls{
+  background-color: #fff;
+  border-radius: 10rpx;
+  margin: 18rpx 0 0;
+  font-size: 26rpx;
+  font-family: 'Medium';
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.auditorium .hallls .hallls_i{
+  width: 630rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 7rpx 0;
+}
+.auditorium .hallls .hallls_i .hallls_i_right{
+  display: flex;
+  align-items: center;
+}
+.auditorium .hallls .hallls_i .hallls_i_right .i_img{
+  width: 14rpx;
+  height: 20rpx;
+  margin-left: 10rpx;
+}
+.auditorium .hallls .hallls_i .hallls_i_right .i_time .i_time_txt{
+  display: inline-block;
+  margin: 0 10rpx;
+}
+.auditorium .hallls .hallls_i .hallls_i_right .i_time .i_time_txts{
+  margin-right: 0;
+}
+.auditorium .hallls .btn {
+  width: 100%;
+  margin-top: 20rpx;
+}
+
+
+.page_cont{
+  height: 620rpx;
+}
+.btn{
+  height: 88rpx;
+  display: flex;
+  justify-content: space-between;
+  width: 670rpx;
+  margin: 0 auto;
+}
+.btn .btns{
+  height: 100%;
+  font-size: 34rpx;
+  font-family: 'Light';
+  color: #aaa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn .btnss{
+  color: #00ae31;
+}
+.wire{
+  border-top: 2rpx solid #f1f1f1;
+}
+.page_cont .item{
+  width: 670rpx;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+}
+.page_cont .item .items{
+  width: 126rpx;
+  height: 126rpx;
+  box-sizing: border-box;
+  border: 2rpx solid #aaa;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 4rpx 4rpx;
+  position: relative;
+}
+.page_cont .item .itemsx{
+  border: 2rpx solid #f54336;
+}
+.page_cont .item .itemss{
+  font-size: 20rpx;
+  font-family: 'Medium';
+  margin: 5rpx 0;
+}

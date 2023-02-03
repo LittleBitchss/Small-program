@@ -74,8 +74,8 @@
 }
 
 .editResume .item .title .add {
-  width: 28rpx;
-  height: 28rpx;
+  width: 30rpx;
+  height: 30rpx;
   border: 2rpx solid;
   border-radius: 50%;
   display: flex;
@@ -85,14 +85,14 @@
 }
 
 .editResume .item .title .add .cross {
-  width: 4rpx;
-  height: 16rpx;
+  width: 2rpx;
+  height: 14rpx;
   background-color: #000;
 }
 
 .editResume .item .title .add .vertical {
-  width: 16rpx;
-  height: 4rpx;
+  width: 14rpx;
+  height: 2rpx;
   background-color: #000;
   position: absolute;
 }

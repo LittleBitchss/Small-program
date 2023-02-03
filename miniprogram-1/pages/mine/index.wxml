@@ -29,6 +29,8 @@
         <text class="bottom_item_txt">{{item.text}}</text>
       </view>
       <image class="bottom_item_img" src="../../icon/mine_right_arrow.png"></image>
+
     </navigator>
+    <van-button type="primary">按钮</van-button>
   </view>
 </view>

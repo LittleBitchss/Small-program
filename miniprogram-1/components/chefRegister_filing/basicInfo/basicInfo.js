@@ -339,7 +339,6 @@ Component({
     },
     siteTesting: function (e) {
       var addressObj = this.data.addressObj
-      console.log(addressObj);
       if (!addressObj.province) {
         this.areaSelect.showDialog();
       } else {
@@ -601,7 +600,6 @@ Component({
         }).then(res => {
           if (res.data.status == 1) {
             var res = res.data.data
-            console.log(res);
             var chef_region = [res.local.provinces, res.local.city, res.local.area, res.local.street, res.local.village]
             var cuisineValue = ""
             var chef_cuisine = ""
