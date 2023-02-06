@@ -10,12 +10,16 @@ function formatMonthTitle(date) {
 }
 exports.formatMonthTitle = formatMonthTitle;
 function compareMonth(date1, date2) {
+  // console.log(date1,date2);
     if (!(date1 instanceof Date)) {
         date1 = new Date(date1);
     }
     if (!(date2 instanceof Date)) {
         date2 = new Date(date2);
     }
+    // console.log(1);
+    // console.log(date1);
+    // console.log(date2);
     var year1 = date1.getFullYear();
     var year2 = date2.getFullYear();
     var month1 = date1.getMonth();

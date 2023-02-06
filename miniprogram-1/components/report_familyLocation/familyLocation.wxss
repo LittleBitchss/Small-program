@@ -192,11 +192,6 @@
 .familyLocation .cont .hall{
   height: 100%;
   background-color: #fff;
-  border-bottom-left-radius: 10rpx;
-  border-bottom-right-radius: 10rpx;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
 }
 .familyLocation .cont .hall .typ {
   width: 340rpx;

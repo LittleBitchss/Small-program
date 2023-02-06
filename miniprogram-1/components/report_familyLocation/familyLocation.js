@@ -654,37 +654,7 @@ Component({
         selectDays: e.detail.selectDays
       })
     },
-    cmfclick() {
-      var entryInfo = wx.getStorageSync('entryInfo')
-      // var aa = utils.getTimeLastWeeks(entryInfo.m_start_date, entryInfo.m_holding_days - 1)
-      this.data.selectDays = this.data.selectDays.sort()
-      console.log(this.data.selectDays);
-      if (this.data.selectDays[0] == entryInfo.m_start_date && this.data.selectDays[this.data.selectDays.length - 1] == entryInfo.m_end_date) {
-        var hallDetails = JSON.parse(JSON.stringify(this.data.hallDetails))
-        hallDetails.office[this.data.ao_id].flag = true
-        hallDetails.office[this.data.ao_id].selectDays = this.data.selectDays
-        this.setData({
-          hallDetails: hallDetails,
-          isShows: 1,
-          selectDays: this.data.selectDays
-        })
-      } else if (this.data.selectDays.length == 0) {
-        var hallDetails = JSON.parse(JSON.stringify(this.data.hallDetails))
-        hallDetails.office[this.data.ao_id].flag = false
-        hallDetails.office[this.data.ao_id].selectDays = []
-        this.setData({
-          hallDetails: hallDetails,
-          isShows: 1,
-          selectDays: []
-        })
-      } else {
-        wx.showToast({
-          title: '天数日期不匹配',
-          icon: 'error',
-          duration: 1000 //持续的时间
-        })
-      }
-    },
+    
   },
   lifetimes: {
     attached() {

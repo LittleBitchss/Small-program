@@ -1,25 +1,25 @@
 <!--secondary/pages/auditorium/index.wxml-->
 <view class="auditorium">
   <view class="details">
-    <image class="cover" src="{{info.a_cover_photo}}"></image>
+    <image class="cover" src="{{a_cover_photo}}"></image>
     <view>
     </view>
-    <view class="title">{{info.a_name}}</view>
+    <view class="title">{{a_name}}</view>
     <view class="addr">
       <image class="addr_img" src="../../../icon/report_marks.png"></image>
-      地址：{{info.a_address}}
+      地址：{{a_address}}
     </view>
     <view class="tiem">
       <image class="tiem_img" src="../../../icon/report_clock.png"></image>
       营业时间：全天
     </view>
     <view class="hint">礼堂简介</view>
-    <text class="introduce" style="white-space: pre-wrap;word-break: break-all;">{{info.a_introduce}}</text>
-    <view class="hint">联系人：{{info.a_contacts}}</view>
-    <view class="hint">联系电话：{{info.a_phone}}</view>
+    <text class="introduce" style="white-space: pre-wrap;word-break: break-all;">{{a_introduce}}</text>
+    <view class="hint">联系人：{{a_contacts}}</view>
+    <view class="hint">联系电话：{{a_phone}}</view>
     <view class="hint">礼堂详情</view>
     <swiper class="hallSwiper" autoplay="true" interval="3500" circular="true" indicator-dots="true" previous-margin="40px" easing-function="easeInCubic" snap-to-edge="true" next-margin="60px">
-      <swiper-item class="swiper-item" wx:for="{{info.a_scroll_picture}}" wx:key="index">
+      <swiper-item class="swiper-item" wx:for="{{a_scroll_picture}}" wx:key="index">
         <image class="item-img" src="{{item}}"></image>
       </swiper-item>
     </swiper>
@@ -37,7 +37,7 @@
     <view class="hallls_i">
       <view class="hallls_i_left">选择大厅</view>
       <view class="hallls_i_right" bindtap="openMask">
-        <text class="i_name">{{hallxss?info.a_name+hallxss:"请选择大厅"}}</text>
+        <text class="i_name">{{hallxss?a_name+hallxss:"请选择大厅"}}</text>
         <image class="i_img" src="../../../icon/report_right.png"></image>
       </view>
     </view>
@@ -58,7 +58,7 @@
 <page-container class="page-container" show="{{show}}" position="right">
   <view class="page_cont">
     <view class="item">
-      <view class="items {{item.flag?'itemsx':''}}" wx:for="{{info.office}}" wx:key="index" catchtap="uncheck" data-index="{{index}}">
+      <view class="items {{item.ao_border?'itemsx':''}}" wx:for="{{office}}" wx:key="index" bindtap="onDisplay" data-index="{{index}}">
         <van-icon name="checked" style="position: absolute;right: 0;top: 0;" color="#00ae31" size="26rpx" />
         <view class="itemss">{{item.ao_name}}</view>
         <view class="itemss">{{item.ao_capacity}}人</view>
@@ -66,9 +66,29 @@
       </view>
     </view>
   </view>
-  <view class="container">
-    <view>
-      <calendar wx:if="{{isShows==2}}" id="calendar" isOpen="{{isOpen}}" mini="true" selected="{{selected}}" lockDay="{{lockday}}" bind:getdate="getdate" bind:select="cmfclick"></calendar>
-    </view>
+  <view class="container" wx:if="{{shows}}">
+    <calendar id="calendar" isOpen="{{true}}" mini="true" selected="{{selected}}" lockDay="{{lockday}}" bind:getdate="getdate" bind:select="cmfclick"></calendar>
   </view>
+  <!-- <van-calendar show="{{ shows }}" bind:close="onClose" bind:confirm="onConfirm" title="选择预订日期" type="{{type}}" default-date="{{defaultDate}}" min-date="{{ dateStr }}" max-date="{{ dateEnd }}" /> -->
+  <!-- if (entryInfo.m_start_date == entryInfo.m_end_date) {
+          console.log(new Date(entryInfo.m_start_date).getTime());
+          console.log(entryInfo.m_start_date);
+          this.setData({
+            type: 'single',
+            defaultDate: new Date(entryInfo.m_start_date).getTime()
+          })
+        } else {
+          // let _start = entryInfo.m_start_date.replace(/[\-]/g, '/');
+          // let _end = entryInfo.m_end_date.replace(/[\-]/g, '/');
+          console.log(entryInfo.m_start_date);
+          console.log(entryInfo.m_end_date);
+          let dataStart = new Date(entryInfo.m_start_date).getTime()
+          let dataEnd = new Date(entryInfo.m_end_date).getTime()
+          let defaultDate = [dataStart, dataEnd]
+          console.log(defaultDate);
+          this.setData({
+            type: 'range',
+            defaultDate: defaultDate
+          })
+        } -->
 </page-container>
