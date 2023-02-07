@@ -37,38 +37,40 @@
     <view class="hallls_i">
       <view class="hallls_i_left">选择大厅</view>
       <view class="hallls_i_right" bindtap="openMask">
-        <text class="i_name">{{hallxss?a_name+hallxss:"请选择大厅"}}</text>
+        <text class="i_name">{{hall?hall:"请选择大厅"}}</text>
         <image class="i_img" src="../../../icon/report_right.png"></image>
       </view>
     </view>
     <view class="hallls_i">
       <view class="hallls_i_left">预约日期</view>
       <view class="hallls_i_right" bindtap="openMask">
-        <view class="i_time">
-          <text class="i_time_txt">{{startDate}}</text>
+        <view class="i_time" wx:if="{{date==''}}">请选择日期</view>
+        <view class="i_time" wx:if="{{date}}">
+          <text class="i_time_txt">{{date[0]}}</text>
           至
-          <text class="i_time_txt i_time_txts">{{endDate}}</text>
+          <text class="i_time_txt i_time_txts">{{date[date.length-1]}}</text>
         </view>
         <image class="i_img" src="../../../icon/report_right.png"></image>
       </view>
     </view>
-    <van-button class="btn" type="info" block>预约</van-button>
+    <van-button class="btn" type="info" block color="#3572e1" bindtap="reservationSubmit">预约</van-button>
   </view>
 </view>
 <page-container class="page-container" show="{{show}}" position="right">
   <view class="page_cont">
     <view class="item">
       <view class="items {{item.ao_border?'itemsx':''}}" wx:for="{{office}}" wx:key="index" bindtap="onDisplay" data-index="{{index}}">
-        <van-icon name="checked" style="position: absolute;right: 0;top: 0;" color="#00ae31" size="26rpx" />
+        <van-icon name="checked" style="position: absolute;right: 0;top: 0;" color="#00ae31" size="26rpx" wx:if="{{item.ao_flag}}"/>
         <view class="itemss">{{item.ao_name}}</view>
         <view class="itemss">{{item.ao_capacity}}人</view>
         <view class="itemss">{{item.ao_tables}}桌</view>
       </view>
     </view>
+    <van-button block style="position: absolute;left: 0;bottom: 0;width: 100%;" color="#3572e1" bindtap="reservationSave">保存</van-button>
   </view>
-  <view class="container" wx:if="{{shows}}">
+  <van-popup show="{{ shows }}" bind:close="onClose" bind:click-overlay="onClose"  position="bottom" closeable custom-style="padding-top:10rpx;" round overlay-style="background-color:rgba(0, 0, 0, 0.5);">
     <calendar id="calendar" isOpen="{{true}}" mini="true" selected="{{selected}}" lockDay="{{lockday}}" bind:getdate="getdate" bind:select="cmfclick"></calendar>
-  </view>
+  </van-popup>
   <!-- <van-calendar show="{{ shows }}" bind:close="onClose" bind:confirm="onConfirm" title="选择预订日期" type="{{type}}" default-date="{{defaultDate}}" min-date="{{ dateStr }}" max-date="{{ dateEnd }}" /> -->
   <!-- if (entryInfo.m_start_date == entryInfo.m_end_date) {
           console.log(new Date(entryInfo.m_start_date).getTime());

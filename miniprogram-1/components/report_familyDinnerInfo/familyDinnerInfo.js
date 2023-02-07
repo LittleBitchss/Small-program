@@ -218,7 +218,13 @@ Component({
               icon: 'error',
               duration: 1000 //持续的时间
             })
-          } else {
+          } else if(aa-bb>6){
+            wx.showToast({
+              title: '请选择七天以内',
+              icon: 'error',
+              duration: 1000 //持续的时间
+            })
+          }else {
             this.setData({
               val3: e.detail.value,
               fontColor3: "fontColor"
@@ -247,6 +253,10 @@ Component({
       }
       if (data.m_name != "" && data.m_phone != "" && data.m_type != "请选择乡宴类型" && data.m_start_date != "请选择举办时间" && data.m_end_date != "请选择结束时间" && data.m_tables != "") {
         wx.setStorageSync('entryInfo', data)
+        var setAddr = wx.getStorageSync('setAddr')
+        if(setAddr && (setAddr[0].a_days[0]!=data.m_start_date||setAddr[0].a_days[setAddr[0].a_days.length-1]!=data.m_end_date)){
+          wx.removeStorageSync('setAddr')
+        }
         this.triggerEvent("nextStep1", {
           go: 2
         })

@@ -15,70 +15,80 @@ Page({
     a_contacts: '',
     a_phone: '',
     a_scroll_picture: [],
+    auditorium: '',
     office: [],
     show: false,
     shows: false,
+    index: 0,
     // defaultDate: '',
-    selected:[],
-    selectDays:[],
-    // date: '',
+    selected: [],
+    selectDays: [],
+    lockday:'',
     // type: 'single',
-    
-
-    isShow: 1,
-    isShows: 1
+    hall: '',
+    date: '',
   },
   openMask() {
-    this.setData({
-      show: true
-    })
     wx.setNavigationBarTitle({
       title: '大厅预订',
+    })
+    var office = JSON.parse(JSON.stringify(this.data.office))
+    if (this.data.auditorium) {
+
+    } else {
+      office.forEach(i => {
+        i.selectDays = []
+        i.ao_flag = false
+      })
+    }
+    this.setData({
+      show: true,
+      office: office
     })
   },
   onDisplay(e) {
     var index = e.currentTarget.dataset.index
     var office = JSON.parse(JSON.stringify(this.data.office))
+    var calendar = this.selectComponent("#calendar");
     office.forEach(i => {
       i.ao_border = ''
     })
     office[index].ao_border = true
     this.setData({
       office: office,
-      shows: true
+      shows: true,
+      index: index
     })
-    // try {
-    //   app.post('/auditorium/getAppointment', {
-    //     ao_id: this.data.hallDetails.office[index].ao_id
-    //   }).then(res => {
-    //     if (res.data.status == 1) {
-    //       var str = ''
-    //       res.data.data.forEach(i => {
-    //         str += i.date
-    //       })
-    //       this.setData({
-    //         lockday: str
-    //       })
-    //     }
-    //   })
-    // } catch {
-    //   wx.showToast({
-    //     title: '网络不稳定~',
-    //     icon: 'error',
-    //     duration: 1000 //持续的时间
-    //   })
-    // }
-    // if (this.data.hallDetails.office[index].selectDays != undefined && this.data.hallDetails.office[index].selectDays.length != 0) {
-    //   this.setData({
-    //     selectDays: this.data.hallDetails.office[index].selectDays,
-    //     selected: this.data.hallDetails.office[index].selectDays
-    //   })
-    // } else {
-    //   this.setData({
-    //     selectedDays: [],
-    //     selected: []
-    //   })
-    // }
+    if (office[index].ao_flag) {
+      calendar.setData({
+        selectDays: office[index].selectDays
+      })
+      this.setData({
+        selected: office[index].selectDays,
+        selectDays: office[index].selectDays,
+      })
+    } else {
+      calendar.clear()
+    }
+    app.post('/auditorium/getAppointment', {
+      ao_id: office[index].ao_id
+    }).then(res => {
+      if (res.data.status == 1) {
+        var str = ''
+        res.data.data.forEach(i => {
+          str += i.date
+        })
+        this.setData({
+          lockday: str
+        })
+      } else {
+        wx.showToast({
+          title: '网络不稳定~',
+          icon: 'error',
+          duration: 1000 //持续的时间
+        })
+      }
+    })
   },
   getdate(e) {
     this.setData({
@@ -87,66 +97,115 @@ Page({
   },
   cmfclick() {
     var entryInfo = wx.getStorageSync('entryInfo')
-    // var aa = utils.getTimeLastWeeks(entryInfo.m_start_date, entryInfo.m_holding_days - 1)
     this.data.selectDays = this.data.selectDays.sort()
     if (this.data.selectDays[0] == entryInfo.m_start_date && this.data.selectDays[this.data.selectDays.length - 1] == entryInfo.m_end_date) {
-      var hallDetails = JSON.parse(JSON.stringify(this.data.hallDetails))
-      hallDetails.office[this.data.ao_id].flag = true
-      hallDetails.office[this.data.ao_id].selectDays = this.data.selectDays
+      var office = JSON.parse(JSON.stringify(this.data.office))
+      office[this.data.index].ao_flag = true
+      office[this.data.index].ao_border = ''
+      office[this.data.index].selectDays = this.data.selectDays
       this.setData({
-        hallDetails: hallDetails,
-        isShows: 1,
-        selectDays: this.data.selectDays
+        office: office,
+        shows: false,
+        selected: [],
+        selectDays: []
       })
     } else if (this.data.selectDays.length == 0) {
-      var hallDetails = JSON.parse(JSON.stringify(this.data.hallDetails))
-      hallDetails.office[this.data.ao_id].flag = false
-      hallDetails.office[this.data.ao_id].selectDays = []
-      this.setData({
-        hallDetails: hallDetails,
-        isShows: 1,
-        selectDays: []
+      wx.showToast({
+        title: '请选择日期',
+        icon: 'error',
+        duration: 1000 //持续的时间
       })
     } else {
       wx.showToast({
-        title: '天数日期不匹配',
+        title: '日期不匹配',
         icon: 'error',
         duration: 1000 //持续的时间
       })
     }
   },
   onClose() {
+    var office = JSON.parse(JSON.stringify(this.data.office))
+    office.forEach(i => {
+      i.ao_border = ''
+    })
     this.setData({
-      shows: false
+      shows: false,
+      office: office
     });
   },
-  formatDate(date) {
-    date = new Date(date);
-    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
-  },
-  onConfirm(event) {
-    var entryInfo = wx.getStorageSync('entryInfo')
-    if (entryInfo.m_start_date == entryInfo.m_end_date) {
-      this.setData({
-        date: this.formatDate(event.detail),
-      });
-      if (this.data.date != entryInfo.m_start_date) {
-        this.setData({
-          date: '',
-        })
-        Toast.fail('日期选择不正确');
-      } else {
-        this.setData({
-          show: false,
-        })
-      }
-    } else {
-      const [start, end] = event.detail;
-      this.setData({
-        show: false,
-        date: `${this.formatDate(start)} - ${this.formatDate(end)}`,
-      });
+  // formatDate(date) {
+  //   date = new Date(date);
+  //   return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+  // },
+  // onConfirm(event) {
+  //   var entryInfo = wx.getStorageSync('entryInfo')
+  //   if (entryInfo.m_start_date == entryInfo.m_end_date) {
+  //     this.setData({
+  //       date: this.formatDate(event.detail),
+  //     });
+  //     if (this.data.date != entryInfo.m_start_date) {
+  //       this.setData({
+  //         date: '',
+  //       })
+  //       Toast.fail('日期选择不正确');
+  //     } else {
+  //       this.setData({
+  //         show: false,
+  //       })
+  //     }
+  //   } else {
+  //     const [start, end] = event.detail;
+  //     this.setData({
+  //       show: false,
+  //       date: `${this.formatDate(start)} - ${this.formatDate(end)}`,
+  //     });
+  //   }
+  // },
+  reservationSave() {
+    var obj = {
+      a_id: this.data.a_id,
+      m_ids: 2,
+      a_days: [],
+      office: []
     }
+    var hall = ''
+    this.data.office.forEach(i => {
+      if (i.ao_flag) {
+        obj.office.push({
+          ao_id: i.ao_id,
+          ao_name: i.ao_name
+        })
+        hall += i.ao_name + '、'
+      }
+      if (i.selectDays.length != 0) {
+        obj.a_days = i.selectDays
+      }
+    })
+    if (hall.indexOf('、') != -1) {
+      hall = hall.slice(0, hall.length - 1)
+    }
+    this.setData({
+      auditorium: obj,
+      hall: hall,
+      date: obj.a_days,
+      show: false
+    })
+  },
+  reservationSubmit() {
+    var setAddr = wx.getStorageSync('setAddr')
+    if (setAddr.length != 0) {
+      setAddr.push(this.data.auditorium)
+    } else {
+      setAddr = [this.data.auditorium]
+    }
+    wx.setStorageSync('setAddr', setAddr)
+    var pages = getCurrentPages();
+    var beforePage = pages[pages.length - 2];
+    var setAddr = beforePage.selectComponent("#setAddr");
+    setAddr.getAuditoriumSelect()
+    wx.navigateBack({
+      delta: 1,
+    })
   },
   /**
    * 生命周期函数--监听页面加载
@@ -159,44 +218,15 @@ Page({
       a_id: options.a_id
     })
     var entryInfo = wx.getStorageSync('entryInfo')
-    let start_date = new Date(entryInfo.m_start_date).getTime()
-    let end_date = new Date(entryInfo.m_end_date).getTime()
-    var selected = []
-    console.log(utils.formatDate(new Date(end_date)));
-    if(end_date==start_date){
-      selected[0]=entryInfo.m_start_date
-    }else if(start_date+86400000==end_date){
-      selected[0]=entryInfo.m_start_date
-      selected[1]=entryInfo.end_date
-    }else if(start_date+(86400000*2)==end_date){
-      selected[0]=entryInfo.m_start_date
-      selected[1]=utils.formatDate(start_date+86400000)
-      selected[2]=entryInfo.end_date
-    }else if(start_date+(86400000*3)==end_date){
-      selected[0]=entryInfo.m_start_date
-      selected[1]=utils.formatDate(start_date+86400000)
-      selected[2]=utils.formatDate(start_date+(86400000*2))
-      selected[3]=entryInfo.end_date
-    }
-    this.setData({
-      
-    })
-    console.log(entryInfo.m_end_date);
-    console.log();
-    if(entryInfo.m_end_date==entryInfo.m_start_date)
-    if((new Date(entryInfo.m_end_date).getTime()-new Date(entryInfo.m_start_date).getTime())/86400000>1){
-
-    }
-    
-    // new Date(entryInfo.m_end_date).getTime()
+    //修改
     app.post('/comm/getAuditorium', {
       a_id: this.data.a_id
     }).then(res => {
       if (res.data.status == 1) {
-        console.log(res.data.data);
         res.data.data.a_scroll_picture = res.data.data.a_scroll_picture.split(',')
         res.data.data.office.forEach(i => {
           i.ao_border = ''
+          i.ao_flag = false
         })
         this.setData({
           a_cover_photo: res.data.data.a_cover_photo,

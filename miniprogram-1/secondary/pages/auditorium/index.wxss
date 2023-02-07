@@ -152,7 +152,8 @@
 
 
 .page_cont{
-  height: calc(100% - 570rpx);
+  height: 100%;
+  position: relative;
 }
 .container{
   height: 570rpx;
@@ -174,7 +175,7 @@
   justify-content: center;
 }
 .btn .btnss{
-  color: #00ae31;
+  color: #3572e1;
 }
 .wire{
   border-top: 2rpx solid #f1f1f1;

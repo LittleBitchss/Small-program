@@ -24,7 +24,7 @@ Component({
     hall: app.domain + "/img/report/hall.png",
     fontColor11: "",
     fontColor22: "fontColor",
-    // show: 1,
+    show: 1,
     province: [],
     provinceValue: "请选择所属省",
     province_code: "",
@@ -59,48 +59,14 @@ Component({
     village_show: false,
     bdColor55: "",
     fontColor5: "",
-
     value1: "",
     value6: "",
     bdColor6: "",
     isFamily: 1,
-    halls: [1, 2, 3],
-    hallValue: "请选择所属村庄",
-    hall_code: "",
-    hall_show: false,
-    fontColor6: "",
-    lists: [],
     region: ["请选择", "区域"],
     regionCode: [],
-    hallDetails: {},
-
-    hallxs: [],
-    hallxss: "",
-
-    isShow: false,
-    isShows: 0,
-    startDate: "",
-    endDate: "",
-
-    m_auditorium_id: "",
-    m_ao_id: "",
-
-
-    lockday: [],
-    selected: ["2022-08-23"],
-    selectDays: [],
-
-
-    ao_id: 0,
-    clears: 0,
-    isOpen: false,
-
-
-    checked: "",
-    imgArr: [1, 2, 3],
-    // isShow: false,
-    // isShows: 0,
-    // anima: ""
+    list:[],
+    lists: [],
   },
 
   /**
@@ -170,10 +136,6 @@ Component({
           city_show: false,
           area_show: false,
           street_show: false
-        })
-      } else if (item == 6) {
-        this.setData({
-          hall_show: !this.data.hall_show
         })
       }
     },
@@ -327,13 +289,6 @@ Component({
           village_show: false,
           fontColor5: "fontColor"
         })
-      } else if (item == 6) {
-        this.setData({
-          hallValue: this.data.halls[index],
-          hall_code: this.data.halls[index].code,
-          hall_show: false,
-          fontColor6: "fontColor"
-        })
       }
     },
     closes() {
@@ -387,16 +342,6 @@ Component({
           fontColor5: "",
         })
       }
-      if (this.data.hallValue != "请选择所属村庄") {
-        this.setData({
-          hall_show: false
-        })
-      } else {
-        this.setData({
-          hall_show: false,
-          fontColor6: "",
-        })
-      }
     },
     focus(e) {
       var index = e.currentTarget.dataset.index
@@ -434,27 +379,6 @@ Component({
         }
       }
     },
-    hallDetails(e) {
-      var item = e.currentTarget.dataset.item
-      var date = utils.formatDate(new Date());
-      this.data.lists[item].a_scroll_picture = typeof this.data.lists[item].a_scroll_picture == 'string' ? this.data.lists[item].a_scroll_picture.split(",") : this.data.lists[item].a_scroll_picture
-      this.data.lists[item].office.forEach(i => {
-        i.flag = false
-      })
-      this.setData({
-        show: 3,
-        hallDetails: this.data.lists[item],
-        startDate: date,
-        endDate: date,
-        m_auditorium_id: this.data.lists[item].a_id
-      })
-    },
-    returns() {
-      this.setData({
-        show: 2,
-        hallxss: ""
-      })
-    },
     nextStep2() {
       var family = {
         m_ids: this.data.isFamily,
@@ -467,7 +391,7 @@ Component({
         m_auditorium_id: 0,
         m_ao_id: 0,
       }
-      var addres = this.data.provinceValue + this.data.areaValue + this.data.areaValue +this.data.streetValue+ this.data.value6
+      var addres = this.data.provinceValue + this.data.areaValue + this.data.areaValue + this.data.streetValue + this.data.value6
       if (this.data.isFamily == 1) {
         var that = this
         qqMapSdk.geocoder({
@@ -479,7 +403,7 @@ Component({
             family.m_longitude = longitude
             family.m_latitude = latitude
             if (family.m_province != "" && family.m_city != "" && family.m_area != "" && family.m_street != "" && family.m_village != "" && family.m_address != "") {
-              wx.setStorageSync('selAddr', family)
+              wx.setStorageSync('setAddr', family)
               that.triggerEvent("nextStep2", {
                 go: 3
               })
@@ -496,7 +420,7 @@ Component({
               })
             }
           },
-          fail: function (res)  {
+          fail: function (res) {
             wx.showToast({
               title: '地址错误',
               icon: 'error',
@@ -505,9 +429,8 @@ Component({
           }
         })
       } else if (this.data.isFamily == 2) {
-        var selAddr = wx.getStorageSync('selAddr')
-        var flag = selAddr.hallDetails ? selAddr.hallDetails.office.some(i => i.flag == true) : false
-        if (flag) {
+        var setAddr = wx.getStorageSync('setAddr')
+        if (setAddr.length != 0) {
           this.triggerEvent("nextStep2", {
             go: 3
           })
@@ -518,7 +441,7 @@ Component({
           })
         } else {
           wx.showToast({
-            title: '请完善礼堂信息',
+            title: '请预定礼堂',
             icon: 'error',
             duration: 1000 //持续的时间
           })
@@ -544,14 +467,23 @@ Component({
       }
       this.getAuditoriumList(a)
     },
-    getAuditoriumList(a){
+    getAuditoriumList(a) {
+      var setAddr = wx.getStorageSync('setAddr')
+      var a_id = ''
+      if (setAddr.length != 0) {
+        setAddr.forEach(i=>{
+          a_id+=i.a_id+','
+        })
+        a_id=a_id.slice(0,a_id.length-1)
+      }
+      //修改
       app.post('/comm/getAuditoriumList', a).then(res => {
         if (res.data.status == 1) {
           console.log(res.data.data.rows);
           this.setData({
             lists: res.data.data.rows,
           })
-        }else{
+        } else {
           wx.showToast({
             title: '网络不稳定~',
             icon: 'error',
@@ -560,8 +492,11 @@ Component({
         }
       })
     },
+    getAuditoriumSelect() {
+      
+    },
     search() {
-      if(this.data.regionCode.length != 0){
+      if (this.data.regionCode.length != 0) {
         var a = {
           province: this.data.regionCode[0].slice(0, 2),
           city: this.data.regionCode[1].slice(0, 4),
@@ -587,59 +522,6 @@ Component({
         }
       }
     },
-    rightArrow() {
-      this.setData({
-        isShow: true,
-        anima: "down",
-        isShows: 1,
-      })
-    },
-    
-    sure() {
-      var a = this.data.hallDetails.office.filter(i => i.flag == true)
-      var day = utils.formatDate(new Date())
-      var hallxss = ""
-      var ao_id = []
-      var startDate = ""
-      var endDate = ""
-      if (a.length == 0) {
-        hallxss = ""
-        ao_id = []
-        startDate = day
-        endDate = day
-      } else {
-        a.forEach(i => {
-          hallxss += i.ao_name
-          ao_id.push(i.ao_id)
-        })
-        startDate = a[0].selectDays[0]
-        endDate = a[0].selectDays[a[0].selectDays.length - 1]
-      }
-      this.setData({
-        anima: "up"
-      })
-      setTimeout(() => {
-        this.setData({
-          anima: "up"
-        })
-        this.setData({
-          isShow: false,
-          hallxs: a,
-          isShows: 0,
-          hallxss: hallxss,
-          m_ao_id: ao_id,
-          startDate: startDate,
-          endDate: endDate
-        })
-        var hall = {
-          m_ids: this.data.isFamily,
-          m_auditorium_id: this.data.m_auditorium_id,
-          m_ao_id: this.data.m_ao_id,
-          hallDetails: this.data.hallDetails
-        }
-        wx.setStorageSync('selAddr', hall)
-      }, 600)
-    },
     findObj(Arr, j) {
       var a = {}
       Arr.forEach((i) => {
@@ -649,81 +531,43 @@ Component({
       })
       return a
     },
-    getdate(e) {
-      this.setData({
-        selectDays: e.detail.selectDays
-      })
-    },
-    
   },
   lifetimes: {
     attached() {
-      var entryInfo = wx.getStorageSync('entryInfo')
-      var selAddr = wx.getStorageSync('selAddr')
-      // if(selAddr && selAddr.hallDetails.office[0].selectDays[0]!=entryInfo.m_start_date){
-      //   wx.removeStorageSync('selAddr')
-      // }
-      // 修改
-      if (selAddr && selAddr.m_ids == 1) {
+      var setAddr = wx.getStorageSync('setAddr')
+      if (setAddr && setAddr.m_ids == 1) {
         this.setData({
           fontColor1: "fontColor",
           fontColor2: "fontColor",
           fontColor3: "fontColor",
           fontColor4: "fontColor",
           fontColor5: "fontColor",
-          province_code: selAddr.m_province,
-          city_code: selAddr.m_city,
-          area_code: selAddr.m_area,
-          street_code: selAddr.m_street,
-          village_code: selAddr.m_village,
+          province_code: setAddr.m_province,
+          city_code: setAddr.m_city,
+          area_code: setAddr.m_area,
+          street_code: setAddr.m_street,
+          village_code: setAddr.m_village,
           province: wx.getStorageSync('province'),
           city: wx.getStorageSync('city'),
           area: wx.getStorageSync('area'),
           street: wx.getStorageSync('street'),
           village: wx.getStorageSync('village'),
-          provinceValue: this.findObj(wx.getStorageSync('province'), selAddr.m_province).name,
-          cityValue: this.findObj(wx.getStorageSync('city'), selAddr.m_city).name,
-          areaValue: this.findObj(wx.getStorageSync('area'), selAddr.m_area).name,
-          streetValue: this.findObj(wx.getStorageSync('street'), selAddr.m_street).name,
-          villageValue: this.findObj(wx.getStorageSync('village'), selAddr.m_village).name,
-          value6: selAddr.m_address
+          provinceValue: this.findObj(wx.getStorageSync('province'), setAddr.m_province).name,
+          cityValue: this.findObj(wx.getStorageSync('city'), setAddr.m_city).name,
+          areaValue: this.findObj(wx.getStorageSync('area'), setAddr.m_area).name,
+          streetValue: this.findObj(wx.getStorageSync('street'), setAddr.m_street).name,
+          villageValue: this.findObj(wx.getStorageSync('village'), setAddr.m_village).name,
+          value6: setAddr.m_address
         })
-      } else if (selAddr && selAddr.m_ids == 2) {
-        var office = selAddr.hallDetails.office.filter(i => i.flag == true)
-        if (office.length != 0) {
-          var date = utils.formatDate(new Date());
-          var hallxss = ''
-          var startDate = ""
-          var endDate = ""
-          if (office[0].selectDays[0] != entryInfo.m_start_date || office[0].selectDays.length != entryInfo.m_holding_days) {
-            office.forEach(i => {
-              i.selectDays = []
-              i.flag = false
-            })
-            startDate = date
-            endDate = date
-            selAddr.m_ao_id = []
-          } else {
-            office.forEach(i => {
-              hallxss += i.ao_name
-            })
-            startDate = office[0].selectDays[0]
-            endDate = office[0].selectDays[office[0].selectDays.length - 1]
-          }
+      } else if (setAddr && setAddr.length != 0) {
+        if (setAddr[0].office.length != 0) {
           this.setData({
-            m_ids: selAddr.m_ids,
-            hallDetails: selAddr.hallDetails,
             Family: app.domain + "/img/report/Family.png",
             hall: app.domain + "/img/report/hall-active.png",
             fontColor11: "fontColor",
             fontColor22: "",
             show: 2,
             isFamily: 2,
-            hallxss: hallxss,
-            startDate: startDate,
-            endDate: endDate,
-            m_auditorium_id: selAddr.m_auditorium_id,
-            m_ao_id: selAddr.m_ao_id,
           })
         }
       }
@@ -747,8 +591,8 @@ Component({
       }
       var userInfo = wx.getStorageSync('userInfo')
       this.setData({
-        region: [userInfo.province,userInfo.citys,userInfo.district],
-        regionCode: [userInfo.provincecode,userInfo.citycode,userInfo.adcode],
+        region: [userInfo.province, userInfo.citys, userInfo.district],
+        regionCode: [userInfo.provincecode, userInfo.citycode, userInfo.adcode],
       })
       var a = {
         province: this.data.regionCode[0].slice(0, 2),

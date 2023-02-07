@@ -58,15 +58,15 @@ Component({
     },
     submitInfo() {
       var entryInfo = wx.getStorageSync('entryInfo')
-      var selAddr = wx.getStorageSync('selAddr')
-      if (selAddr.m_ids == 2) {
-        selAddr = {
-          m_auditorium_id: selAddr.m_auditorium_id,
-          m_ao_id: selAddr.m_ao_id
+      var setAddr = wx.getStorageSync('setAddr')
+      if (setAddr.m_ids == 2) {
+        setAddr = {
+          m_auditorium_id: setAddr.m_auditorium_id,
+          m_ao_id: setAddr.m_ao_id
         }
       }
-      delete selAddr.m_ids
-      entryInfo = Object.assign(entryInfo, selAddr)
+      delete setAddr.m_ids
+      entryInfo = Object.assign(entryInfo, setAddr)
       var foodSource = wx.getStorageSync('foodSource')
       var obj = {
         token: wx.getStorageSync('userInfo').token,
@@ -90,7 +90,7 @@ Component({
           app.post('/house/matsuriApplication', obj).then(res => {
             if (res.data.status == 1) {
               wx.removeStorageSync('entryInfo')
-              wx.removeStorageSync('selAddr')
+              wx.removeStorageSync('setAddr')
               wx.removeStorageSync('foodSource')
               wx.showToast({
                 title: res.data.msg,

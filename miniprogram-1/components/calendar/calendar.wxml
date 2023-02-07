@@ -76,7 +76,7 @@
       </block>
     </view>
     <view wx:if="{{!readonly}}" class="packup flex flex-between">
-      <view class="packup-button" bindtap='backtoday'>回到今天</view>
+      <!-- <view class="packup-button" bindtap='backtoday'>回到今天</view> -->
       <view class="packup-button border-left" bindtap='packup'>确定</view>
     </view>
   </view>
