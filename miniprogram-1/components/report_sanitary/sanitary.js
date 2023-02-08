@@ -60,13 +60,18 @@ Component({
       var entryInfo = wx.getStorageSync('entryInfo')
       var setAddr = wx.getStorageSync('setAddr')
       if (setAddr.m_ids == 2) {
+        var m_ao_id = []
+        setAddr.office.forEach(i=>{
+          m_ao_id.push(i.ao_id)
+        })
         setAddr = {
-          m_auditorium_id: setAddr.m_auditorium_id,
-          m_ao_id: setAddr.m_ao_id
+          m_auditorium_id: setAddr.a_id,
+          m_ao_id: m_ao_id
         }
       }
-      delete setAddr.m_ids
+      // delete setAddr.m_ids
       entryInfo = Object.assign(entryInfo, setAddr)
+      console.log(entryInfo);
       var foodSource = wx.getStorageSync('foodSource')
       var obj = {
         token: wx.getStorageSync('userInfo').token,

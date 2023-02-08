@@ -254,7 +254,7 @@ Component({
       if (data.m_name != "" && data.m_phone != "" && data.m_type != "请选择乡宴类型" && data.m_start_date != "请选择举办时间" && data.m_end_date != "请选择结束时间" && data.m_tables != "") {
         wx.setStorageSync('entryInfo', data)
         var setAddr = wx.getStorageSync('setAddr')
-        if(setAddr && (setAddr[0].a_days[0]!=data.m_start_date||setAddr[0].a_days[setAddr[0].a_days.length-1]!=data.m_end_date)){
+        if(setAddr && (setAddr.a_days[0]!=data.m_start_date||setAddr.a_days[setAddr.a_days.length-1]!=data.m_end_date)){
           wx.removeStorageSync('setAddr')
         }
         this.triggerEvent("nextStep1", {

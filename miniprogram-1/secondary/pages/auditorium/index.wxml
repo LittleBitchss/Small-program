@@ -52,8 +52,9 @@
         </view>
         <image class="i_img" src="../../../icon/report_right.png"></image>
       </view>
+
     </view>
-    <van-button class="btn" type="info" block color="#3572e1" bindtap="reservationSubmit">预约</van-button>
+    <van-dialog id="van-dialog" />
   </view>
 </view>
 <page-container class="page-container" show="{{show}}" position="right">
@@ -66,9 +67,11 @@
         <view class="itemss">{{item.ao_tables}}桌</view>
       </view>
     </view>
+    
     <van-button block style="position: absolute;left: 0;bottom: 0;width: 100%;" color="#3572e1" bindtap="reservationSave">保存</van-button>
   </view>
-  <van-popup show="{{ shows }}" bind:close="onClose" bind:click-overlay="onClose"  position="bottom" closeable custom-style="padding-top:10rpx;" round overlay-style="background-color:rgba(0, 0, 0, 0.5);">
+  <van-popup show="{{ shows }}" bind:close="onClose" bind:click-overlay="onClose"  position="bottom" closeable custom-style="padding-top:30rpx;" round overlay-style="background-color:rgba(0, 0, 0, 0.5);">
+    <van-button type="primary" size="mini" style="margin-left: 30rpx;" bind:click="onDel">清除</van-button>
     <calendar id="calendar" isOpen="{{true}}" mini="true" selected="{{selected}}" lockDay="{{lockday}}" bind:getdate="getdate" bind:select="cmfclick"></calendar>
   </van-popup>
   <!-- <van-calendar show="{{ shows }}" bind:close="onClose" bind:confirm="onConfirm" title="选择预订日期" type="{{type}}" default-date="{{defaultDate}}" min-date="{{ dateStr }}" max-date="{{ dateEnd }}" /> -->

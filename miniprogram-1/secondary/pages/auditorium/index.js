@@ -1,6 +1,7 @@
 // secondary/pages/auditorium/index.js
 const app = getApp()
 var utils = require('../../../utils/utils')
+import Dialog from '@vant/weapp/dialog/dialog';
 Page({
 
   /**
@@ -16,6 +17,7 @@ Page({
     a_phone: '',
     a_scroll_picture: [],
     auditorium: '',
+    offices: [],
     office: [],
     show: false,
     shows: false,
@@ -23,7 +25,7 @@ Page({
     // defaultDate: '',
     selected: [],
     selectDays: [],
-    lockday:'',
+    lockday: '',
     // type: 'single',
     hall: '',
     date: '',
@@ -32,24 +34,14 @@ Page({
     wx.setNavigationBarTitle({
       title: '大厅预订',
     })
-    var office = JSON.parse(JSON.stringify(this.data.office))
-    if (this.data.auditorium) {
-
-    } else {
-      office.forEach(i => {
-        i.selectDays = []
-        i.ao_flag = false
-      })
-    }
     this.setData({
       show: true,
-      office: office
+      office: this.data.offices
     })
   },
   onDisplay(e) {
     var index = e.currentTarget.dataset.index
     var office = JSON.parse(JSON.stringify(this.data.office))
-    var calendar = this.selectComponent("#calendar");
     office.forEach(i => {
       i.ao_border = ''
     })
@@ -59,16 +51,34 @@ Page({
       shows: true,
       index: index
     })
-    if (office[index].ao_flag) {
-      calendar.setData({
-        selectDays: office[index].selectDays
-      })
-      this.setData({
-        selected: office[index].selectDays,
-        selectDays: office[index].selectDays,
-      })
-    } else {
-      calendar.clear()
+    var setAddr = wx.getStorageSync('setAddr')
+    var calendar = this.selectComponent("#calendar");
+    if(setAddr){
+      // var auditorium = setAddr.find(i => i.a_id == this.data.a_id)
+      if (office[index].ao_flag) {
+        calendar.setData({
+          selectDays: setAddr.a_days
+        })
+        this.setData({
+          selected: setAddr.a_days,
+          selectDays: setAddr.a_days
+        })
+      } else {
+        calendar.clear()
+      }
+    }else{
+      var days = wx.getStorageSync('days')
+      if (office[index].ao_flag) {
+        calendar.setData({
+          selectDays: days
+        })
+        this.setData({
+          selected: days,
+          selectDays: days
+        })
+      } else {
+        calendar.clear()
+      }
     }
     app.post('/auditorium/getAppointment', {
       ao_id: office[index].ao_id
@@ -97,19 +107,21 @@ Page({
   },
   cmfclick() {
     var entryInfo = wx.getStorageSync('entryInfo')
-    this.data.selectDays = this.data.selectDays.sort()
-    if (this.data.selectDays[0] == entryInfo.m_start_date && this.data.selectDays[this.data.selectDays.length - 1] == entryInfo.m_end_date) {
+    var selectDays = JSON.parse(JSON.stringify(this.data.selectDays))
+    selectDays = selectDays.sort()
+    if (selectDays[0] == entryInfo.m_start_date && selectDays[selectDays.length - 1] == entryInfo.m_end_date) {
       var office = JSON.parse(JSON.stringify(this.data.office))
       office[this.data.index].ao_flag = true
       office[this.data.index].ao_border = ''
-      office[this.data.index].selectDays = this.data.selectDays
+      office[this.data.index].selectDays = selectDays
+      wx.setStorageSync('days', selectDays)
       this.setData({
         office: office,
         shows: false,
         selected: [],
         selectDays: []
       })
-    } else if (this.data.selectDays.length == 0) {
+    } else if (selectDays.length == 0) {
       wx.showToast({
         title: '请选择日期',
         icon: 'error',
@@ -132,6 +144,16 @@ Page({
       shows: false,
       office: office
     });
+  },
+  onDel(){
+    var office = JSON.parse(JSON.stringify(this.data.office))
+    office[this.data.index].ao_flag = false
+    office[this.data.index].ao_border = ''
+    office[this.data.index].selectDays = []
+    this.setData({
+      office:office,
+      shows:false
+    })
   },
   // formatDate(date) {
   //   date = new Date(date);
@@ -162,50 +184,73 @@ Page({
   //   }
   // },
   reservationSave() {
-    var obj = {
-      a_id: this.data.a_id,
-      m_ids: 2,
-      a_days: [],
-      office: []
-    }
-    var hall = ''
-    this.data.office.forEach(i => {
-      if (i.ao_flag) {
-        obj.office.push({
-          ao_id: i.ao_id,
-          ao_name: i.ao_name
-        })
-        hall += i.ao_name + '、'
-      }
-      if (i.selectDays.length != 0) {
-        obj.a_days = i.selectDays
-      }
-    })
-    if (hall.indexOf('、') != -1) {
-      hall = hall.slice(0, hall.length - 1)
-    }
-    this.setData({
-      auditorium: obj,
-      hall: hall,
-      date: obj.a_days,
-      show: false
-    })
-  },
-  reservationSubmit() {
     var setAddr = wx.getStorageSync('setAddr')
-    if (setAddr.length != 0) {
-      setAddr.push(this.data.auditorium)
-    } else {
-      setAddr = [this.data.auditorium]
+    if(setAddr&&this.data.a_id!=setAddr.a_id){
+      wx.showToast({
+        title: '已预订大礼堂',
+        icon: 'error',
+        duration: 1000 //持续的时间
+      })
+    }else{
+      var obj = {
+        a_id: this.data.a_id,
+        m_ids: 2,
+        a_days: [],
+        office: []
+      }
+      var hall = ''
+      this.data.office.forEach(i => {
+        if (i.ao_flag) {
+          obj.office.push({
+            ao_id: i.ao_id,
+            ao_name: i.ao_name
+          })
+          hall += i.ao_name + '、'
+        }
+        if (i.selectDays&&i.selectDays.length != 0) {
+          obj.a_days = i.selectDays
+        }
+      })
+      if (hall.indexOf('、') != -1) {
+        hall = hall.slice(0, hall.length - 1)
+      }
+      this.setData({
+        auditorium: obj,
+        offices: this.data.office,
+        hall: hall?hall:'请选择大厅',
+        date: obj.a_days.length?obj.a_days:'',
+        show: false
+      })
+      if(this.data.auditorium.office.length){
+        // if (setAddr&&setAddr.length != 0) {
+        //   var index = setAddr.findIndex(i => i.a_id == this.data.auditorium.a_id)
+        //   if (index != -1) {
+        //     setAddr[index] = this.data.auditorium
+        //   } else {
+        //     setAddr.push(this.data.auditorium)
+        //   }
+        // } else {
+        //   setAddr = [this.data.auditorium]
+        // }
+        wx.setStorageSync('setAddr', this.data.auditorium)
+        wx.showToast({
+          title: '预订成功',
+          icon: 'success',
+          duration: 1000 //持续的时间
+        })
+      }else{
+        // if(setAddr.length=1){
+          wx.removeStorageSync('setAddr')
+        // }else{
+        //   var index = setAddr.findIndex(i => i.a_id == this.data.auditorium.a_id)
+        //   setAddr.splice(index,1)
+        // }
+      }
+      var pages = getCurrentPages();
+      var beforePage = pages[pages.length - 2];
+      var setAddr = beforePage.selectComponent("#setAddr");
+      setAddr.getAuditoriumList()
     }
-    wx.setStorageSync('setAddr', setAddr)
-    var pages = getCurrentPages();
-    var beforePage = pages[pages.length - 2];
-    var setAddr = beforePage.selectComponent("#setAddr");
-    setAddr.getAuditoriumSelect()
-    wx.navigateBack({
-      delta: 1,
-    })
   },
   /**
    * 生命周期函数--监听页面加载
@@ -217,8 +262,6 @@ Page({
     this.setData({
       a_id: options.a_id
     })
-    var entryInfo = wx.getStorageSync('entryInfo')
-    //修改
     app.post('/comm/getAuditorium', {
       a_id: this.data.a_id
     }).then(res => {
@@ -236,8 +279,35 @@ Page({
           a_contacts: res.data.data.a_contacts,
           a_phone: res.data.data.a_phone,
           a_scroll_picture: res.data.data.a_scroll_picture,
-          office: res.data.data.office
+          office: res.data.data.office,
+          offices: res.data.data.office
         })
+        var setAddr = wx.getStorageSync('setAddr')
+        var offices = JSON.parse(JSON.stringify(this.data.offices))
+        // if (setAddr && setAddr.length != 0) {
+          // var auditorium = setAddr.find(i => i.a_id == options.a_id)
+          if (setAddr.a_id==options.a_id) {
+            var hall = ''
+            setAddr.office.forEach(i => {
+              hall += i.ao_name + '、'
+              offices.forEach(j => {
+                if (i.ao_id == j.ao_id) {
+                  j.ao_flag = true
+                  j.selectDays = setAddr.a_days
+                }
+              })
+            })
+            if (hall.indexOf('、') != -1) {
+              hall = hall.slice(0, hall.length - 1)
+            }
+            this.setData({
+              auditorium: setAddr,
+              offices: offices,
+              date: setAddr.a_days,
+              hall: hall
+            })
+          }
+        // }
       } else {
         wx.showToast({
           title: '网络不稳定~',
@@ -272,7 +342,7 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload() {
-
+    wx.removeStorageSync('days')
   },
 
   /**

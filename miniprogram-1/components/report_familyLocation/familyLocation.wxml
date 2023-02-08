@@ -115,15 +115,25 @@
           </view>
           <view class="righ">
             <view class="righ_top">
-              <view class="righ_top_name">{{item.a_name}}</view>
+              <view class="righ_top_names">
+                <view class="righ_top_name">
+                  {{item.a_name}}
+                </view>
+                <view class="righ_top_mark" wx:if="{{item.a_mark}}">
+                  <van-icon name="checked" color="#3572e1" size="14px" />
+                  <text style="line-height: 1;">已预订</text>
+                </view>
+              </view>
               <view class="righ_top_logo">
                 <view class="righ_top_logos">活动中心</view>
+                <view class="righ_top_logos">家宴</view>
+                <view class="righ_top_logos">家宴中心</view>
                 <view class="righ_top_logos">家宴中心</view>
               </view>
             </view>
             <view class="righ_bottom">
               <image class="righ_bottom_icon" src="../../icon/report_icon.png"></image>
-              <view class="righ_bottom_address">{{item.a_address}}</view>
+              <text style="flex: 1;">{{item.a_address}}空荡荡多多</text>
             </view>
           </view>
         </navigator>

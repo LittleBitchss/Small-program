@@ -72,7 +72,6 @@ Component({
       value: false
     }
   },
-
   /**
    * 组件的初始数据
    */

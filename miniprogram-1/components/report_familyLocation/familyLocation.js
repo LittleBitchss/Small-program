@@ -430,7 +430,7 @@ Component({
         })
       } else if (this.data.isFamily == 2) {
         var setAddr = wx.getStorageSync('setAddr')
-        if (setAddr.length != 0) {
+        if (setAddr) {
           this.triggerEvent("nextStep2", {
             go: 3
           })
@@ -458,30 +458,47 @@ Component({
         region: e.detail.value,
         regionCode: e.detail.code,
       })
-      var a = {
-        province: e.detail.code[0].slice(0, 2),
-        city: e.detail.code[1].slice(0, 4),
-        area: e.detail.code[2],
-        street: e.detail.code[3] || 0,
-        village: e.detail.code[4] || 0
-      }
-      this.getAuditoriumList(a)
+      this.getAuditoriumList()
     },
-    getAuditoriumList(a) {
+    getAuditoriumList(filter,page) {
       var setAddr = wx.getStorageSync('setAddr')
-      var a_id = ''
-      if (setAddr.length != 0) {
-        setAddr.forEach(i=>{
-          a_id+=i.a_id+','
-        })
-        a_id=a_id.slice(0,a_id.length-1)
+      // var selArr = []
+      // var sel_id = ''
+      // if (setAddr) {
+      //   setAddr.forEach(i=>{
+      //     sel_id+=i.a_id+','
+      //     selArr.push(i.a_id)
+      //   })
+      //   sel_id=sel_id?sel_id.slice(0,sel_id.length-1):''
+      // }
+      var a = {
+        province: this.data.regionCode[0].slice(0, 2),
+        city: this.data.regionCode[1].slice(0, 4),
+        area: this.data.regionCode[2],
+        street: this.data.regionCode[3] || 0,
+        village: this.data.regionCode[4] || 0,
       }
-      //修改
+      if(filter){
+        a.filter = filter 
+      }
+      if(page){
+        a.page = page 
+      }
+      if(setAddr){
+        a.sel_id = setAddr.a_id
+      }
       app.post('/comm/getAuditoriumList', a).then(res => {
         if (res.data.status == 1) {
+          res.data.data.rows.forEach(i=>{
+            // selArr.forEach(j=>{
+              if(i.a_id==setAddr.a_id){
+                i.a_mark=true
+              }
+            // })
+          })
           console.log(res.data.data.rows);
           this.setData({
-            lists: res.data.data.rows,
+            lists: res.data.data.rows
           })
         } else {
           wx.showToast({
@@ -492,34 +509,9 @@ Component({
         }
       })
     },
-    getAuditoriumSelect() {
-      
-    },
     search() {
       if (this.data.regionCode.length != 0) {
-        var a = {
-          province: this.data.regionCode[0].slice(0, 2),
-          city: this.data.regionCode[1].slice(0, 4),
-          area: this.data.regionCode[2],
-          street: this.data.regionCode[3] || 0,
-          village: this.data.regionCode[4] || 0,
-          filter: this.data.value1
-        }
-        try {
-          app.post('/comm/getAuditoriumList', a).then(res => {
-            if (res.data.status == 1) {
-              this.setData({
-                lists: res.data.data.rows,
-              })
-            }
-          })
-        } catch {
-          wx.showToast({
-            title: '网络不稳定~',
-            icon: 'error',
-            duration: 1000 //持续的时间
-          })
-        }
+        this.getAuditoriumList(this.data.value1)
       }
     },
     findObj(Arr, j) {
@@ -559,8 +551,8 @@ Component({
           villageValue: this.findObj(wx.getStorageSync('village'), setAddr.m_village).name,
           value6: setAddr.m_address
         })
-      } else if (setAddr && setAddr.length != 0) {
-        if (setAddr[0].office.length != 0) {
+      } else if (setAddr && setAddr.m_ids == 2) {
+        // if (setAddr[0].office.length != 0) {
           this.setData({
             Family: app.domain + "/img/report/Family.png",
             hall: app.domain + "/img/report/hall-active.png",
@@ -569,7 +561,7 @@ Component({
             show: 2,
             isFamily: 2,
           })
-        }
+        // }
       }
       try {
         app.post('/region/getProvince', {
@@ -594,14 +586,7 @@ Component({
         region: [userInfo.province, userInfo.citys, userInfo.district],
         regionCode: [userInfo.provincecode, userInfo.citycode, userInfo.adcode],
       })
-      var a = {
-        province: this.data.regionCode[0].slice(0, 2),
-        city: this.data.regionCode[1].slice(0, 4),
-        area: this.data.regionCode[2],
-        street: 0,
-        village: 0
-      }
-      this.getAuditoriumList(a)
+      this.getAuditoriumList()
     }
   }
 })

@@ -110,9 +110,8 @@
 }
 .auditorium .hallls{
   background-color: #fff;
-  border-radius: 10rpx;
-  margin: 18rpx 0 0;
-  font-size: 26rpx;
+  padding: 30rpx 0;
+  font-size: 30rpx;
   font-family: 'Medium';
   display: flex;
   flex-direction: column;
@@ -142,43 +141,15 @@
 .auditorium .hallls .hallls_i .hallls_i_right .i_time .i_time_txts{
   margin-right: 0;
 }
-.auditorium .hallls .btn {
-  width: 100%;
-  margin-top: 20rpx;
-}
 .page-container{
   height: 100%;
 }
-
-
 .page_cont{
   height: 100%;
   position: relative;
 }
 .container{
   height: 570rpx;
-}
-.btn{
-  height: 88rpx;
-  display: flex;
-  justify-content: space-between;
-  width: 670rpx;
-  margin: 0 auto;
-}
-.btn .btns{
-  height: 100%;
-  font-size: 34rpx;
-  font-family: 'Light';
-  color: #aaa;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.btn .btnss{
-  color: #3572e1;
-}
-.wire{
-  border-top: 2rpx solid #f1f1f1;
 }
 .page_cont .item{
   width: 670rpx;
