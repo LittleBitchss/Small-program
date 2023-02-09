@@ -265,9 +265,7 @@
 }
 .user_orderDetail .securitys .security{
   height: 254rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  margin: 0 30rpx;
 }
 .user_orderDetail .securitys .security .security_item{
   width: 220rpx;

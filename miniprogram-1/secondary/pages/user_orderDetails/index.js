@@ -176,7 +176,7 @@ Page({
         if (res.data.status == 1) {
           var rex = res.data.data
           rex.auditorium.m_start_date = rex.basics.m_start_date
-          rex.auditorium.m_holding_days = rex.basics.m_holding_days
+          rex.auditorium.m_end_date = rex.basics.m_end_date
           // var m_province = rex.basics.m_province.toString().slice(0, 2)
           // var m_city = rex.basics.m_city.toString().slice(0, 4)
           app.post('/region/getProvince', {
@@ -227,9 +227,9 @@ Page({
                     var provinceValue = this.findObj(this.data.province, rex.basics.m_province).name
                     var cityValue = this.findObj(this.data.city, rex.basics.m_city).name
                     var areaValue = this.findObj(this.data.area, rex.basics.m_area).name
-                    var streetValue = this.findObj(this.data.street, rex.basics.m_street).name
-                    var villageValue = this.findObj(this.data.village, rex.basics.m_village).name
-                    rex.basics.region = [provinceValue, cityValue, areaValue, streetValue, villageValue]
+                    // var streetValue = this.findObj(this.data.street, rex.basics.m_street).name
+                    // var villageValue = this.findObj(this.data.village, rex.basics.m_village).name
+                    rex.basics.region = [provinceValue, cityValue, areaValue]
                     this.setData({
                       basics: rex.basics,
                       foodsources: rex.foodsource,

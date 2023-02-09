@@ -15,12 +15,7 @@ Component({
    */
   data: {
     domain: app.domain + "/img/chef/",
-    Family: app.domain + "/img/report/Family-active.png",
-    hall: app.domain + "/img/report/hall.png",
-    fontColor11: "",
-    fontColor22: "fontColor",
     show: 1,
-
     province: [],
     provinceValue: "",
     city: [],
@@ -31,26 +26,16 @@ Component({
     streetValue: "",
     village: [],
     villageValue: "",
-
     value1: "",
-    value6: "",
-
     cover: "",
     a_name: "",
     address: "",
+    introduce: '',
+    contacts: '',
+    phone: '',
     swipers: [],
-    hallx: [],
-    hallxs: [],
-    hallxss: "",
-
-    chooseHall: false,
-    chooseHall2: 0,
-    startDate: "",
-    endDate: "",
-
-    selStartDate: "",
-    selEndDate: "",
-
+    hall: '',
+    date: '',
     m_auditorium_id: "",
     m_ao_id: ""
   },
@@ -145,7 +130,7 @@ Component({
                       areaValue: this.findObj(wx.getStorageSync('area'), this.data.basics.m_area).name,
                       streetValue: this.findObj(wx.getStorageSync('street'), this.data.basics.m_street).name,
                       villageValue: this.findObj(wx.getStorageSync('village'), this.data.basics.m_village).name,
-                      value6: this.data.basics.m_address
+                      value1: this.data.basics.m_address
                     })
                     wx.hideLoading()
                   })
@@ -161,29 +146,24 @@ Component({
           })
         }
       } else {
-        var hallxss = ""
+        var hall = ""
         this.data.auditorium.office.forEach(i => {
-          i.flag = true
-          hallxss += i.ao_name
+          hall += i.ao_name + '、'
         })
-        var endDate = this.getDatess(this.data.auditorium.m_start_date, this.data.auditorium.m_holding_days - 1)
+        if (hall.indexOf('、') != -1) {
+          hall = hall.slice(0, hall.length - 1)
+        }
         this.setData({
-          Family: app.domain + "/img/report/Family.png",
-          hall: app.domain + "/img/report/hall-active.png",
-          fontColor11: "fontColor",
-          fontColor22: "",
-          show: 3,
-          isFamily: 2,
+          show: 2,
           cover: this.data.auditorium.a_cover_photo,
           a_name: this.data.auditorium.a_name,
           address: this.data.auditorium.a_address,
+          introduce: this.data.auditorium.a_introduce,
+          contacts: this.data.auditorium.a_contacts,
+          phone: this.data.auditorium.a_phone,
           swipers: this.data.auditorium.a_scroll_picture.split(","),
-          hallx: this.data.auditorium.office,
-          hallxss: hallxss,
-          startDate: this.data.auditorium.m_start_date,
-          endDate: endDate,
-          selStartDate: this.data.auditorium.m_start_date.replace(/-/g, ""),
-          selEndDate: endDate.replace(/-/g, ""),
+          hall: hall,
+          date: [this.data.auditorium.m_start_date, this.data.auditorium.m_end_date],
         })
         wx.hideLoading()
       }

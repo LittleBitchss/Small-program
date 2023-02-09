@@ -1,98 +1,100 @@
 <!--components/user_orderAddre/user_orderAddre.wxml-->
 <view class="user_orderAddre">
-  <view class="top">
-    <image class="img imgs" src="{{Family}}"></image>
-    <view class="img_txt img_txts {{fontColor11}}">自家举办</view>
-    <image class="img imgss" src="{{hall}}"></image>
-    <view class="img_txt img_txtss {{fontColor22}}">大礼堂</view>
+  <view class="Family" wx:if="{{show == 1}}">
+    <view class="item">
+      <view class="lefts">
+        举办区域
+      </view>
+      <view class="typ">
+        <text class="txt">{{provinceValue}}</text>
+      </view>
+    </view>
+    <view class="item">
+      <view class="lefts"></view>
+      <view class="typ">
+        <text class="txt">{{cityValue}}</text>
+      </view>
+    </view>
+    <view class="item">
+      <view class="lefts"></view>
+      <view class="typ">
+        <text class="txt">{{areaValue}}</text>
+      </view>
+    </view>
+    <view class="item">
+      <view class="lefts"></view>
+      <view class="typ">
+        <text class="txt">{{streetValue}}</text>
+      </view>
+    </view>
+    <view class="item">
+      <view class="lefts"></view>
+      <view class="typ">
+        <text class="txt">{{villageValue}}</text>
+      </view>
+    </view>
+    <view class="item">
+      <view class="lefts">详细地址</view>
+      <view class="typ">
+        <text class="txt">{{value1}}</text>
+      </view>
+    </view>
   </view>
-  <view class="cont">
-    <view class="Family" wx:if="{{show == 1}}">
-      <view class="item">
-        <view class="lefts">
-          举办区域
-        </view>
-        <view class="typ">
-          <text class="txt">{{provinceValue}}</text>
-        </view>
+  <view class="auditorium" wx:if="{{show == 2}}">
+    <view class="details">
+      <image class="cover" src="{{cover}}"></image>
+      <view>
       </view>
-      <view class="item">
-        <view class="lefts"></view>
-        <view class="typ">
-          <text class="txt">{{cityValue}}</text>
-        </view>
+      <view class="title">{{a_name}}</view>
+      <view class="addr">
+        <image class="addr_img" src="../../icon/report_marks.png"></image>
+        地址：{{address}}
       </view>
-      <view class="item">
-        <view class="lefts"></view>
-        <view class="typ">
-          <text class="txt">{{areaValue}}</text>
-        </view>
+      <view class="tiem">
+        <image class="tiem_img" src="../../icon/report_clock.png"></image>
+        营业时间：全天
       </view>
-      <view class="item">
-        <view class="lefts"></view>
-        <view class="typ">
-          <text class="txt">{{streetValue}}</text>
-        </view>
-      </view>
-      <view class="item">
-        <view class="lefts"></view>
-        <view class="typ">
-          <text class="txt">{{villageValue}}</text>
-        </view>
-      </view>
-      <view class="item">
-        <view class="lefts">详细地址</view>
-        <view class="typ">
-          <text class="txt">{{value6}}</text>
+      <view class="hint">礼堂简介</view>
+      <text class="introduce" style="white-space: pre-wrap;word-break: break-all;">{{introduce}}</text>
+      <view class="hint">联系人：{{contacts}}</view>
+      <view class="hint">联系电话：{{phone}}</view>
+      <view class="hint">礼堂详情</view>
+      <swiper class="hallSwiper" autoplay="true" interval="3500" circular="true" indicator-dots="true" previous-margin="40px" easing-function="easeInCubic" snap-to-edge="true" next-margin="60px">
+        <swiper-item class="swiper-item" wx:for="{{swipers}}" wx:key="index">
+          <image class="item-img" src="{{item}}"></image>
+        </swiper-item>
+      </swiper>
+      <view class="assure">
+        <view class="assures">
+          <text class="txts">保障</text>
+          <view class="item">
+            <image class="item_img" src="../../icon/report_tick.png"></image>
+            <text class="item_txt">食品安全责任险</text>
+          </view>
         </view>
       </view>
     </view>
-    <view class="hallDetails" wx:if="{{show == 3}}">
-      <view class="details">
-        <image class="cover" src="{{cover}}"></image>
-        <view class="title">{{a_name}}</view>
-        <view class="addr">
-          <image class="addr_img" src="../../icon/report_marks.png"></image>
-          地址：{{address}}
-        </view>
-        <view class="tiem">
-          <image class="tiem_img" src="../../icon/report_clock.png"></image>
-          营业时间：全天
-        </view>
-        <view class="hint">礼堂详情</view>
-        <swiper class="hallSwiper" autoplay="true" interval="3500" circular="true" indicator-dots="true" previous-margin="40px" easing-function="easeInCubic" snap-to-edge="true" next-margin="50px">
-          <swiper-item class="swiper-item" wx:for="{{swipers}}" wx:key="index">
-            <image class="item-img" src="{{item}}"></image>
-          </swiper-item>
-        </swiper>
-        <view class="assure">
-          <view class="assures">
-            <text class="txts">保障</text>
-            <view class="item">
-              <image class="item_img" src="../../icon/report_tick.png"></image>
-              <text class="item_txt">食品安全责任险</text>
-            </view>
-          </view>
+    <view class="hallls">
+      <view class="hallls_i">
+        <view class="hallls_i_left">选择大厅</view>
+        <view class="hallls_i_right" bindtap="openMask">
+          <text class="i_name">{{hall?hall:"请选择大厅"}}</text>
+          <image class="i_img" src="../../icon/report_right.png"></image>
         </view>
       </view>
-      <view class="hallls">
-        <view class="hallls_i">
-          <view class="hallls_i_left">选择大厅</view>
-          <view class="hallls_i_right">
-            <text class="i_name">{{a_name+hallxss}}</text>
+      <view class="hallls_i">
+        <view class="hallls_i_left">预约日期</view>
+        <view class="hallls_i_right" bindtap="openMask">
+          <view class="i_time" wx:if="{{date==''}}">请选择日期</view>
+          <view class="i_time" wx:if="{{date}}">
+            <text class="i_time_txt">{{date[0]}}</text>
+            至
+            <text class="i_time_txt i_time_txts">{{date[date.length-1]}}</text>
           </view>
-        </view>
-        <view class="hallls_i">
-          <view class="hallls_i_left">预约日期</view>
-          <view class="hallls_i_right">
-            <view class="i_time">
-              <text class="i_time_txt">{{startDate}}</text>
-              至
-              <text class="i_time_txt i_time_txts">{{endDate}}</text>
-            </view>
-          </view>
+          <image class="i_img" src="../../icon/report_right.png"></image>
         </view>
       </view>
+      <van-dialog id="van-dialog" />
     </view>
   </view>
 </view>

@@ -189,11 +189,10 @@ Page({
     let day = parseInt((end_num.getTime() - start_num.getTime()) / (1000 * 60 * 60 * 24))
     return day
   },
-  getDates(days) {
-    var date = utils.formatDate(new Date());
-    var start_num = new Date(date.replace(/-/g, "/"))
-    var end_num = new Date(days.replace(/-/g, "/"))
-    let day = parseInt((start_num.getTime() - end_num.getTime()) / (1000 * 60 * 60 * 24))
+  getDates(startDay,endDay) {
+    var start_num = new Date(startDay.replace(/-/g, "/"))
+    var end_num = new Date(endDay.replace(/-/g, "/"))
+    let day = parseInt((end_num.getTime() - start_num.getTime() + (1000 * 60 * 60 * 24))/(1000 * 60 * 60 * 24))
     return day
   },
   getOrder() {
@@ -203,6 +202,7 @@ Page({
         token: wx.getStorageSync('userInfo').token
       }).then(res => {
         if (res.data.status == 1) {
+          console.log(res.data);
           res.data.data.forEach(i => {
             var banCancel = this.getDate(i.m_start_date)
             if (banCancel <= 0) {
@@ -210,6 +210,10 @@ Page({
             } else {
               i.banCancel = false
             }
+            if(i.m_end_date){
+              i.m_holding_days = this.getDates(i.m_start_date,i.m_end_date)
+            }
+            
           })
           var listArr2 = res.data.data.filter(i => i.o_status!=3 && i.m_approval != (3 || 2) && i.banCancel == false && i.mi_accept_invitation != (2 || 3))
           var listArr3 = res.data.data.filter(i => i.m_approval == 0 && i.m_matsuri_type == 1 && i.banCancel == false)

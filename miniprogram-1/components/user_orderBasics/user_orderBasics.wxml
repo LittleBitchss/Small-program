@@ -13,23 +13,17 @@
     <input class="inp" type="text" value="{{type[basics.m_type-1].mt_name}}" disabled="true"/>
   </view>
   <view class="item">
-    <text space="emsp" class="title">举办日期</text>
+    <text space="emsp" class="title">开始日期</text>
     <input class="inp" type="text" value="{{basics.m_start_date}}" disabled="true"/>
   </view>
   <view class="item">
-    <text space="emsp" class="title">就餐人数</text>
-    <input class="inp" type="text" value="{{basics.m_banquet_number}}" disabled="true"/>
-    人
+    <text space="emsp" class="title">结束日期</text>
+    <input class="inp" type="text" value="{{basics.m_end_date}}" disabled="true"/>
   </view>
   <view class="item">
     <text space="emsp" class="title">拟办桌数</text>
     <input class="inp" type="text" value="{{basics.m_tables}}" disabled="true"/>
     桌
-  </view>
-  <view class="item">
-    <text space="emsp" class="title">拟办天数</text>
-    <input class="inp" type="text" value="{{basics.m_holding_days}}" disabled="true"/>
-    天
   </view>
 </view>
 

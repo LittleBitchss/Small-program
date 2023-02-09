@@ -69,9 +69,11 @@ Component({
           m_ao_id: m_ao_id
         }
       }
-      // delete setAddr.m_ids
+      if(setAddr.m_ids == 1){
+        delete setAddr.m_ids
+      }
       entryInfo = Object.assign(entryInfo, setAddr)
-      console.log(entryInfo);
+      
       var foodSource = wx.getStorageSync('foodSource')
       var obj = {
         token: wx.getStorageSync('userInfo').token,

@@ -14,7 +14,7 @@
       </view>
       <view class="item">
         <view class="item_left">用餐时间</view>
-        <picker mode="time" value="{{time}}" class="item_right" start="06:01" end="23:59" bindchange="bindChange" data-index="2">
+        <picker mode="multiSelector" class="item_right" bindchange="bindChange" bindcolumnchange="bindcolumnchange" value="{{multiIndex}}" range="{{multiArray}}" data-index="2">
           <view class="picker">
             <text class="item_right_txt {{fontColor2}}">{{time}}</text>
             <image class="item_right_img" src="../../../icon/mine_right_arrow.png"></image>
@@ -37,7 +37,7 @@
           </view>
         </view>
       </view>
-      <view class="item">
+      <!-- <view class="item">
         <text class="item_left">用餐地址：</text>
         <view class="region {{fontColor3}}" bindtap="siteTesting">
           <text class="txt txts">{{region[0]}}</text>
@@ -45,6 +45,15 @@
           <text class="txt txts">{{region[2]}}</text>
           <text class="txt txts">{{region[3]}}</text>
           <text class="txt txts">{{region[4]}}</text>
+        </view>
+        <image class="item_right_img" src="../../../icon/mine_right_arrow.png" bindtap="siteTesting"></image>
+      </view> -->
+      <view class="item">
+        <text class="item_left">用餐地址：</text>
+        <view class="region {{fontColor3}}" bindtap="siteTesting">
+          <text class="txt txts">{{region[0]}}</text>
+          <text class="txt txts">{{region[1]}}</text>
+          <text class="txt txts">{{region[2]}}</text>
         </view>
         <image class="item_right_img" src="../../../icon/mine_right_arrow.png" bindtap="siteTesting"></image>
       </view>
@@ -123,8 +132,11 @@
     提交
   </view>
 </view>
-<page-container class="page-container" show="{{show}}" position="bottom" overlay="true" bind:clickoverlay="eventhandle">
+<van-popup show="{{ show }}" bind:close="onClose" position="bottom">
+  <van-area area-list="{{ areaList }}" value="{{area}}" columns-placeholder="{{ ['请选择', '请选择', '请选择'] }}" bind:cancel="onClose" bind:confirm="confirm" />
+</van-popup>
+<!-- <page-container class="page-container" show="{{show}}" position="bottom" overlay="true" bind:clickoverlay="eventhandle">
   <view class="page-root">
     <area-select id="areaSelect" bind:cancelEvent="_cancelEvent" bind:confirmEvent="_confirmEvent"></area-select>
   </view>
-</page-container>
+</page-container> -->

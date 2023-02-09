@@ -5,6 +5,7 @@ var QQMapWX = require('../../../utils/qqmap-wx-jssdk.min');
 const qqMapSdk = new QQMapWX({
   key: 'ABNBZ-GKPLS-FOAOJ-6HOP3-GAWZO-NNFDH'
 });
+import { areaList } from '../../miniprogram_npm/@vant/area-data/data';
 Page({
   data: {
     domain: app.domain + "/img/chef/",
@@ -12,10 +13,14 @@ Page({
     time: "请选择用餐时间",
     fontColor1: "",
     fontColor2: "",
+    multiIndex:[0,0],
+    multiArray:[['00','01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23'],['00','30']],
     value1: "",
     value2: "",
     value3: "",
     value4: "",
+    area:'',
+    areaList,
     region: ["请选择地区"],
     regionCode: [],
     checked1: true,
@@ -55,8 +60,9 @@ Page({
         })
       }
     } else if (index == 2) {
+      var time = this.data.multiArray[0][val[0]]+':'+this.data.multiArray[1][val[1]]
       this.setData({
-        time: val,
+        time: time,
         fontColor2: "fontColor"
       })
     } else if (index == 3) {
@@ -64,6 +70,18 @@ Page({
         region: e.detail.value,
         regionCode: e.detail.code,
         fontColor3: "fontColor",
+      })
+    }
+  },
+  bindcolumnchange(e){
+    var val = e.detail.value
+    var col = e.detail.column
+    var multiIndex = JSON.parse(JSON.stringify(this.data.multiIndex))
+    if(col==0){
+      multiIndex[0]=val
+      multiIndex[1]=0
+      this.setData({
+        multiIndex:multiIndex
       })
     }
   },
@@ -152,61 +170,85 @@ Page({
       })
     }
   },
-  siteTesting: function (e) {
-    var addressObj = this.data.addressObj
-    if (!addressObj.province) {
-      this.areaSelect.showDialog();
-    } else {
-      this.areaSelect.pass({
-        addressObj: addressObj
-      });
-    }
+  siteTesting(){
     this.setData({
-      show: true
+      show:true
     })
   },
-  _cancelEvent(e) {
-    var addressObj = this.data.addressObj
+  onClose(){
     this.setData({
-      show: e.detail.show
+      show:false
     })
-    if (!addressObj.province) {
-      this.areaSelect.hideDialog();
-    }
   },
-  _confirmEvent(e) {
-    var Obj = this.areaSelect.data.addressObj
-    var region = [
-      Obj.province.provinceName,
-      Obj.city.cityName,
-      Obj.area.areaName,
-      Obj.address.addressName,
-      Obj.community.communityName,
-    ]
-    var regionCode = [
-      Obj.province.provinceCode,
-      Obj.city.cityCode,
-      Obj.area.areaCode,
-      Obj.address.addressCode,
-      Obj.community.communityCode,
-    ]
+  confirm(e){
+    var region = []
+    var regionCode = []
+    e.detail.values.forEach(i=>{
+      region.push(i.name)
+      regionCode.push(i.code)
+    })
     this.setData({
-      show: e.detail.show,
-      addressObj: Obj,
       region: region,
       regionCode: regionCode,
-      fontColor3: "fontColor",
+      fontColor3:'fontColor',
+      show:false
     })
   },
-  eventhandle() {
-    var addressObj = this.data.addressObj
-    if (!addressObj.province) {
-      this.areaSelect.hideDialog();
-    }
-    this.setData({
-      show: false
-    })
-  },
+  // siteTesting: function (e) {
+  //   var addressObj = this.data.addressObj
+  //   if (!addressObj.province) {
+  //     this.areaSelect.showDialog();
+  //   } else {
+  //     this.areaSelect.pass({
+  //       addressObj: addressObj
+  //     });
+  //   }
+  //   this.setData({
+  //     show: true
+  //   })
+  // },
+  // _cancelEvent(e) {
+  //   var addressObj = this.data.addressObj
+  //   this.setData({
+  //     show: e.detail.show
+  //   })
+  //   if (!addressObj.province) {
+  //     this.areaSelect.hideDialog();
+  //   }
+  // },
+  // _confirmEvent(e) {
+  //   var Obj = this.areaSelect.data.addressObj
+  //   var region = [
+  //     Obj.province.provinceName,
+  //     Obj.city.cityName,
+  //     Obj.area.areaName,
+  //     Obj.address.addressName,
+  //     Obj.community.communityName,
+  //   ]
+  //   var regionCode = [
+  //     Obj.province.provinceCode,
+  //     Obj.city.cityCode,
+  //     Obj.area.areaCode,
+  //     Obj.address.addressCode,
+  //     Obj.community.communityCode,
+  //   ]
+  //   this.setData({
+  //     show: e.detail.show,
+  //     addressObj: Obj,
+  //     region: region,
+  //     regionCode: regionCode,
+  //     fontColor3: "fontColor",
+  //   })
+  // },
+  // eventhandle() {
+  //   var addressObj = this.data.addressObj
+  //   if (!addressObj.province) {
+  //     this.areaSelect.hideDialog();
+  //   }
+  //   this.setData({
+  //     show: false
+  //   })
+  // },
   submitInfo() {
     var that = this
     var obj = {
@@ -218,19 +260,19 @@ Page({
         m_meal_time: this.data.time,
         m_banquet_number: this.data.value1,
         m_phone: this.data.value2,
-        m_province: this.data.regionCode[0],
-        m_city: this.data.regionCode[1],
+        m_province: this.data.regionCode[0]?this.data.regionCode[0].slice(0,2):'',
+        m_city: this.data.regionCode[1]?this.data.regionCode[1].slice(0,4):'',
         m_area: this.data.regionCode[2],
-        m_street: this.data.regionCode[3],
-        m_village: this.data.regionCode[4],
+        // m_street: this.data.regionCode[3],
+        // m_village: this.data.regionCode[4],
         m_address: this.data.value3,
         m_remark: this.data.value4,
         m_insurance: this.data.m_insurance,
         m_insurance_count: this.data.m_insurance_count
       }
     }
-    if (obj.meal_info.m_start_date != "请选择服务日期" && obj.meal_info.m_meal_time != "请选择用餐时间" && obj.meal_info.m_banquet_number && obj.meal_info.m_phone && obj.meal_info.m_province && obj.meal_info.m_address && obj.meal_info.m_remark) {
-      var address = this.data.region[0] + this.data.region[1] + this.data.region[2] + this.data.region[3] + this.data.region[4] + this.data.value3
+    if (obj.meal_info.m_start_date != "请选择服务日期" && obj.meal_info.m_meal_time != "请选择用餐时间" && obj.meal_info.m_banquet_number && obj.meal_info.m_phone && obj.meal_info.m_province && obj.meal_info.m_address) {
+      var address = this.data.region[0] + this.data.region[1] + this.data.region[2] + this.data.value3
       qqMapSdk.geocoder({
         //获取表单传入地址
         address: address, //地址参数，例：固定地址，address: '北京市海淀区彩和坊路海淀西大街74号'
@@ -288,6 +330,32 @@ Page({
   onLoad() {
     wx.setNavigationBarTitle({
       title: '厨师到家'
+    })
+    var time = new Date().toLocaleTimeString().split(':')
+    if(time[0].indexOf('下午')==-1){
+      var aa = time[0].slice(2,time[0].length)
+      if(aa<10){
+        aa = '0'+aa
+      }
+      time[0] = aa
+    }else{
+      var aa = Number(time[0].slice(2,time[0].length))+12
+      time[0] = aa+''
+    }
+    if(time[1]<10){
+      time[1] = '0'+ time[1]
+    }
+    console.log(time);
+    var index1 = this.data.multiArray[0].indexOf(time[0])
+    var index2 = 0
+    if(time[1]>=this.data.multiArray[1][0]&&time[1]<this.data.multiArray[1][1]){
+      index2 = 0
+    }else{
+      index2 = 1
+    }
+    this.setData({
+      multiIndex:[index1,index2],
+      area:wx.getStorageSync('userInfo').adcode
     })
     wx.showModal({
       title: '',

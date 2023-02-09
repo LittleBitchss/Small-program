@@ -107,21 +107,18 @@
       </view>
       <view class="securitys">
         <view class="security_title">安全保障</view>
-        <radio-group class="security">
-          <label class="security_item security_left {{basics.m_insurance_count==0?'active':''}}">
-            <view class="security_item_top {{basics.m_insurance_count==0?'bdColor':''}}">无保障</view>
+        <view class="security">
+          <view class="security_item security_left" wx:if="{{basics.m_insurance_count==0}}">
+            <view class="security_item_top">无保障</view>
             <view class="security_left_bottom">
               <view class="security_left_bottom_imgs">
                 <image class="security_left_bottom_img" src="../../../icon/goHome_null.png"></image>
               </view>
               <view class="security_left_bottom_txt">0项</view>
-              <view class="security_left_bottom_checkbox">
-                <radio value="0" checked="{{basics.m_insurance_count==0}}" disabled="true" />
-              </view>
             </view>
-          </label>
-          <label class="security_item security_right {{basics.m_insurance_count!=0?'active':''}}">
-            <view class="security_item_top {{basics.m_insurance_count!=0?'bdColor':''}}">厨师到家安全组合险</view>
+          </view>
+          <view class="security_item security_right" wx:if="{{basics.m_insurance_count!=0}}">
+            <view class="security_item_top">厨师到家安全组合险</view>
             <view class="security_right_bottom">
               <view class="security_right_item">
                 <view class="security_right_item_cont">
@@ -135,9 +132,6 @@
                   <view class="security_right_midden_add_item"></view>
                   <view class="security_right_midden_add_item security_right_midden_add_items"></view>
                 </view>
-                <view class="security_right_midden_checkbox">
-                  <radio value="10" checked="{{basics.m_insurance_count!=0}}" disabled="true" />
-                </view>
               </view>
               <view class="security_right_item">
                 <view class="security_right_item_cont">
@@ -146,8 +140,10 @@
                 </view>
               </view>
             </view>
-          </label>
-        </radio-group>
+          </view>
+          <view>
+          </view>
+        </view>
       </view>
     </view>
     <user_orderChefInfo wx:if="{{shows == 2&&invitation==0}}" chefs="{{chefs}}" m_id="{{m_id}}"></user_orderChefInfo>

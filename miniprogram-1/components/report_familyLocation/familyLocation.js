@@ -484,7 +484,7 @@ Component({
       if(page){
         a.page = page 
       }
-      if(setAddr){
+      if(setAddr && setAddr.m_ids==2){
         a.sel_id = setAddr.a_id
       }
       app.post('/comm/getAuditoriumList', a).then(res => {
@@ -562,6 +562,7 @@ Component({
             isFamily: 2,
           })
         // }
+        
       }
       try {
         app.post('/region/getProvince', {

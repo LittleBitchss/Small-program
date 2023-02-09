@@ -130,12 +130,14 @@
   color: #f14c44;
   border: #f14c44 2rpx solid;
   margin-left: 15rpx;
+  padding: 0
 }
 .userOrder .all .item .nobd .btns .btn3{
   border-radius: 10rpx;
   color: #fff;
   background-color: #717171;
   line-height: 40rpx;
+  padding: 0;
 }
 .userOrder .all .item .nobd .btns .bg1{
   background-color: #717171;

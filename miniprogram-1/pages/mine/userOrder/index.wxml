@@ -28,8 +28,8 @@
             </view>
             <view class="items items2">
               <view class="left">
-                <text>宴席人数：</text>
-                <text class="txt">{{item.m_banquet_number}}人</text>
+                <text>宴席桌数：</text>
+                <text class="txt">{{item.m_tables}}人</text>
               </view>
               <view class="right">
                 <text>主厨姓名：</text>
@@ -145,8 +145,8 @@
             </view>
             <view class="items items2">
               <view class="left">
-                <text>宴席人数：</text>
-                <text class="txt">{{item.m_banquet_number}}人</text>
+                <text>宴席桌数：</text>
+                <text class="txt">{{item.m_tables}}人</text>
               </view>
               <view class="right">
                 <text>主厨姓名：</text>
@@ -235,8 +235,8 @@
           </view>
           <view class="items items2">
             <view class="left">
-              <text>宴席人数：</text>
-              <text class="txt">{{item.m_banquet_number}}人</text>
+              <text>宴席桌数：</text>
+                <text class="txt">{{item.m_tables}}人</text>
             </view>
             <view class="right">
               <text>主厨姓名：</text>
@@ -287,8 +287,8 @@
             </view>
             <view class="items items2">
               <view class="left">
-                <text>宴席人数：</text>
-                <text class="txt">{{item.m_banquet_number}}人</text>
+                <text>宴席桌数：</text>
+                <text class="txt">{{item.m_tables}}人</text>
               </view>
               <view class="right">
                 <text>主厨姓名：</text>
@@ -385,8 +385,8 @@
             </view>
             <view class="items items2">
               <view class="left">
-                <text>宴席人数：</text>
-                <text class="txt">{{item.m_banquet_number}}人</text>
+                <text>宴席桌数：</text>
+                <text class="txt">{{item.m_tables}}人</text>
               </view>
               <view class="right">
                 <text>主厨姓名：</text>
@@ -482,8 +482,8 @@
             </view>
             <view class="items items2">
               <view class="left">
-                <text>宴席人数：</text>
-                <text class="txt">{{item.m_banquet_number}}人</text>
+                <text>宴席桌数：</text>
+                <text class="txt">{{item.m_tables}}人</text>
               </view>
               <view class="right">
                 <text>主厨姓名：</text>
