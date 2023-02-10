@@ -106,42 +106,34 @@
         <view class="note_right">{{basics.m_remark}}</view>
       </view>
       <view class="securitys">
-        <view class="security_title">安全保障</view>
-        <view class="security">
-          <view class="security_item security_left" wx:if="{{basics.m_insurance_count==0}}">
-            <view class="security_item_top">无保障</view>
-            <view class="security_left_bottom">
-              <view class="security_left_bottom_imgs">
-                <image class="security_left_bottom_img" src="../../../icon/goHome_null.png"></image>
-              </view>
-              <view class="security_left_bottom_txt">0项</view>
+        <view class="security_title">
+          <text>我的保障</text>
+          <text style="font-size: 22rpx;{{basics.m_insurance_count==0?'':'color:#4768f3;text-decoration: underline;'}}">{{basics.m_insurance_count==0?"无":"厨师到家安全组合险"}}</text>
+        </view>
+        <view class="scheme" wx:if="{{basics.m_insurance_count!=0}}">
+          <view class="title">
+            <view class="title_item">
+              <view class="title_item_isAssure">意外伤害险+食品安全责任险</view>
+              <view class="title_item_isScheme">花小钱省大心</view>
+              <view class="actives"></view>
             </view>
           </view>
-          <view class="security_item security_right" wx:if="{{basics.m_insurance_count!=0}}">
-            <view class="security_item_top">厨师到家安全组合险</view>
-            <view class="security_right_bottom">
-              <view class="security_right_item">
-                <view class="security_right_item_cont">
-                  <image class="security_right_item_cont_imgs" src="../../../icon/goHome_casualty.png"></image>
-                  <text class="security_right_item_cont_txt">意外伤害险</text>
-                </view>
-              </view>
-              <view class="security_right_midden">
-                <view class="price">10元</view>
-                <view class="security_right_midden_add">
-                  <view class="security_right_midden_add_item"></view>
-                  <view class="security_right_midden_add_item security_right_midden_add_items"></view>
-                </view>
-              </view>
-              <view class="security_right_item">
-                <view class="security_right_item_cont">
-                  <image class="security_right_item_cont_img" src="../../../icon/goHome_foodSafety.png"></image>
-                  <text class="security_right_item_cont_txt">食品安全责任险</text>
-                </view>
-              </view>
+          <view class="content">
+            <view class="content1">
+              <text class="content1_left">意外医疗补偿</text>
+              <text class="{{isAssure}}">4.00元</text>
             </view>
-          </view>
-          <view>
+            <view class="content1">
+              <text class="content1_left">住院补贴</text>
+              <text class="{{isAssure}}">3.00元</text>
+            </view>
+            <view class="content1">
+              <text class="content1_left">食品安全个人责任</text>
+              <text class="{{isAssure}}">3.00元</text>
+            </view>
+            <view class="content1 content2" bindtap="coverDetails">
+              查看保障详情
+            </view>
           </view>
         </view>
       </view>
@@ -150,3 +142,6 @@
     <user_orderChefDetails wx:if="{{shows == 2&&invitation==1}}" chefs="{{chef}}"></user_orderChefDetails>
   </view>
 </view>
+<page-container class="page-container" show="{{showx}}" position="center" bind:leave="eventhandle">
+
+</page-container>

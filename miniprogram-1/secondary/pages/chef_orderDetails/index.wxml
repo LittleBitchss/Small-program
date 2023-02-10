@@ -24,8 +24,8 @@
       <view class="info_item_right">{{m_matsuri_type==1?m_holding_days:m_meal_time}}</view>天
     </view>
     <view class="info_item">
-      <view class="info_item_left">{{m_matsuri_type==1?"宴会人数":"用餐人数"}}</view>
-      <view class="info_item_right">{{m_banquet_number}}</view>人
+      <view class="info_item_left">{{m_matsuri_type==1?"宴会桌数":"用餐人数"}}</view>
+      <view class="info_item_right">{{m_tables}}</view>桌
     </view>
     <view class="info_item">
       <view class="info_item_left">联系方式</view>

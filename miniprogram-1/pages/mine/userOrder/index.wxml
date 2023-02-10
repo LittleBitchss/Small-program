@@ -5,7 +5,7 @@
     <view class="point" wx:if="{{item.point}}">{{item.point}}</view>
     </view>
   </view>
-  <view class="bottom">
+  <view class="bottom"> 
     <scroll-view class="all" wx:if="{{isShow == 0}}" scroll-y="true" refresher-enabled="true" scroll-with-animation="true" enable-back-to-top="true" enhanced="true" bounces="true">
       <view class="item" wx:for="{{listArr}}" wx:key="index">
         <navigator open-type="navigate" url="/secondary/pages/user_orderDetails/index?m_id={{item.m_id}}&m_matsuri_type={{item.m_matsuri_type}}">

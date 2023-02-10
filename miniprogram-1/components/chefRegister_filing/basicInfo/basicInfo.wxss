@@ -217,6 +217,7 @@
   justify-content: center;
   align-items: center;
   height: 70rpx;
+  padding: 0;
 }
 .basicInfo .basic .item .select .listss .btn .btns{
   width: 110rpx;
@@ -507,6 +508,7 @@
   margin: 0;
   font-family: 'Normal';
   font-size: 26rpx;
+  padding: 0;
 }
 .page-container .page-root{
   height: 50vh;

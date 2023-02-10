@@ -73,6 +73,7 @@
         <textarea class="note_right_area" placeholder-class="placeholder" bindinput="inputs" placeholder="请填写您所需要求" data-index="4" value="{{value4}}"></textarea>
       </view>
     </view>
+    <view style="font-size: 25rpx;color: #f14c44;font-family: 'Medium';margin: 20rpx 0 10rpx 30rpx;">*订单提交后需缴纳100元定金，完成订单后全额返还定金</view>
     <view class="securitys">
       <view class="security_title">安全保障</view>
       <radio-group class="security" bindchange="radioChange">
@@ -89,7 +90,9 @@
           </view>
         </label>
         <label class="security_item security_right {{active2}}">
-          <view class="security_item_top {{bdColor2}}">厨师到家安全组合险</view>
+          <view class="security_item_top {{bdColor2}}" style="color: #4768f3;">
+          <navigator style="display: inline;" url="/secondary/pages/insurance/index" catchtap="agreement">厨师到家安全组合险</navigator>
+          </view>
           <view class="security_right_bottom">
             <view class="security_right_item">
               <view class="security_right_item_cont">
@@ -98,11 +101,11 @@
               </view>
             </view>
             <view class="security_right_midden">
-              <view class="price">10元</view>
               <view class="security_right_midden_add">
                 <view class="security_right_midden_add_item"></view>
                 <view class="security_right_midden_add_item security_right_midden_add_items"></view>
               </view>
+              <view class="price">10元</view>
               <view class="security_right_midden_checkbox">
                 <radio value="10" checked="{{checked2}}" />
               </view>
@@ -128,8 +131,10 @@
       </text>
     </view>
   </view>
-  <view class="bottom" bindtap="submitInfo">
-    提交
+  <view class="bottom">
+    <van-checkbox class="checkbox" value="{{ checked }}" bind:change="onChange">同意<navigator style="color: #4768f3;display: inline;" url="/secondary/pages/agreement/index?item=1" catchtap="agreement">《食安寻宴预订须知》</navigator>、<navigator catchtap="agreement" style="color: #4768f3;display: inline;" url="/secondary/pages/agreement/index?item=2" >《用户取消协议》</navigator>
+    </van-checkbox>
+    <van-button type="primary" size="small" custom-style="border-radius: 10rpx;width: 152rpx;height: 54rpx;" bindtap="submitInfo" color="#4768f3" disabled="{{checked?'':true}}">提交</van-button>
   </view>
 </view>
 <van-popup show="{{ show }}" bind:close="onClose" position="bottom">

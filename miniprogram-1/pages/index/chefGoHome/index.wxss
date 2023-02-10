@@ -223,6 +223,7 @@
   height: 100%;
   width: 88rpx;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   position: relative;
@@ -232,10 +233,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  position: absolute;
-  top: 30rpx;
   font-size: 28rpx;
   color: #f14c44;
+  margin-top: 20rpx;
 }
 .chefGoHome .securitys .security .security_right .security_right_bottom .security_right_midden .security_right_midden_add{
   width: 20rpx;
@@ -278,15 +278,14 @@
   color: #4768f3;
 }
 .chefGoHome .bottom{
-  height: 8%;
-  background-color: #4768f3;
-  color: #fff;
+  height: 94rpx;
+  background-color: #fff;
   font-size: 30rpx;
   font-family: 'Medium';
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
 }
-.page-container .page-root{
-  height: 50vh;
+.chefGoHome .bottom .checkbox{
+  font-size: 22rpx;
 }

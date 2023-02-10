@@ -12,7 +12,7 @@
   </view>
   <view class="bottom">
     <scroll-view class="all" scroll-y="true" refresher-enabled="true" scroll-with-animation="true" enable-back-to-top="true" enhanced="true" bounces="true">
-      <navigator class="item" open-type="navigate" wx:for="{{chefOrderArr}}" wx:key="index" url="/secondary/pages/chef_orderDetails/index?a_name={{item.a_name}}&mt_name={{item.mt_name}}&m_start_date={{item.m_start_date}}&m_holding_days={{item.m_holding_days}}&m_banquet_number={{item.m_banquet_number}}&m_phone={{item.m_phone}}&m_longitude={{item.m_longitude}}&m_latitude={{item.m_latitude}}&m_id={{item.m_id}}&mi_id={{item.mi_id}}&mi_accept_invitation={{item.mi_accept_invitation}}&m_matsuri_type={{item.m_matsuri_type}}&m_meal_time={{item.m_meal_time}}&m_remark={{item.m_remark}}">
+      <navigator class="item" open-type="navigate" wx:for="{{chefOrderArr}}" wx:key="index" url="/secondary/pages/chef_orderDetails/index?a_name={{item.a_name}}&mt_name={{item.mt_name}}&m_start_date={{item.m_start_date}}&m_tables={{item.m_tables}}&m_holding_days={{item.m_holding_days}}&m_banquet_number={{item.m_banquet_number}}&m_phone={{item.m_phone}}&m_longitude={{item.m_longitude}}&m_latitude={{item.m_latitude}}&m_id={{item.m_id}}&mi_id={{item.mi_id}}&mi_accept_invitation={{item.mi_accept_invitation}}&m_matsuri_type={{item.m_matsuri_type}}&m_meal_time={{item.m_meal_time}}&m_remark={{item.m_remark}}">
         <block wx:if="{{item.m_matsuri_type==1}}">
           <view class="items items1">
             <view class="time">

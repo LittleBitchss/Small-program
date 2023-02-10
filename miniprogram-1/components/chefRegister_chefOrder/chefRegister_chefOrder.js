@@ -157,6 +157,12 @@ Component({
       let day = parseInt((end_num.getTime() - start_num.getTime()) / (1000 * 60 * 60 * 24))
       return day
     },
+    getDates(startDay,endDay) {
+      var start_num = new Date(startDay.replace(/-/g, "/"))
+      var end_num = new Date(endDay.replace(/-/g, "/"))
+      let day = parseInt((end_num.getTime() - start_num.getTime() + (1000 * 60 * 60 * 24))/(1000 * 60 * 60 * 24))
+      return day
+    },
     getData(type, m_type) {
       wx.showLoading({
         title: '加载中',
@@ -174,6 +180,9 @@ Component({
                 i.banCancel = true
               } else {
                 i.banCancel = false
+              }
+              if(i.m_end_date){
+                i.m_holding_days = this.getDates(i.m_start_date,i.m_end_date)
               }
             })
             console.log(res.data.data);

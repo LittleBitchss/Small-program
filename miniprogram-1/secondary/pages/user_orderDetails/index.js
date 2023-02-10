@@ -16,6 +16,7 @@ Page({
     active22: "",
     show: 0,
     shows: 1,
+    showx: false,
     m_matsuri_type: 1,
     invitation: 0,
     m_id: 0,
@@ -151,6 +152,19 @@ Page({
       }
     })
     return a
+  },
+  coverDetails() {
+    this.setData({
+      showx: true
+    })
+    wx.setNavigationBarTitle({
+      title: '保障详情',
+    })
+  },
+  eventhandle() {
+    wx.setNavigationBarTitle({
+      title: '厨师到家安全组合险',
+    })
   },
   /**
    * 生命周期函数--监听页面加载

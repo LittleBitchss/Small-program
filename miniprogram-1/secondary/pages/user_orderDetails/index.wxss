@@ -260,137 +260,64 @@
   height: 82rpx;
   font-size: 28rpx;
   display: flex;
+  justify-content: space-between;
   align-items: center;
   padding: 0 32rpx;
 }
-.user_orderDetail .securitys .security{
-  height: 254rpx;
-  margin: 0 30rpx;
-}
-.user_orderDetail .securitys .security .security_item{
-  width: 220rpx;
-  height: 100%;
-  border-radius: 15rpx;
+.user_orderDetail .securitys .scheme{
   background-color: #fff;
-  border: 2rpx solid #fff;
+  border-radius: 10rpx;
+  width: 720rpx;
+  margin: 0 auto 0;
+  padding: 10rpx 30rpx;
+  font-family: 'Medium';
+  font-size: 30rpx;
 }
-.user_orderDetail .securitys .security .security_right{
-  width: 455rpx;
-  margin-left: 26rpx;
-}
-.user_orderDetail .securitys .security .active{
-  background-color: #eaf2ff;
-  border-color: #4768f3;
-}
-
-.user_orderDetail .securitys .security .security_item .security_item_top{
-  height: 48rpx;
-  font-size: 25rpx;
+.user_orderDetail .securitys .scheme .title{
+  height: 108rpx;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  border-bottom: 2rpx solid #d5d5d5;
+  /* justify-content: center;
+  align-items: center; */
 }
-.user_orderDetail .securitys .security .security_item .bdColor{
-  border-color: #000;
-}
-.user_orderDetail .securitys .security .security_left .security_left_bottom{
-  height: 202rpx;
-  padding-top: 76rpx;
-  text-align: center;
-
-}
-.user_orderDetail .securitys .security .security_left .security_left_bottom .security_left_bottom_imgs{
-  display: flex;
-  justify-content: center;
-}
-.user_orderDetail .securitys .security .security_left .security_left_bottom .security_left_bottom_img{
-  width: 28rpx;
-  height: 28rpx;
-  display: block;
-}
-.user_orderDetail .securitys .security .security_left .security_left_bottom .security_left_bottom_txt{
-  height: 30rpx;
-  margin-top: 15rpx;
-  margin-bottom: 8rpx;
-  display: flex; 
-  align-items: center;
-  justify-content: center;
-  font-size: 20rpx;
-}
-.user_orderDetail .securitys .security .security_right .security_right_bottom{
-  height: 202rpx;
-  display: flex;
-  justify-content: center;
-}
-.user_orderDetail .securitys .security .security_right .security_right_bottom .security_right_item{
-  width: 140rpx;
-  height: 100%;
-}
-.user_orderDetail .securitys .security .security_right .security_right_bottom .security_right_item .security_right_item_cont{
-  height: 142rpx;
+.user_orderDetail .securitys .scheme .title .title_item{
+  width: 100%;
+  position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-}
-.user_orderDetail .securitys .security .security_right .security_right_bottom .security_right_item .security_right_item_cont .security_right_item_cont_img{
-  height: 80rpx;
-  width: 90rpx;
-}
-.user_orderDetail .securitys .security .security_right .security_right_bottom .security_right_item .security_right_item_cont .security_right_item_cont_imgs{
-  height: 80rpx;
-  width: 62rpx;
-} 
-.user_orderDetail .securitys .security .security_right .security_right_bottom .security_right_item .security_right_item_cont .security_right_item_cont_txt{
-  font-size: 20rpx;
-  line-height: 1;
-  margin-top: 10rpx;
-}
-.user_orderDetail .securitys .security .security_right .security_right_bottom .security_right_midden{
-  height: 100%;
-  width: 88rpx;
-  display: flex;
   justify-content: center;
-  align-items: center;
-  position: relative;
-}
-.user_orderDetail .securitys .security .security_right .security_right_bottom .security_right_midden .price{
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  top: 30rpx;
-  font-size: 28rpx;
-  color: #f14c44;
-}
-.user_orderDetail .securitys .security .security_right .security_right_bottom .security_right_midden .security_right_midden_add{
-  width: 20rpx;
-  height: 20rpx;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-}
-.user_orderDetail .securitys .security .security_right .security_right_bottom .security_right_midden .security_right_midden_add .security_right_midden_add_item{
-  background-color: #000;
-  width: 100%;
-  height: 4rpx;
-}
-.user_orderDetail .securitys .security .security_right .security_right_bottom .security_right_midden .security_right_midden_add .security_right_midden_add_items{
-  width: 4rpx;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%); 
-}
-.user_orderDetail .securitys .security .security_right .security_right_bottom .security_right_midden .security_right_midden_checkbox{
-  position: absolute;
-  bottom: 4rpx;
+  color: #4768f3;
 }
 
+.user_orderDetail .securitys .scheme .title .title_item .title_item_isScheme{
+  font-size: 25rpx;
+  font-family: 'Light';
+}
+.user_orderDetail .securitys .scheme .title .title_item .actives{
+  height: 6rpx;
+  border-radius: 100rpx;
+  background-color: #4768f3;
+}
+
+.user_orderDetail .securitys .scheme .content{
+  height: 220rpx;
+  font-family: 'Normal';
+  font-size: 28rpx;
+  color: #828181;
+  display: flex;
+  flex-direction: column;
+}
+.user_orderDetail .securitys .scheme .content .content1{
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.user_orderDetail .securitys .scheme .content .content1 .content1_right{
+  text-decoration:line-through;
+}
+.user_orderDetail .securitys .scheme .content .content2{
+  color: #4768f3;
+}
 
 .user_orderDetail .top .announcements{
   font-size: 22rpx;

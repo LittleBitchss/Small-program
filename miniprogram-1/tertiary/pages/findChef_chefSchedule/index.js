@@ -40,6 +40,7 @@ Page({
       confirmColor: '#4768f3',
       success(res) {
         if (res.confirm) {
+          // var aa = this.data.lockday.split(',')
           wx.showLoading({
             title: '预约中'
           })
@@ -80,6 +81,12 @@ Page({
       }
     })
   },
+  getDates(startDay,endDay) {
+    var start_num = new Date(startDay.replace(/-/g, "/"))
+    var end_num = new Date(endDay.replace(/-/g, "/"))
+    let day = parseInt((end_num.getTime() - start_num.getTime() + (1000 * 60 * 60 * 24))/(1000 * 60 * 60 * 24))
+    return day
+  },
   /**
    * 生命周期函数--监听页面加载
    */
@@ -115,6 +122,11 @@ Page({
               return i
             }
           })
+          res.data.data.forEach(i => {
+            if(i.m_end_date){
+              i.m_holding_days = this.getDates(i.m_start_date,i.m_end_date)
+            }
+          })
           this.setData({
             listArr: res.data.data
           })
@@ -130,6 +142,8 @@ Page({
         chef_id: options.chef_id
       }).then(res => {
         if (res.data.status == 1) {
+          // console.log(res);
+          // res.data.data = '2023-02-11,2023-02-15'
           this.setData({
             lockday:res.data.data
           })
