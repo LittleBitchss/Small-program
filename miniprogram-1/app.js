@@ -19,42 +19,47 @@ App({
     // 下载字体
     wx.loadFontFace({
       family: 'Bold',
+      scopes: ['webview', 'native'],
       global: true, //是否全局生效
       source: 'url(' + this.domain + '/fonts/SourceHanSansCN-Bold.otf)',
       fail(res) {
-        console.log(res);
+        // console.log(res);
       }
     })
     wx.loadFontFace({
       family: 'ExtraLight',
+      scopes: ['webview', 'native'],
       global: true, //是否全局生效
       source: 'url(' + this.domain + '/fonts/SourceHanSansCN-ExtraLight.otf)',
       fail(res) {
-        console.log(res);
+        // console.log(res);
       }
     })
     wx.loadFontFace({
       family: 'Light',
+      scopes: ['webview', 'native'],
       global: true, //是否全局生效
       source: 'url(' + this.domain + '/fonts/SourceHanSansCN-Light.otf)',
       fail(res) {
-        console.log(res);
+        // console.log(res);
       }
     })
     wx.loadFontFace({
       family: 'Medium',
+      scopes: ['webview', 'native'],
       global: true, //是否全局生效
       source: 'url(' + this.domain + '/fonts/SourceHanSansCN-Medium.otf)',
       fail(res) {
-        console.log(res);
+        // console.log(res);
       }
     })
     wx.loadFontFace({
       family: 'Normal',
+      scopes: ['webview', 'native'],
       global: true, //是否全局生效
       source: 'url(' + this.domain + '/fonts/SourceHanSansCN-Normal.otf)',
       fail(res) {
-        console.log(res);
+        // console.log(res);
       }
     })
     wx.loadFontFace({
@@ -62,7 +67,7 @@ App({
       global: true, //是否全局生效
       source: 'url(' + this.domain + '/fonts/SourceHanSansCN-Regular.otf)',
       fail(res) {
-        console.log(res);
+        // console.log(res);
       }
     })
     wx.getSystemInfo({

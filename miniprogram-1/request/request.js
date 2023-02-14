@@ -59,6 +59,8 @@ function get(url,data={}){
   return fetchData(url,data,'GET')
 }
 
+
+
 module.exports = {
   fetchData,
   upload,

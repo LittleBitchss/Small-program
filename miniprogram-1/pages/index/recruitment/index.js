@@ -4,10 +4,7 @@ const qqMapSdk = new QQMapWX({
   key: 'ABNBZ-GKPLS-FOAOJ-6HOP3-GAWZO-NNFDH'
 });
 const app = getApp()
-const ctx = wx.createCanvasContext('myCanvas')
-ctx.drawImage('/img/study/shareimg.png', 0, 0, 690, 1085)
 Page({
-
   /**
    * 页面的初始数据
    */
@@ -709,7 +706,7 @@ Page({
                 p_name: '推荐厨师',
                 active: 'active'
               }]
-              if(typeof rex.duty == 'string'){
+              if (typeof rex.duty == 'string') {
                 rex.duty = rex.duty.split()
               }
               if (rex.duty.length != 0) {
@@ -734,9 +731,9 @@ Page({
           rex.list.forEach(i => {
             i.r_age = this.data.month > i.r_born.slice(5, 7) ? this.data.year - i.r_born.slice(0, 4) + 1 : this.data.year - i.r_born.slice(0, 4)
             i.r_experience = this.data.month > i.r_working_time.slice(5, 7) ? this.data.year - i.r_working_time.slice(0, 4) + 1 : this.data.year - i.r_working_time.slice(0, 4)
-            if(post){
-              i.job_expectation = wx.getStorageSync('position')[i.job_expectation.find(k => k == post)-1].p_name
-            }else{
+            if (post) {
+              i.job_expectation = wx.getStorageSync('position')[i.job_expectation.find(k => k == post) - 1].p_name
+            } else {
               if (duty.length != 0) {
                 var job_expectation = []
                 duty.forEach(j => {
@@ -792,14 +789,250 @@ Page({
       this.getData(this.data.dutys, this.data.location, 0)
     })
   },
-  share(){
+  initCanvas(index) {
+    let recruitment = this.data.onTheJobList[index]
+    var date = new Date()
+    var month = date.getMonth() + 1
+    var day = date.getDate()
+    let that = this;
+    const query = wx.createSelectorQuery();
+    query
+      .select("#myCanvas")
+      .fields({
+        node: true,
+        size: true
+      })
+      .exec(async (res) => {
+        const width = res[0].width;
+        const height = res[0].height;
+        const canvas = res[0].node;
+        const context = canvas.getContext("2d");
+        // 比例
+        const ratio = wx.getSystemInfoSync()?.windowWidth / 750;
+        const dpr = wx.getSystemInfoSync().pixelRatio;
+        canvas.width = width * dpr;
+        canvas.height = height * dpr;
+        context.scale(dpr, dpr);
+        that.setData({
+          canvas,
+        });
+
+        // 绘制背景
+        context.beginPath();
+        await that.loadImg(
+          "https://qunyan.canancn.com/assets/applet/img/poster/bgImg.jpg",
+          canvas,
+          context,
+          0,
+          0,
+          1380 * ratio,
+          2170 * ratio
+        );
+        context.save();
+        // 绘制圆角矩形
+        context.beginPath();
+
+        function roundRect(ctx, x, y, w, h, r) {
+          // 开始绘制
+          // 因为边缘描边存在锯齿，最好指定使用 transparent 填充
+          // 这里是使用 fill 还是 stroke都可以，二选一即可
+          ctx.fillStyle = 'rgb(255,255,255)'
+          // ctx.setStrokeStyle('transparent')
+          // 左上角
+          ctx.arc(x + r, y + r, r, Math.PI, Math.PI * 1.5)
+          // border-top
+          ctx.moveTo(x + r, y)
+          ctx.lineTo(x + w - r, y)
+          ctx.lineTo(x + w, y + r)
+          // 右上角
+          ctx.arc(x + w - r, y + r, r, Math.PI * 1.5, Math.PI * 2)
+          // border-right
+          ctx.lineTo(x + w, y + h - r)
+          ctx.lineTo(x + w - r, y + h)
+          // 右下角
+          ctx.arc(x + w - r, y + h - r, r, 0, Math.PI * 0.5)
+          // border-bottom
+          ctx.lineTo(x + r, y + h)
+          ctx.lineTo(x, y + h - r)
+          // 左下角
+          ctx.arc(x + r, y + h - r, r, Math.PI * 0.5, Math.PI)
+          // border-left
+          ctx.lineTo(x, y + r)
+          ctx.lineTo(x + r, y)
+          // 这里是使用 fill 还是 stroke都可以，二选一即可，但是需要与上面对应
+          ctx.fill()
+          // ctx.stroke()
+          // ctx.closePath()
+          // 剪切
+          // ctx.clip()
+        }
+        roundRect(context, 90 * ratio, 1200 * ratio, 1200 * ratio, 800 * ratio, 30 * ratio)
+        // 绘制圆
+
+        context.beginPath();
+        context.arc(
+          240 * ratio,
+          1370 * ratio,
+          90 * ratio,
+          0,
+          (Math.PI / 180) * 360
+        );
+        context.fill();
+        context.clip();
+        // 绘制头像
+        context.beginPath();
+        const avatar = recruitment.rc_head_portrait;
+        await that.loadImg(
+          avatar,
+          canvas,
+          context,
+          150 * ratio,
+          1280 * ratio,
+          180 * ratio,
+          180 * ratio
+        );
+        context.restore();
+
+        // 绘制文字
+        context.beginPath();
+        let aaa = '长按识别二维码，查看职位详情';
+        context.fillStyle = '#000'
+        context.font = 'normal 500 22px sans-serif';
+        context.fillText(aaa, 170 * ratio, 1866 * ratio);
+
+        context.beginPath();
+        let company = recruitment.rc_company;
+        context.fillStyle = '#333'
+        context.font = 'normal 300 23px sans-serif';
+        context.fillText(company, 380 * ratio, 1431 * ratio);
+
+        context.beginPath();
+        let post = recruitment.rc_post;
+        context.fillStyle = '#000'
+        context.font = 'normal 500 25px sans-serif';
+        context.fillText(post, 630 * ratio, 1341 * ratio);
+
+        context.beginPath();
+        let name = recruitment.rc_sex == '女' ? recruitment.rc_name.slice(0, 1) + '女士' : recruitment.rc_name.slice(0, 1) + '先生';
+        // if (name.length > 5) {
+        //   name = name.slice(0, 5) + "...";
+        // }
+        context.fillStyle = '#000'
+        context.font = 'normal bold 28px sans-serif';
+        context.fillText(name, 380 * ratio, 1342 * ratio);
+
+        context.beginPath();
+        let title = recruitment.rpr_title;
+        context.fillStyle = '#000'
+        context.font = 'normal bold 28px sans-serif';
+        context.fillText(title, 160 * ratio, 1600 * ratio);
+
+        context.beginPath();
+        let waga = recruitment.rpr_minimum_waga + '-' + recruitment.rpr_maximum_waga;
+        context.fillStyle = '#fc6500'
+        context.font = 'normal bold 28px sans-serif';
+        context.fillText(waga, 160 * ratio, 1700 * ratio);
+
+        context.beginPath();
+        context.lineWidth = 1; //lineWidth 线条边线线宽
+        context.strokeStyle = '#333'; //strokeStyle 线条样式，默认是black
+        context.strokeRect(80, 900, 320, 50);
+
+        context.beginPath();
+        let bbb = '上寻宴 · 靠谱人才天天见';
+        context.fillStyle = '#fff'
+        context.font = 'normal bold 22px sans-serif';
+        context.fillText(bbb, 470 * ratio, 2080 * ratio);
+
+        context.beginPath();
+        let ccc = 'ZHAOPIN.COM';
+        context.fillStyle = '#fff'
+        context.font = 'normal bold 16px sans-serif';
+        context.fillText(ccc, 120 * ratio, 1150 * ratio);
+
+        context.beginPath();
+        let ddd = month < 10 ? '0' + month : month;
+        context.fillStyle = '#fff'
+        context.font = 'normal bold 56px sans-serif';
+        context.fillText(ddd, 60 * ratio, 180 * ratio);
+
+        context.beginPath();
+        context.font = 'normal bold 22px sans-serif';
+        context.fillText('/', 60 * ratio, 240 * ratio);
+
+        context.beginPath();
+        let eee = day < 10 ? '0' + day : day;
+        context.fillStyle = '#fff'
+        context.font = 'normal bold 46px sans-serif';
+        context.fillText(eee, 90 * ratio, 280 * ratio);
+
+        context.beginPath();
+        context.font = 'normal bold 38px sans-serif';
+        context.fillText('食安寻宴', 1000 * ratio, 160 * ratio);
+
+        let fff = '相信自己能力的人，任何事都能做到'
+        var chr = fff.split('，'); //这个方法是将一个字符串分割成字符串数组
+        context.beginPath();
+        context.font = 'normal bold 66px sans-serif';
+        context.fillText(chr[0], 110 * ratio, 640 * ratio);
+        context.beginPath();
+        context.font = 'normal bold 66px sans-serif';
+        context.fillText(chr[1], 110 * ratio, 840 * ratio);
+      });
+  },
+  save() {
+    return new Promise((resolve, reject) => {
+      wx.canvasToTempFilePath({
+        canvas: this.data.canvas,
+        success: (res) => {
+          return resolve(res.tempFilePath);
+        },
+        fail(error) {
+          return reject(error);
+        },
+      });
+    });
+  },
+  loadImg(src, canvas, context, x, y, width, height) {
+    return new Promise((resolve, reject) => {
+      try {
+        const img = canvas.createImage();
+        setTimeout(() => {
+          img.src = src;
+          img.onload = function () {
+            context.drawImage(img, x, y, width, height);
+            resolve(canvas.toDataURL("image/png"));
+          };
+        })
+      } catch (error) {
+        reject(error);
+      }
+    });
+  },
+  share(e) {
+    wx.showLoading({
+      title: '加载中',
+    })
+    var index = e.currentTarget.dataset.index
+    this.initCanvas(index)
+    setTimeout(() => {
+      this.shares()
+    }, 500)
+  },
+  async shares() {
+    const res = await this.save();
+    wx.hideLoading()
     wx.downloadFile({
-      url: 'https://qunyan.canancn.com/assets/applet/img/jobRecruitment/photo.png',
+      url: res,
       success: (res) => {
         wx.showShareImageMenu({
           path: res.tempFilePath,
-          success: (res) => {},
-          fail: (res) => {},
+          success: (res) => {
+            // console.log(res);
+          },
+          fail: (res) => {
+            // console.log(res);
+          },
         })
       }
     })

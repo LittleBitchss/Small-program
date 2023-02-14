@@ -153,6 +153,7 @@
           <view>发布职位</view>
         </navigator>
       </view>
+      <canvas type="2d" id="myCanvas" style="width: 690px;height:1085px;position: fixed;top: -3000px;"></canvas>
     </view>
   </view>
   <view class="recruitment_bottom">
@@ -165,7 +166,6 @@
       <text class="text {{mine.fontColor}}">我 的</text>
     </view>
   </view>
-  <canvas canvas-id="myCanvas" style="width: 690px;height:1085px;position: fixed;top: -10000px;"></canvas>
 </view>
 <page-container class="page-container" show="{{show}}" position="right" bind:leave="eventhandle">
   <view class="filter">
