@@ -1,5 +1,6 @@
 // pages/index/recruitment/index.js
 var QQMapWX = require('../../../utils/qqmap-wx-jssdk.min');
+var request = require('../../../request/request');
 const qqMapSdk = new QQMapWX({
   key: 'ABNBZ-GKPLS-FOAOJ-6HOP3-GAWZO-NNFDH'
 });
@@ -562,10 +563,12 @@ Page({
         this.setData({
           photo: rex.card.head_portrait,
           name: rex.card.name,
+          card: rex.card,
           actives1: 'active',
           actives2: '',
           actives3: ''
         })
+        this.initCanvas()
       }
     })
   },
@@ -789,8 +792,9 @@ Page({
       this.getData(this.data.dutys, this.data.location, 0)
     })
   },
-  initCanvas(index) {
-    let recruitment = this.data.onTheJobList[index]
+  initCanvas() {
+    let card = this.data.card
+    console.log(card);
     var date = new Date()
     var month = date.getMonth() + 1
     var day = date.getDate()
@@ -813,66 +817,27 @@ Page({
         canvas.width = width * dpr;
         canvas.height = height * dpr;
         context.scale(dpr, dpr);
+        console.log(canvas);
         that.setData({
           canvas,
         });
-
         // 绘制背景
         context.beginPath();
         await that.loadImg(
-          "https://qunyan.canancn.com/assets/applet/img/poster/bgImg.jpg",
+          "https://qunyan.canancn.com/assets/applet/img/poster/bgImg.png",
           canvas,
           context,
           0,
           0,
-          1380 * ratio,
-          2170 * ratio
+          1440 * ratio,
+          2260 * ratio
         );
         context.save();
-        // 绘制圆角矩形
-        context.beginPath();
-
-        function roundRect(ctx, x, y, w, h, r) {
-          // 开始绘制
-          // 因为边缘描边存在锯齿，最好指定使用 transparent 填充
-          // 这里是使用 fill 还是 stroke都可以，二选一即可
-          ctx.fillStyle = 'rgb(255,255,255)'
-          // ctx.setStrokeStyle('transparent')
-          // 左上角
-          ctx.arc(x + r, y + r, r, Math.PI, Math.PI * 1.5)
-          // border-top
-          ctx.moveTo(x + r, y)
-          ctx.lineTo(x + w - r, y)
-          ctx.lineTo(x + w, y + r)
-          // 右上角
-          ctx.arc(x + w - r, y + r, r, Math.PI * 1.5, Math.PI * 2)
-          // border-right
-          ctx.lineTo(x + w, y + h - r)
-          ctx.lineTo(x + w - r, y + h)
-          // 右下角
-          ctx.arc(x + w - r, y + h - r, r, 0, Math.PI * 0.5)
-          // border-bottom
-          ctx.lineTo(x + r, y + h)
-          ctx.lineTo(x, y + h - r)
-          // 左下角
-          ctx.arc(x + r, y + h - r, r, Math.PI * 0.5, Math.PI)
-          // border-left
-          ctx.lineTo(x, y + r)
-          ctx.lineTo(x + r, y)
-          // 这里是使用 fill 还是 stroke都可以，二选一即可，但是需要与上面对应
-          ctx.fill()
-          // ctx.stroke()
-          // ctx.closePath()
-          // 剪切
-          // ctx.clip()
-        }
-        roundRect(context, 90 * ratio, 1200 * ratio, 1200 * ratio, 800 * ratio, 30 * ratio)
         // 绘制圆
-
         context.beginPath();
         context.arc(
           240 * ratio,
-          1370 * ratio,
+          1470 * ratio,
           90 * ratio,
           0,
           (Math.PI / 180) * 360
@@ -881,75 +846,18 @@ Page({
         context.clip();
         // 绘制头像
         context.beginPath();
-        const avatar = recruitment.rc_head_portrait;
+        const avatar = card.head_portrait;
         await that.loadImg(
           avatar,
           canvas,
           context,
           150 * ratio,
-          1280 * ratio,
+          1380 * ratio,
           180 * ratio,
           180 * ratio
         );
         context.restore();
-
         // 绘制文字
-        context.beginPath();
-        let aaa = '长按识别二维码，查看职位详情';
-        context.fillStyle = '#000'
-        context.font = 'normal 500 22px sans-serif';
-        context.fillText(aaa, 170 * ratio, 1866 * ratio);
-
-        context.beginPath();
-        let company = recruitment.rc_company;
-        context.fillStyle = '#333'
-        context.font = 'normal 300 23px sans-serif';
-        context.fillText(company, 380 * ratio, 1431 * ratio);
-
-        context.beginPath();
-        let post = recruitment.rc_post;
-        context.fillStyle = '#000'
-        context.font = 'normal 500 25px sans-serif';
-        context.fillText(post, 630 * ratio, 1341 * ratio);
-
-        context.beginPath();
-        let name = recruitment.rc_sex == '女' ? recruitment.rc_name.slice(0, 1) + '女士' : recruitment.rc_name.slice(0, 1) + '先生';
-        // if (name.length > 5) {
-        //   name = name.slice(0, 5) + "...";
-        // }
-        context.fillStyle = '#000'
-        context.font = 'normal bold 28px sans-serif';
-        context.fillText(name, 380 * ratio, 1342 * ratio);
-
-        context.beginPath();
-        let title = recruitment.rpr_title;
-        context.fillStyle = '#000'
-        context.font = 'normal bold 28px sans-serif';
-        context.fillText(title, 160 * ratio, 1600 * ratio);
-
-        context.beginPath();
-        let waga = recruitment.rpr_minimum_waga + '-' + recruitment.rpr_maximum_waga;
-        context.fillStyle = '#fc6500'
-        context.font = 'normal bold 28px sans-serif';
-        context.fillText(waga, 160 * ratio, 1700 * ratio);
-
-        context.beginPath();
-        context.lineWidth = 1; //lineWidth 线条边线线宽
-        context.strokeStyle = '#333'; //strokeStyle 线条样式，默认是black
-        context.strokeRect(80, 900, 320, 50);
-
-        context.beginPath();
-        let bbb = '上寻宴 · 靠谱人才天天见';
-        context.fillStyle = '#fff'
-        context.font = 'normal bold 22px sans-serif';
-        context.fillText(bbb, 470 * ratio, 2080 * ratio);
-
-        context.beginPath();
-        let ccc = 'ZHAOPIN.COM';
-        context.fillStyle = '#fff'
-        context.font = 'normal bold 16px sans-serif';
-        context.fillText(ccc, 120 * ratio, 1150 * ratio);
-
         context.beginPath();
         let ddd = month < 10 ? '0' + month : month;
         context.fillStyle = '#fff'
@@ -964,27 +872,110 @@ Page({
         let eee = day < 10 ? '0' + day : day;
         context.fillStyle = '#fff'
         context.font = 'normal bold 46px sans-serif';
-        context.fillText(eee, 90 * ratio, 280 * ratio);
+        context.fillText(eee, 120 * ratio, 280 * ratio);
 
         context.beginPath();
-        context.font = 'normal bold 38px sans-serif';
-        context.fillText('食安寻宴', 1000 * ratio, 160 * ratio);
+        let company = card.company;
+        context.fillStyle = '#999'
+        context.font = 'normal 300 22px sans-serif';
+        context.fillText(company, 380 * ratio, 1531 * ratio);
 
-        let fff = '相信自己能力的人，任何事都能做到'
-        var chr = fff.split('，'); //这个方法是将一个字符串分割成字符串数组
         context.beginPath();
-        context.font = 'normal bold 66px sans-serif';
-        context.fillText(chr[0], 110 * ratio, 640 * ratio);
+        let post = card.post;
+        context.fillStyle = '#555'
+        context.font = 'normal 500 23px sans-serif';
+        context.fillText(post, 630 * ratio, 1441 * ratio);
+
         context.beginPath();
-        context.font = 'normal bold 66px sans-serif';
-        context.fillText(chr[1], 110 * ratio, 840 * ratio);
+        let name = card.sex == '女' ? card.name.slice(0, 1) + '女士' : card.name.slice(0, 1) + '先生';
+        context.fillStyle = '#000'
+        context.font = 'normal bold 30px sans-serif';
+        context.fillText(name, 380 * ratio, 1442 * ratio);
+        that.inits()
+      });
+  },
+  shareCanvas(index) {
+    let recruitment = this.data.onTheJobList[index]
+    let that = this;
+    const query = wx.createSelectorQuery();
+    query
+      .select("#myCanvas")
+      .fields({
+        node: true,
+        size: true
+      })
+      .exec(async (res) => {
+        const width = res[0].width;
+        const height = res[0].height;
+        const canvas = res[0].node;
+        const context = canvas.getContext("2d");
+        // 比例
+        const ratio = wx.getSystemInfoSync()?.windowWidth / 750;
+        const dpr = wx.getSystemInfoSync().pixelRatio;
+        canvas.width = width * dpr;
+        canvas.height = height * dpr;
+        context.scale(dpr, dpr);
+        that.setData({
+          canvas,
+        });
+        // 绘制背景
+        context.beginPath();
+        await that.loadImg(
+          that.data.url,
+          canvas,
+          context,
+          0,
+          0,
+          1440 * ratio,
+          2260 * ratio
+        );
+        // 绘制文字
+        context.beginPath();
+        let title = recruitment.rpr_title;
+        context.fillStyle = '#000'
+        context.font = 'normal bold 28px sans-serif';
+        context.fillText(title, 160 * ratio, 1600 * ratio);
+
+        context.beginPath();
+        let waga = recruitment.rpr_minimum_waga + '-' + recruitment.rpr_maximum_waga;
+        context.fillStyle = '#fc6500'
+        context.font = 'normal bold 28px sans-serif';
+        context.fillText(waga, 160 * ratio, 1700 * ratio);
+
+        // 绘制圆
+        context.fillStyle = '#000'
+        context.beginPath();
+        context.arc(
+          1100 * ratio,
+          1800 * ratio,
+          130 * ratio,
+          0,
+          (Math.PI / 180) * 360
+        );
+        context.fill();
+        context.clip();
+        // 绘制小程序码
+        context.beginPath();
+        const smallProgramCodes = recruitment.rc_head_portrait;
+        await that.loadImg(
+          smallProgramCodes,
+          canvas,
+          context,
+          970 * ratio,
+          1670 * ratio,
+          260 * ratio,
+          260 * ratio
+        );
       });
   },
   save() {
+    console.log(this.data.canvas);
     return new Promise((resolve, reject) => {
+      console.log(this.data.canvas);
       wx.canvasToTempFilePath({
         canvas: this.data.canvas,
         success: (res) => {
+          console.log(res);
           return resolve(res.tempFilePath);
         },
         fail(error) {
@@ -997,13 +988,13 @@ Page({
     return new Promise((resolve, reject) => {
       try {
         const img = canvas.createImage();
-        setTimeout(() => {
-          img.src = src;
-          img.onload = function () {
-            context.drawImage(img, x, y, width, height);
-            resolve(canvas.toDataURL("image/png"));
-          };
-        })
+        // setTimeout(() => {
+        img.src = src;
+        img.onload = function () {
+          context.drawImage(img, x, y, width, height);
+          resolve(canvas.toDataURL("image/png"));
+        };
+        // })
       } catch (error) {
         reject(error);
       }
@@ -1014,27 +1005,46 @@ Page({
       title: '加载中',
     })
     var index = e.currentTarget.dataset.index
-    this.initCanvas(index)
+    setTimeout(() => {
+      this.shareCanvas(index)
+    })
+
     setTimeout(() => {
       this.shares()
-    }, 500)
+    })
   },
   async shares() {
     const res = await this.save();
-    wx.hideLoading()
-    wx.downloadFile({
-      url: res,
-      success: (res) => {
-        wx.showShareImageMenu({
-          path: res.tempFilePath,
-          success: (res) => {
-            // console.log(res);
-          },
-          fail: (res) => {
-            // console.log(res);
-          },
-        })
-      }
+    console.log(res);
+    request.upload(res, 'recruitmentposter' + wx.getStorageSync('userInfo').rc_id).then((res) => {
+      wx.downloadFile({
+        url: res.data.fullurl,
+        success: (res) => {
+          wx.showShareImageMenu({
+            path: res.tempFilePath,
+            success: (res) => {
+              // console.log(res);
+            },
+            fail: (res) => {
+              // console.log(res);
+            },
+          })
+        }
+      })
+      wx.hideLoading()
+    })
+  },
+  async inits() {
+    const res = await this.save();
+    request.upload(res, 'recruitmentposter' + wx.getStorageSync('userInfo').rc_id).then((res) => {
+      wx.downloadFile({
+        url: res.data.fullurl,
+        success: async (res) => {
+          this.setData({
+            url: res.tempFilePath
+          })
+        }
+      })
     })
   },
   /**

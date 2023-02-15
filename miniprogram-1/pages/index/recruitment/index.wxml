@@ -125,7 +125,7 @@
             <text>发布时间：{{item.rpr_publish_date}}</text>
             </view>
             <view class="recruitment_list5">
-              <view class="recruitment_list5_item y" wx:if="{{actives1}}" bindtap="shelves" data-index="{{index}}">
+              <view class="recruitment_list5_item" wx:if="{{actives1}}" bindtap="shelves" data-index="{{index}}">
                 <image class="recruitment_list5_item_img" src="../../../icon/z_soldOut.png"></image>
                 <text>下架</text>
               </view>
@@ -153,7 +153,6 @@
           <view>发布职位</view>
         </navigator>
       </view>
-      <canvas type="2d" id="myCanvas" style="width: 690px;height:1085px;position: fixed;top: -3000px;"></canvas>
     </view>
   </view>
   <view class="recruitment_bottom">
@@ -167,6 +166,7 @@
     </view>
   </view>
 </view>
+<canvas type="2d" id="myCanvas" style="width: 690px;height:1085px;position: fixed;top: -3000px;"></canvas>
 <page-container class="page-container" show="{{show}}" position="right" bind:leave="eventhandle">
   <view class="filter">
     <view class="educationBackground">

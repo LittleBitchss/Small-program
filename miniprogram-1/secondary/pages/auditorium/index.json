@@ -1,5 +1,9 @@
 {
   "usingComponents": {
-    "calendar": "/components/calendar/calendar"
+    "calendar": "/components/calendar/calendar",
+    "van-button": "@vant/weapp/button/index",
+    "van-icon": "@vant/weapp/icon/index",
+    "van-popup": "@vant/weapp/popup/index",
+    "van-dialog": "@vant/weapp/dialog/index"
   }
 }

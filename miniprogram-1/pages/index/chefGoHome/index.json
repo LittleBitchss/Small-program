@@ -1,6 +1,10 @@
 {
   "usingComponents": {
-    "area-select":"/components/linkage/linkage"
+    "area-select":"/components/linkage/linkage",
+    "van-popup": "@vant/weapp/popup/index",
+    "van-area": "@vant/weapp/area/index",
+    "van-checkbox": "@vant/weapp/checkbox/index",
+    "van-button": "@vant/weapp/button/index"
   },
   "styleIsolation": "apply-shared"
 }

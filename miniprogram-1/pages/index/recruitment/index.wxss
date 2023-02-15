@@ -416,9 +416,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  border-right: 2rpx solid #d4d4d4;
 }
 .recruitment .recruitment_top .mine .list .inRecruitment .recruitment_list .recruitment_list5 .y{
-  border-right: 2rpx solid #d4d4d4;
+  border-right: 0;
 }
 .recruitment .recruitment_top .mine .list .inRecruitment .recruitment_list .recruitment_list5 .recruitment_list5_item .recruitment_list5_item_img{
   width: 24rpx;

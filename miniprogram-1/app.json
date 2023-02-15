@@ -118,15 +118,6 @@
     }
   },
   "usingComponents": {
-    "van-button": "@vant/weapp/button/index",
-    "van-icon": "@vant/weapp/icon/index",
-    "van-calendar": "@vant/weapp/calendar/index",
-    "van-toast": "@vant/weapp/toast/index",
-    "van-popup": "@vant/weapp/popup/index",
-    "van-dialog": "@vant/weapp/dialog/index",
-    "van-area": "@vant/weapp/area/index",
-    "van-checkbox": "@vant/weapp/checkbox/index",
-    "van-checkbox-group": "@vant/weapp/checkbox-group/index"
   },
   "sitemapLocation": "sitemap.json",
   "lazyCodeLoading": "requiredComponents"
