@@ -563,12 +563,10 @@ Page({
         this.setData({
           photo: rex.card.head_portrait,
           name: rex.card.name,
-          card: rex.card,
           actives1: 'active',
           actives2: '',
           actives3: ''
         })
-        this.initCanvas()
       }
     })
   },
@@ -792,13 +790,12 @@ Page({
       this.getData(this.data.dutys, this.data.location, 0)
     })
   },
-  initCanvas() {
-    let card = this.data.card
-    console.log(card);
+  shareCanvas(index) {
+    let recruitment = this.data.onTheJobList[index]
+    let that = this;
     var date = new Date()
     var month = date.getMonth() + 1
     var day = date.getDate()
-    let that = this;
     const query = wx.createSelectorQuery();
     query
       .select("#myCanvas")
@@ -812,12 +809,12 @@ Page({
         const canvas = res[0].node;
         const context = canvas.getContext("2d");
         // 比例
+        console.log(wx.getSystemInfoSync());
         const ratio = wx.getSystemInfoSync()?.windowWidth / 750;
         const dpr = wx.getSystemInfoSync().pixelRatio;
         canvas.width = width * dpr;
         canvas.height = height * dpr;
         context.scale(dpr, dpr);
-        console.log(canvas);
         that.setData({
           canvas,
         });
@@ -829,16 +826,16 @@ Page({
           context,
           0,
           0,
-          1440 * ratio,
-          2260 * ratio
+          Math.round(that.data.posterWidth*that.data.rpx),
+          Math.round(that.data.posterHeight*that.data.rpx)
         );
         context.save();
         // 绘制圆
         context.beginPath();
         context.arc(
-          240 * ratio,
-          1470 * ratio,
-          90 * ratio,
+          70 * that.data.rpx,
+          336 * that.data.rpx,
+          30 * that.data.rpx,
           0,
           (Math.PI / 180) * 360
         );
@@ -846,109 +843,71 @@ Page({
         context.clip();
         // 绘制头像
         context.beginPath();
-        const avatar = card.head_portrait;
+        const avatar = recruitment.rc_head_portrait;
         await that.loadImg(
           avatar,
           canvas,
           context,
-          150 * ratio,
-          1380 * ratio,
-          180 * ratio,
-          180 * ratio
+          40 * that.data.rpx,
+          306 * that.data.rpx,
+          60 * that.data.rpx,
+          60 * that.data.rpx
         );
         context.restore();
         // 绘制文字
         context.beginPath();
-        let ddd = month < 10 ? '0' + month : month;
-        context.fillStyle = '#fff'
-        context.font = 'normal bold 56px sans-serif';
-        context.fillText(ddd, 60 * ratio, 180 * ratio);
+        let company = recruitment.rc_company;
+        context.fillStyle = '#999'
+        context.font = `normal 300 ${15*that.data.rpx}px sans-serif`;
+        context.fillText(company, 120 * that.data.rpx, 354 * that.data.rpx);
 
         context.beginPath();
-        context.font = 'normal bold 22px sans-serif';
-        context.fillText('/', 60 * ratio, 240 * ratio);
+        let post = recruitment.rc_post;
+        context.fillStyle = '#555'
+        context.font = `normal 500 ${16*that.data.rpx}px sans-serif`;
+        context.fillText(post, 198 * that.data.rpx, 329 * that.data.rpx);
+
+        context.beginPath();
+        let name = recruitment.rc_sex == '女' ? recruitment.rc_name.slice(0, 1) + '女士' : recruitment.rc_name.slice(0, 1) + '先生';
+        context.fillStyle = '#000'
+        context.font = `normal bold ${20*that.data.rpx}px sans-serif`;
+        context.fillText(name, 120 * that.data.rpx, 328 * that.data.rpx);
+
+        context.beginPath();
+        let ddd = month < 10 ? '0' + month : month;
+        context.fillStyle = '#fff'
+        context.font = `normal bold ${38*that.data.rpx}px sans-serif`;
+        context.fillText(ddd, 30 * that.data.rpx, 46 * that.data.rpx);
+
+        context.beginPath();
+        context.font = `normal bold ${16*that.data.rpx}px sans-serif`;
+        context.fillText('/', 30 * that.data.rpx, 76 * that.data.rpx);
 
         context.beginPath();
         let eee = day < 10 ? '0' + day : day;
         context.fillStyle = '#fff'
-        context.font = 'normal bold 46px sans-serif';
-        context.fillText(eee, 120 * ratio, 280 * ratio);
+        context.font = `normal bold ${28*that.data.rpx}px sans-serif`;
+        context.fillText(eee, 46 * that.data.rpx, 80 * that.data.rpx);
 
-        context.beginPath();
-        let company = card.company;
-        context.fillStyle = '#999'
-        context.font = 'normal 300 22px sans-serif';
-        context.fillText(company, 380 * ratio, 1531 * ratio);
-
-        context.beginPath();
-        let post = card.post;
-        context.fillStyle = '#555'
-        context.font = 'normal 500 23px sans-serif';
-        context.fillText(post, 630 * ratio, 1441 * ratio);
-
-        context.beginPath();
-        let name = card.sex == '女' ? card.name.slice(0, 1) + '女士' : card.name.slice(0, 1) + '先生';
-        context.fillStyle = '#000'
-        context.font = 'normal bold 30px sans-serif';
-        context.fillText(name, 380 * ratio, 1442 * ratio);
-        that.inits()
-      });
-  },
-  shareCanvas(index) {
-    let recruitment = this.data.onTheJobList[index]
-    let that = this;
-    const query = wx.createSelectorQuery();
-    query
-      .select("#myCanvas")
-      .fields({
-        node: true,
-        size: true
-      })
-      .exec(async (res) => {
-        const width = res[0].width;
-        const height = res[0].height;
-        const canvas = res[0].node;
-        const context = canvas.getContext("2d");
-        // 比例
-        const ratio = wx.getSystemInfoSync()?.windowWidth / 750;
-        const dpr = wx.getSystemInfoSync().pixelRatio;
-        canvas.width = width * dpr;
-        canvas.height = height * dpr;
-        context.scale(dpr, dpr);
-        that.setData({
-          canvas,
-        });
-        // 绘制背景
-        context.beginPath();
-        await that.loadImg(
-          that.data.url,
-          canvas,
-          context,
-          0,
-          0,
-          1440 * ratio,
-          2260 * ratio
-        );
-        // 绘制文字
         context.beginPath();
         let title = recruitment.rpr_title;
         context.fillStyle = '#000'
-        context.font = 'normal bold 28px sans-serif';
-        context.fillText(title, 160 * ratio, 1600 * ratio);
+        context.font = `normal bold ${18*that.data.rpx}px sans-serif`;
+        context.fillText(title, 40 * that.data.rpx, 397 * that.data.rpx);
 
         context.beginPath();
         let waga = recruitment.rpr_minimum_waga + '-' + recruitment.rpr_maximum_waga;
         context.fillStyle = '#fc6500'
-        context.font = 'normal bold 28px sans-serif';
-        context.fillText(waga, 160 * ratio, 1700 * ratio);
+        context.font = `normal bold ${18*that.data.rpx}px sans-serif`;
+        context.fillText(waga, 40 * that.data.rpx, 426 * that.data.rpx);
 
         // 绘制圆
         context.fillStyle = '#000'
         context.beginPath();
         context.arc(
-          1100 * ratio,
-          1800 * ratio,
-          130 * ratio,
+          274 * that.data.rpx,
+          430 * that.data.rpx,
+          46 * that.data.rpx,
           0,
           (Math.PI / 180) * 360
         );
@@ -961,21 +920,29 @@ Page({
           smallProgramCodes,
           canvas,
           context,
-          970 * ratio,
-          1670 * ratio,
-          260 * ratio,
-          260 * ratio
+          228 * that.data.rpx,
+          384 * that.data.rpx,
+          92 * that.data.rpx,
+          92 * that.data.rpx
         );
+        this.shares()
       });
   },
   save() {
-    console.log(this.data.canvas);
     return new Promise((resolve, reject) => {
       console.log(this.data.canvas);
       wx.canvasToTempFilePath({
+        x: 0,
+        y: 0,
+        width: Math.round(this.data.posterWidth*this.data.rpx),
+        height: Math.round(this.data.posterHeight*this.data.rpx),
+        destWidth: Math.round(this.data.posterWidth*this.data.rpx)*3,
+        destHeight: Math.round(this.data.posterHeight*this.data.rpx)*3,
+        fileType: 'jpg',
+        quality: '0.5',
         canvas: this.data.canvas,
         success: (res) => {
-          console.log(res);
+          console.log(res.tempFilePath);
           return resolve(res.tempFilePath);
         },
         fail(error) {
@@ -1005,13 +972,7 @@ Page({
       title: '加载中',
     })
     var index = e.currentTarget.dataset.index
-    setTimeout(() => {
-      this.shareCanvas(index)
-    })
-
-    setTimeout(() => {
-      this.shares()
-    })
+    this.shareCanvas(index)
   },
   async shares() {
     const res = await this.save();
@@ -1020,10 +981,15 @@ Page({
       wx.downloadFile({
         url: res.data.fullurl,
         success: (res) => {
+          wx.hideLoading()
           wx.showShareImageMenu({
             path: res.tempFilePath,
             success: (res) => {
-              // console.log(res);
+              wx.showToast({
+                title: '成功',
+                icon: 'success',
+                duration: 1000
+              })
             },
             fail: (res) => {
               // console.log(res);
@@ -1031,20 +997,7 @@ Page({
           })
         }
       })
-      wx.hideLoading()
-    })
-  },
-  async inits() {
-    const res = await this.save();
-    request.upload(res, 'recruitmentposter' + wx.getStorageSync('userInfo').rc_id).then((res) => {
-      wx.downloadFile({
-        url: res.data.fullurl,
-        success: async (res) => {
-          this.setData({
-            url: res.tempFilePath
-          })
-        }
-      })
+
     })
   },
   /**
@@ -1053,6 +1006,10 @@ Page({
   onLoad(options) {
     wx.setNavigationBarTitle({
       title: '招聘-招聘广场',
+    })
+    wx.showShareMenu({
+      withShareTicket: true,
+      menus: ['shareAppMessage', 'shareTimeline']
     })
     var date = new Date()
     var year = date.getFullYear()
@@ -1169,6 +1126,17 @@ Page({
       }
     })
     this.getData(0, storage.citycode, 1)
+    const that = this
+    wx.getSystemInfo({
+      success: function (res) {
+        that.setData({
+          model: res.model,
+          rpx: res.windowWidth / 375,
+          posterWidth: res.screenWidth,
+          posterHeight: res.screenWidth * 1.5,
+        })
+      }
+    })
   },
 
   /**
