@@ -780,7 +780,7 @@ Page({
               duration: 1000 //持续的时间
             })
             this.setData({
-              fullScreen: false
+              fullScreen: true
             })
           } else if (this.data.anima == "middleToUp" && chefArr.length != 0) {
             this.setData({

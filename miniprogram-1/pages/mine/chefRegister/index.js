@@ -14,6 +14,10 @@ Page({
       img:app.domain+"/img/tabBer/information.png",
       fontColor:""
     },
+    gang:{
+      img:app.domain+"/img/tabBer/gang.png",
+      fontColor:""
+    },
     index:1
   },
   toggle(e){
@@ -26,6 +30,10 @@ Page({
         },
         invite:{
           img:app.domain+"/img/tabBer/information.png",
+          fontColor:""
+        },
+        gang:{
+          img:app.domain+"/img/tabBer/gang.png",
           fontColor:""
         },
         index:1
@@ -43,10 +51,33 @@ Page({
           img:app.domain+"/img/tabBer/information-active.png",
           fontColor:"fontColor"
         },
+        gang:{
+          img:app.domain+"/img/tabBer/gang.png",
+          fontColor:""
+        },
         index:2
       })
       wx.setNavigationBarTitle({
         title: '我的订单'
+      })
+    }else if(index == 3){
+      this.setData({
+        filing:{
+          img:app.domain+"/img/tabBer/filing.png",
+          fontColor:""
+        },
+        invite:{
+          img:app.domain+"/img/tabBer/information.png",
+          fontColor:""
+        },
+        gang:{
+          img:app.domain+"/img/tabBer/gang-active.png",
+          fontColor:"fontColor"
+        },
+        index:3
+      })
+      wx.setNavigationBarTitle({
+        title: '我的厨邦'
       })
     }
   },

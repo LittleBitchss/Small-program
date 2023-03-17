@@ -1,15 +1,23 @@
 <!--secondary/pages/mine_setName/index.wxml-->
 <view class="setName">
-  <view class="save">
-    <text class="saves" bindtap="saves">保存</text>
-  </view>
-  <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
-    <image class="avatar" src="{{avatarUrl}}"></image>
-  </button>
-  <view class="item">
-    <view class="item_">
-      <text>昵称</text>
-      <input type="nickname" class="weui-input" placeholder="请输入昵称" value="{{nickname}}" bindinput="inputs" />
+  <form bindsubmit="formsubmit">
+    <view class="save">
+      <button class="saves" form-type="submit" type="primary" size="mini">保存</button>
     </view>
-  </view> 
+    <view class="avatar-wrapper">
+      <image class="avatar" src="{{avatarUrl}}"></image>
+      <view class="save">
+      <button class="saves" type="primary" size="mini"  open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">更换头像</button>
+    </view>
+    
+    </view>
+    <view class="item">
+      <view class="item_">
+        <text>昵称</text>
+        <input type="nickname" class="weui-input" placeholder="请输入昵称" name="nickname" value="{{nickName}}"/>
+      </view>
+    </view>
+  </form>
+
+
 </view>

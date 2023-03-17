@@ -3,6 +3,7 @@
   <view class="content">
     <filing wx:if="{{index == 1}}"></filing>
     <chefOrder id="myComponent" wx:if="{{index == 2}}"></chefOrder>
+    <gang wx:if="{{index == 3}}"></gang>
   </view>
   <view class="tab">
     <view class="item" bindtap="toggle" data-index="1">
@@ -12,6 +13,10 @@
     <view class="item" bindtap="toggle" data-index="2">
       <image class="img" src="{{invite.img}}"></image>
       <text class="text {{invite.fontColor}}">我的订单</text>
+    </view>
+    <view class="item" bindtap="toggle" data-index="3">
+      <image class="img" src="{{gang.img}}" style="height: 44rpx;margin: 6rpx 0 4rpx 0;"></image>
+      <text class="text {{gang.fontColor}}">我的厨邦</text>
     </view>
   </view>
 </view>

@@ -1,5 +1,5 @@
 <!--components/familyDinnerInfo/familyDinnerInfo.wxml-->
-<view class="familyDinnerInfo" bindtap="closes">
+<view class="familyDinnerInfo" bindtap="closes" style="padding-top: 30rpx;">
   <view class="process">
     <view class="processLine"></view>
     <view class="proces">

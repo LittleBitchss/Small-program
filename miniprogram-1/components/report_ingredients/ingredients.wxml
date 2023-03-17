@@ -1,5 +1,5 @@
 <!--components/ingredients/ingredients.wxml-->
-<view class="ingredients">
+<view class="ingredients"  style="padding-top: 30rpx;">
   <view class="process">
     <view class="processLine"></view>
     <view class="proces">

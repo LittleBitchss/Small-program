@@ -1,5 +1,6 @@
 // pkgA/pages/familyDinnerApplication/index.js
 const app = getApp()
+const utils = require("../../../utils/utils")
 Page({
 
   /**
@@ -68,6 +69,13 @@ Page({
   tagles(){
     this.triggerEvent("tagles",{go:0})
   },
+  getDate(days) {
+    var date = utils.formatDate(new Date());
+    var start_num = new Date(date.replace(/-/g, "/"))
+    var end_num = new Date(days.replace(/-/g, "/"))
+    let day = parseInt((end_num.getTime() - start_num.getTime()) / (1000 * 60 * 60 * 24))
+    return day
+  },
   /**
    * 生命周期函数--监听页面加载
    */
@@ -75,6 +83,15 @@ Page({
     wx.setNavigationBarTitle({
       title: '家宴预订',
     })
+    var entryInfo = wx.getStorageSync('entryInfo')
+    if(entryInfo){
+      var day = this.getDate(entryInfo.m_start_date)
+      if(day<3){
+        wx.removeStorageSync('entryInfo')
+        wx.removeStorageSync('setAddr')
+        wx.removeStorageSync('foodSource')
+      }
+    }
   },
 
   /**

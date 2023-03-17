@@ -1,5 +1,8 @@
 <!--pages/chefGoHome/index.wxml-->
-<view class="chefGoHome">
+<view class="chefGoHome" style="position: relative;">
+  <!-- <view style="position: absolute;left: 0;right: 0;z-index: 100;">
+    <van-notice-bar left-icon="volume-o" text="创建订单需支付100元定金，完成订单后全额返还。"></van-notice-bar>
+  </view> -->
   <view class="top">
     <view class="diniInfo">
       <view class="title">用餐信息</view>

@@ -1,5 +1,8 @@
 <!--pkgA/pages/familyDinnerApplication/index.wxml-->
-<view class="familyDinnerApplication">
+<view class="familyDinnerApplication" style="position: relative;">
+  <view style="position: absolute;left: 0;right: 0;">
+    <van-notice-bar left-icon="volume-o" text="创建订单需支付100元定金，完成订单后全额返还。"></van-notice-bar>
+  </view>
   <familyDinnerInfo wx:if="{{isShow == 1}}" bindnextStep1="nextStep1"></familyDinnerInfo>
   <familyLocation id="setAddr" wx:if="{{isShow == 2}}" bindprevious2="previous2" bindnextStep2="nextStep2"></familyLocation>
   <ingredients wx:if="{{isShow == 3}}" bindprevious3="previous3" bindnextStep3="nextStep3"></ingredients>

@@ -47,7 +47,8 @@
         "pages/mine_setName/index",
         "pages/auditorium/index",
         "pages/agreement/index",
-        "pages/insurance/index"
+        "pages/insurance/index",
+        "pages/swiperPage/index"
       ]
     },
     {
@@ -117,8 +118,7 @@
       "desc": "你的位置信息将用于小程序位置定位"
     }
   },
-  "usingComponents": {
-  },
+  "usingComponents": {},
   "sitemapLocation": "sitemap.json",
   "lazyCodeLoading": "requiredComponents"
 }

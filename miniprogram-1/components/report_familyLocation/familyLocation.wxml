@@ -1,5 +1,5 @@
 <!--components/familyLocation/familyLocation.wxml-->
-<view class="familyLocation" bindtap="closes">
+<view class="familyLocation" bindtap="closes" style="padding-top: 30rpx;">
   <view class="process">
     <view class="processLine"></view>
     <view class="proces">

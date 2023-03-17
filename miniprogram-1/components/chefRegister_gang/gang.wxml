@@ -1,0 +1,4 @@
+<!--components/chefRegister_gang/gang.wxml-->
+<scroll-view scroll-x="true" scroll-y="true" style="height: 100%;position: relative;">
+  <tree treeList="{{treeList}}" id="treeSelect" bind:onclick="treeClick"></tree>
+</scroll-view>

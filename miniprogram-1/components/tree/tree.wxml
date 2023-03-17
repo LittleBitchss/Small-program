@@ -1,0 +1,24 @@
+<!--components/tree/tree.wxml-->
+<view>
+  <block wx:for="{{tree}}" wx:key="index">
+    <view style="width: 300rpx; display:flex;align-items:center;margin-left:{{item.nodes.length !== 0 ? depth*156 : depth*156}}rpx;font-size:36rpx;margin-top: 60rpx;" wx:if="{{item.category !== 'index'}}">
+      <view style="width: 60rpx;position: relative;height: 4rpx;background-color: #f7808a;" wx:if="{{item.id!=1}}">
+        <!-- <view class="tree_left" wx:if="{{item.nodes.length !== 0}}" data-id="{{item.id}}" data-open="{{item.open}}" bindtap="onchange">
+          <view class="{{!item.open ? 'icon-right' : 'icon-down'}}"></view>
+        </view> -->
+        <image src="{{item.line}}" style="width: 4rpx;position: absolute;left: 0;bottom: 0;height: {{130}}rpx;" mode=""/>
+      </view>
+      <view style="width: 60rpx;" wx:if="{{item.id==1}}"></view>
+      <view class="chef {{item.nodes.length !== 0 ?'parent':'node'}}" style="background: {{item.color}};" data-id="{{item.id}}" bindtap="onchange" >
+        <image class="img" src="{{item.avatar}}" mode="" />
+        <text>{{item.name}}</text>
+      </view>
+      <view style="width: 40rpx;"></view>
+    </view>
+    <block>
+      <view>
+        <tree treeList="{{item.nodes}}" id="treeSelect" bind:onclick="click" bind:change="change" depth="{{depth+1}}"></tree>
+      </view>
+    </block>
+  </block>
+</view>

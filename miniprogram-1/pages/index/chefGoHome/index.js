@@ -370,26 +370,6 @@ Page({
       multiIndex: [index1, index2],
       area: wx.getStorageSync('userInfo').adcode
     })
-    wx.showModal({
-      title: '',
-      content: '创建订单需支付100元定金，完成订单后全额返还',
-      confirmText: '我已知晓',
-      cancelText: '返回',
-      cancelColor: '#b6b6b6',
-      confirmColor: '#4768f3',
-      success(res) {
-        if (res.cancel) {
-          wx.navigateBack({
-            delta: 1
-          })
-        }
-      },
-      fail(res) {
-        wx.navigateBack({
-          delta: 1
-        })
-      }
-    })
   },
   onShow: function () {
     this.areaSelect = this.selectComponent("#areaSelect");

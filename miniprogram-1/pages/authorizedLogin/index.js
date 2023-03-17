@@ -28,11 +28,14 @@ Page({
   bindGetUserInfo: function (res) {
     var userInfo = {}
     wx.showModal({
-      title: '警告',
+      title: '提示',
       content: '确定是否授权',
       showCancel: '取消',
       confirmText: '确定',
       success: function (res) {
+        wx.showLoading({
+          title: '加载中',
+        })
         if (res.confirm) {
           wx.login({
             success: res => {
@@ -56,6 +59,7 @@ Page({
                         userInfo.rc_id = res.data.data.rc_id
                         userInfo.isLogin = 1
                         wx.setStorageSync('userInfo', userInfo) //存储用户信息
+                        wx.hideLoading()
                         wx.showToast({
                           title: "授权成功",
                           icon: 'success',

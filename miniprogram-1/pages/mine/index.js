@@ -75,13 +75,14 @@ Page({
     return day
   },
   getUserInfo() {
-    var storage = wx.getStorageSync('userInfo')
-    if (storage.nickName) {
+    app.post('/comm/getUserInfo', {
+      token: wx.getStorageSync('userInfo').token
+    }).then(res => {
       this.setData({
-        avatar: storage.avatarUrl,
-        nickName: storage.nickName
+        avatar: res.data.data.pic_path,
+        nickName: res.data.data.name
       })
-    }
+    })
   },
   getOrder() {
     var functionBars = JSON.parse(JSON.stringify(this.data.functionBars))

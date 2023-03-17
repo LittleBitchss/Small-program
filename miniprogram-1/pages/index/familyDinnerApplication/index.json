@@ -3,6 +3,7 @@
     "familyDinnerInfo":"/components/report_familyDinnerInfo/familyDinnerInfo",
     "familyLocation":"/components/report_familyLocation/familyLocation",
     "ingredients":"/components/report_ingredients/ingredients",
-    "sanitary":"/components/report_sanitary/sanitary"
+    "sanitary":"/components/report_sanitary/sanitary",
+    "van-notice-bar": "@vant/weapp/notice-bar/index"
   }
 }

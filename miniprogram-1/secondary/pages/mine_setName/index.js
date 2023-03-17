@@ -18,30 +18,36 @@ Page({
     wx.setNavigationBarTitle({
       title: '设置头像和昵称',
     })
-    var storage = wx.getStorageSync('userInfo')
-    if(storage.nickName){
+    app.post('/comm/getUserInfo', {
+      token: wx.getStorageSync('userInfo').token
+    }).then(res => {
       this.setData({
-        nickName:storage.nickName,
-        avatarUrl:storage.avatarUrl
+        avatarUrl: res.data.data.pic_path,
+        nickName: res.data.data.name
       })
-    }
+    })
   },
   inputs(e){
     this.setData({
       nickName:e.detail.value
     })
   },
-  saves(){
-    wx.navigateBack({
-      delta: 1
+  formsubmit(e){
+    this.setData({
+      nickName:e.detail.value.nickname
     })
-    var storage = wx.getStorageSync('userInfo')
-    storage.nickName = this.data.nickName
-    storage.avatarUrl = this.data.avatarUrl
-    wx.setStorageSync('userInfo', storage)
-    var pages = getCurrentPages();
-    var beforePage = pages[pages.length - 2];
-    beforePage.getUserInfo()
+    app.post('/comm/setUserInfo', {
+      token: wx.getStorageSync('userInfo').token,
+      name: this.data.nickName,
+      pic_path: this.data.avatarUrl
+    }).then(res => {
+      wx.navigateBack({
+        delta: 1
+      })
+      var pages = getCurrentPages();
+      var beforePage = pages[pages.length - 2];
+      beforePage.getUserInfo()
+    })
   },
   onChooseAvatar(e) {
     const { avatarUrl } = e.detail 

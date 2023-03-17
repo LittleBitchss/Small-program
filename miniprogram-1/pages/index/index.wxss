@@ -45,7 +45,7 @@
 /* 需添加 */
 .index .module{
   margin: 0 auto;
-  padding: 20rpx 72rpx 0;
+  padding: 20rpx 30rpx 0;
   height: 290rpx;
   position: relative;
   background-color: #fff;
@@ -104,8 +104,8 @@
   align-items: center;
 }
 .index .module .swiper .slider .item .components .img{
-  width: 84rpx;
-  height: 66rpx;
+  width: 80rpx;
+  height: 60rpx;
 }
 .index .module .swiper .slider .item .components .text{
   font-size: 25rpx;

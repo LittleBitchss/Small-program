@@ -11,14 +11,19 @@
   
 }
 .save .saves{
+  margin: 0;
+  height: 50rpx;
+  line-height: 50rpx;
   padding: 2rpx 16rpx;
   background-color: #eee;
   border-radius: 5rpx;
+  color: black;
 }
 .avatar-wrapper{
   height: 360rpx;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: space-around;
   align-items: center;
 }
 .avatar-wrapper .avatar{

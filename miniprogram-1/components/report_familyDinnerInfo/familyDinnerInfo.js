@@ -300,27 +300,6 @@ Component({
           value4: entryInfo.m_tables,
           // value5: entryInfo.m_holding_days
         })
-      } else {
-        wx.showModal({
-          title: '',
-          content: '创建订单需支付100元定金，完成订单后全额返还',
-          confirmText: '我已知晓',
-          cancelText: '返回',
-          cancelColor: '#b6b6b6',
-          confirmColor: '#4768f3',
-          success(res) {
-            if (res.cancel) {
-              wx.navigateBack({
-                delta: 1
-              })
-            }
-          },
-          fail(res) {
-            wx.navigateBack({
-              delta: 1
-            })
-          }
-        })
       }
     }
   }

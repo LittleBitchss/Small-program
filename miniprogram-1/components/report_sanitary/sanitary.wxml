@@ -1,5 +1,5 @@
 <!--components/sanitary/sanitary.wxml-->
-<view class="sanitary">
+<view class="sanitary" style="padding-top: 30rpx;">
   <view class="process">
     <view class="processLine"></view>
     <view class="proces">

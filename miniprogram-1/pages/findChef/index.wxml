@@ -4,14 +4,14 @@
     <view class="custom-bar__wrapper" style="margin-top:{{searchMarginTop}}px; height: {{searchHeight}}px;width: {{searchWidth}}px;position:absolute;">
       <view class="search-group" style="position:absolute;">
         <!-- <image class="quit" bindtap="quit" src="../../icon/quit.png"></image> -->
-        <view class="select">
-          <picker mode="region" bindchange="bindRegionChange" value="{{region}}">
+        <picker mode="region" bindchange="bindRegionChange" value="{{region}}">
+          <view class="select">
             <view class="picker txt">
               {{region[1]}}{{region[2]}}
             </view>
-          </picker>
-          <image class="down" src="../../icon/index-down.png"></image>
-        </view>
+            <image class="down" src="../../icon/index-down.png"></image>
+          </view>
+        </picker>
       </view>
     </view>
   </view>
@@ -57,7 +57,7 @@
     <map id="maps" bindtap="clickMap" class="maps" longitude="{{longitude}}" latitude="{{latitude}}" scale="11" show-location bindregionchange="regionchange" markers="{{markers}}" catchcallouttap="callouttaphandle">
     </map>
   </view>
-  <scroll-view scroll-y="{{openScroll}}" class="notices {{anima}}" style="height:{{searchHeights}}px;" bindtouchstart="touchStart" catchtouchmove="touchMove" catchtouchend="touchEnd" bindscrolltolower="lower" >
+  <scroll-view scroll-y="{{openScroll}}" class="notices {{anima}}" style="height:{{searchHeights}}px;" bindtouchstart="touchStart" catchtouchmove="touchMove" catchtouchend="touchEnd" bindscrolltolower="lower">
     <view class="bulletin">
       <view class="bulletin_left">
         <image class="bulletin_left_img" src="../../icon/trumpet.png"></image>
@@ -66,6 +66,9 @@
       <view class="bulletin_right">
         详情 >
       </view>
+    </view>
+    <view wx:if="{{chefs.length==0}}">
+      <van-empty description="当前区域暂无厨师，请重新选择区域" />
     </view>
     <navigator class="chefs" wx:for="{{chefs}}" wx:key="index" open-type="navigate" url="/secondary/pages/findChef_chefDetails/index?chef_id={{item.chef_id}}">
       <view class="chefs_avatar">
