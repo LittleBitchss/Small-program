@@ -27,16 +27,24 @@ Component({
   methods: {
     //修改折叠状态
     changeOpen(tree, id) {
+      var chefInfo = wx.getStorageSync('chefInfo')
       for (let i = 0; i < tree.length; i += 1) {
-        tree[i].color = ''
-        if(tree[i].id == id){
-          tree[i].color = "linear-gradient(to left bottom,#f5eee3,#fda7ae)"
-        }
-        if (tree[i].id === id) {
-          tree[i].open = !tree[i].open;
-        }
-        if (tree[i].nodes.length !== 0) {
-          this.changeOpen(tree[i].nodes, id);
+        if(id){
+          tree[i].color = ''
+          if(tree[i].id == id){
+            tree[i].color = "linear-gradient(to left bottom,#f5eee3,#fda7ae)"
+          }
+          if (tree[i].id === id) {
+            tree[i].open = !tree[i].open;
+          }
+          if (tree[i].nodes.length !== 0) {
+            this.changeOpen(tree[i].nodes, id);
+          }
+        }else{
+          if(tree[i].chef_id==chefInfo.chef_id){
+            tree[i].active = "linear-gradient(to left bottom,#f5eee3,#fda7ae)"
+
+          }
         }
       }
       return;
@@ -127,7 +135,6 @@ Component({
     },
     //获取选中项信息
     getData(tree, id) {
-      console.log(1);
       for (let i = 0; i < tree.length; i += 1) {
         if (tree[i].id === id) {
           return tree[i].name;
@@ -162,6 +169,7 @@ Component({
   lifetimes: {
     attached: function () {
       this.ready()
+      this.changeOpen(this.data.tree)
     }
   }
 })

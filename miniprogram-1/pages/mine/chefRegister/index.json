@@ -2,7 +2,7 @@
   "usingComponents": {
     "filing":"/components/chefRegister_filing/filing",
     "chefOrder":"/components/chefRegister_chefOrder/chefRegister_chefOrder",
-    "gang":"/components/chefRegister_gang/gang"
+    "gang": "/components/chefRegister_gang/gang"
   },
   "navigationBarTitleText":"我的备案",
   "navigationBarTextStyle":"black",

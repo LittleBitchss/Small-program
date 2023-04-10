@@ -1,8 +1,7 @@
-// pages/admin/admin.js
+// pages/location/location.js
 import * as echarts from '../../ec-canvas/echarts';
 const app = getApp();
 const utils = require("../../../utils/utils")
-
 function initChart(chart, seriesData, legendData) {
   var option = {
     title: {
@@ -669,8 +668,8 @@ Page({
     wx.showLoading({
       title: '加载中'
     })
-    var admin = wx.getStorageSync('admin').location
-    if (admin) {
+    var location = wx.getStorageSync('admin').location
+    if (location) {
       try {
         app.post('/region/getProvince', {
           province_code: 0
@@ -682,52 +681,68 @@ Page({
           }
         }).then(res => {
           app.post('/region/getCity', {
-            province_code: admin.province
+            province_code: location.province
           }).then(res => {
             if (res.data.status == 1) {
               this.setData({
                 city: res.data.data
               })
+            }else{
+              this.setData({
+                city: []
+              })
             }
           }).then(res => {
             app.post('/region/getAreas', {
-              city_code: admin.city
+              city_code: location.city
             }).then(res => {
               if (res.data.status == 1) {
                 this.setData({
                   area: res.data.data
                 })
+              }else{
+                this.setData({
+                  area: []
+                })
               }
             }).then(res => {
               app.post('/region/getStreets', {
-                area_code: admin.area
+                area_code: location.area
               }).then(res => {
                 if (res.data.status == 1) {
                   this.setData({
                     street: res.data.data
                   })
+                }else{
+                  this.setData({
+                    street: []
+                  })
                 }
               }).then(res => {
                 app.post('/region/getVillage', {
-                  street_code: admin.street
+                  street_code: location.street
                 }).then(res => {
                   if (res.data.status == 1) {
                     this.setData({
                       village: res.data.data
                     })
+                  }else{
+                    this.setData({
+                      village: []
+                    })
                   }
                 }).then(res => {
-                  var provinces = admin.province == 0 ? "全部" : this.data.province.find(i => i.code == admin.province)
-                  var city = admin.city == 0 ? "全部" : this.data.city.find(i => i.code == admin.city)
-                  var area = admin.area == 0 ? "全部" : this.data.area.find(i => i.code == admin.area)
-                  var street = admin.street == 0 ? "全部" : this.data.street.find(i => i.code == admin.street)
-                  var village = admin.village == 0 ? "全部" : this.data.village.find(i => i.code == admin.village)
+                  var provinces = location.province == 0 ? "全部" : this.data.province.find(i => i.code == location.province)
+                  var city = location.city == 0 ? "全部" : this.data.city.find(i => i.code == location.city)
+                  var area = location.area == 0 ? "全部" : this.data.area.find(i => i.code == location.area)
+                  var street = location.street == 0 ? "全部" : this.data.street.find(i => i.code == location.street)
+                  var village = location.village == 0 ? "全部" : this.data.village.find(i => i.code == location.village)
                   var locationArr = [
-                    admin.province,
-                    admin.city,
-                    admin.area,
-                    admin.street,
-                    admin.village,
+                    location.province,
+                    location.city,
+                    location.area,
+                    location.street,
+                    location.village,
                   ]
                   var locationStrArr = [
                     provinces.name,
@@ -738,7 +753,7 @@ Page({
                   ]
                   var index = locationArr.indexOf(0)
                   if (index != 0) {
-                    var location = locationStrArr[index - 1]
+                    var locations = locationStrArr[index - 1]
                   }
                   this.setData({
                     provinceValue: provinces.name == undefined ? "全部" : provinces.name,
@@ -751,7 +766,7 @@ Page({
                     area_code: area.code == undefined ? 0 : area.code,
                     street_code: street.code == undefined ? 0 : street.code,
                     village_code: village.code == undefined ? 0 : village.code,
-                    location: location ? location : '',
+                    location: locations ? locations : '',
                     locationArr: locationArr
                   })
                   this.getDate()

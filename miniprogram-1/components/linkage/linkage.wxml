@@ -17,7 +17,7 @@
       <block wx:for="{{list}}" wx:key="index">
         <view class="area-select-show-item" data-item="{{item}}" bindtap="selectBtn">
           <view class="area-select-show-item-name" style="color:{{item.checked?'#07c160':''}}">{{item.name}}</view>
-          <!-- <image class="area-select-show-item-checked" wx:if="{{item.checked}}" src="/img/select-on.png"></image> -->
+          <!-- <image class="area-select-show-item-checked img" wx:if="{{item.checked}}" src="/img/select-on.png"></image> -->
         </view>
       </block>
     </scroll-view>

@@ -2,13 +2,12 @@
 .box {
   height: 100vh;
 }
-
 .box .content {
-  height: 92%;
+  height: calc(100% - 50px);
 }
 
 .box .tab {
-  height: 8%;
+  height: 50px;
   display: flex;
   justify-content: space-around;
   align-items: center;

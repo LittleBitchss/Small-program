@@ -13,6 +13,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@antv/f6": "0.0.19",
+    "@antv/f6-wx": "0.0.7",
     "@vant/area-data": "^1.4.0",
     "@vant/weapp": "^1.10.12",
     "area-data": "^3.1.2"

@@ -83,7 +83,7 @@
   align-items: center;
 }
 
-.area-select-box .area-select-show .area-select-show-item image {
+.area-select-box .area-select-show .area-select-show-item .img {
   width: 28rpx;
   height: 20rpx;
   margin-left: 20rpx;
